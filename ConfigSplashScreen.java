@@ -21,138 +21,226 @@ import java.awt.geom.Rectangle2D;
 import java.awt.FontMetrics;
 import java.awt.BasicStroke;
 
+/*
+    Project:    Modern 2D Java Game Engine
+    Purpose:    Provide basics functionalities to write 2D games in Java in a more modern approach
+    Author:     Mr. Joao P. B. Faria
+    Date:       Octuber 2021
+    WTCD:       This class, provides a selection screen, that could be hide forever, that allow the user to choose between window format (full, pseudo-full, windowed)
+                and than, the syncronization method, frame cap, screen size & resolution.
+*/
 public class ConfigSplashScreen extends JFrame implements Runnable {
 
     private static final long serialVersionUID  = 1L;
+
+    //this window properties
     private int positionX                       = 0;
     private int positionY                       = 0;
     private int windowWidth                     = 800;
     private int windowHeight                    = 600;
+
+    //desktop properties
     private int resolutionH                     = 0;
     private int resolutionW                     = 0;
-    private ConfigurationFile confFile          = null;
+    
+    //the first 'canvas' & the backbuffer (for simple doublebuffer strategy)
     private JPanel canvas                       = null;
+    private VolatileImage bufferImage           = null;
+
+    //some support and the graphical device itself
     private GraphicsEnvironment ge              = null;
     private GraphicsDevice dsd                  = null;
     private Graphics2D g2d                      = null;
-    private VolatileImage bufferImage           = null;
+
+    //this screen control logic parameter   
     private int selectedItem                    = 0;
     
+    /*
+        WTMD: some responsabilites here:
+            1) load some parameters from config file (if exists)
+            2) center the window in the screen
+            3) add a keylistener
+            4) initialize the canvas and retrieve the graphical device objects
+    */
     public ConfigSplashScreen() {
-        //verifica se existe o arquivo de configuração, caso contrário, escreve com parâmetros default
-        this.confFile = new ConfigurationFile();
-        confFile.loadConfigFile();
 
-        //inicializa a janela de "welcome"
-        this.setPreferredSize(new Dimension(windowWidth, windowHeight));
-        this.setMinimumSize(new Dimension(windowWidth, windowHeight));
-        Dimension size = Toolkit.getDefaultToolkit(). getScreenSize();
+        //////////////////////////////////////////////////////////////////////
+        // ->>>  for the window
+
+        //load or provide the default configuration file
+        new ConfigurationFile().verifyTheConfigurationFile();
+
+        //set some properties for this window
+        Dimension basic = new Dimension(this.windowWidth, this.windowHeight);
+        this.setPreferredSize(basic);
+        this.setMinimumSize(basic);
         this.setUndecorated(true);
 
-        //armazena a resolução atual do usuário
+        //default operation on close (exit in this case)
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        //recover the desktop resolution
+        Dimension size = Toolkit.getDefaultToolkit(). getScreenSize();
+
+        //and save this values
         this.resolutionH = (int)size.getHeight();
         this.resolutionW = (int)size.getWidth();
 
-        //define a operação padrão ao fechar
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        //define a posição da janela como centralizada
-        this.positionX = (int)((size.getWidth()/2) - (windowWidth/2));
-        this.positionY = (int)((size.getHeight()/2) - (windowHeight/2));
+        //center the current window regards the desktop resolution
+        this.positionX = (int)((size.getWidth() / 2) - (this.windowWidth / 2));
+        this.positionY = (int)((size.getHeight() / 2) - (this.windowHeight / 2));
         this.setLocation(this.positionX, this.positionY);
-        this.setVisible(true);
-        this.setBackground(Color.BLACK);     
+        
+        //add a keylistener
+        this.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == 39) {if (selectedItem < 2) { selectedItem++;paint(g2d);}}
+                if (e.getKeyCode() == 37) {if (selectedItem > 0) {selectedItem--;paint(g2d);}}
+                if (e.getKeyCode() == 27) {setVisible(false);System.exit(0);}
+            }
+        });
 
-        //Define o canvas (layer 0)
-        this.canvas = new JPanel();
+        //create the backbuffer from the size of screen resolution to avoid any resize process penalty
+        this.ge             = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        this.dsd            = ge.getDefaultScreenDevice();
+        this.bufferImage    = dsd.getDefaultConfiguration().createCompatibleVolatileImage(this.resolutionW, this.resolutionH);
+        this.g2d            = (Graphics2D)bufferImage.getGraphics();
+        
+        //////////////////////////////////////////////////////////////////////
+        // ->>>  now, for the canvas
+
+        //initialize the canvas
+        this.canvas = new JPanel(null);
         this.canvas.setSize(windowWidth, windowHeight);
         this.canvas.setBackground(Color.BLACK);
         this.setVisible(true);
         this.canvas.setOpaque(true);
         
-        //Adciona o canvas
+        //final parameters for the window
         this.add(canvas);
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
         this.requestFocus();
-
-        //cria o buffer
-        this.ge             = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        this.dsd            = ge.getDefaultScreenDevice();
-        this.bufferImage    = dsd.getDefaultConfiguration().createCompatibleVolatileImage(this.resolutionW, this.resolutionH);
-        this.g2d            = (Graphics2D)bufferImage.getGraphics();
-
-        //adiciona o keylistener
-        this.addKeyListener(new KeyAdapter() {
-            /* Key released */
-            public void keyReleased(KeyEvent e) {
-                if (e.getKeyCode() == 39) {if (selectedItem < 2) { selectedItem++;paint(g2d);}}
-                if (e.getKeyCode() == 37) {if (selectedItem > 0) {selectedItem--;paint(g2d);}}
-                
-            }
-        });
     }
 
+    /*
+        WTMD: Override the paint method, transfering the rendering control to draw.
+    */
     @Override
     public void paint(Graphics g) {
-        super.paint(g);
         this.draw();
     }
 
+    /*
+        WTMD: This method draw the current screen, some steps described here:
+            1) Clear the stage
+            2) Print the main label
+            3) Print the selection buttons
+            4) Print the exit label
+     */
     public void draw() {
+
+        //update the window size variables if the user resize it.
+        this.windowHeight = this.getHeight();
+        this.windowWidth  = this.getWidth();
+
         if (this.g2d != null) {
-            //cria a tela inicial no buffer e renderiza        
+            
+            //this graphical device (g2d) points to backbuffer, so, we are making things behide the scenes
+
+            //clear the stage
             this.g2d.setBackground(Color.BLACK);
             this.g2d.clearRect(0, 0, this.resolutionW, this.resolutionH);
             this.g2d.setFont(new Font("Abadi", Font.PLAIN, 18));
             this.g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+            //Define some labels
             FontMetrics fm              = this.g2d.getFontMetrics();
-            String label1               = "Por favor, escolha o modo que deseja iniciar:";
-            String label2               = "Windowed";
-            String label3               = "FullScreen Window-Borderless";
-            String label4               = "FullScreen (V-Synced)";
-            
+            String labels[]             = new String[5];
+            Rectangle2D labelbounds[]   = new Rectangle2D[5];
+            labels[0]                   = "Please, select the screen mode!";
+            labels[1]                   = "Windowed";
+            labels[2]                   = "FullScreen Window-Borderless";
+            labels[3]                   = "FullScreen (V-Synced)";
+            labels[4]                   = "ESC to exit";
+            labelbounds[0]              = fm.getStringBounds(labels[0], g2d);
+            labelbounds[1]              = fm.getStringBounds(labels[1], g2d);
+            labelbounds[2]              = fm.getStringBounds(labels[2], g2d);
+            labelbounds[3]              = fm.getStringBounds(labels[3], g2d);
+
+            //retrieve some common values in some variables
             int windowXCenter           = (int)(this.getWidth() / 2);
             int windowHeight            = (int)(this.getHeight());
-            Rectangle2D label1bounds    = fm.getStringBounds(label1, g2d);
-            Rectangle2D label2bounds    = fm.getStringBounds(label2, g2d);
-            Rectangle2D label3bounds    = fm.getStringBounds(label3, g2d);
-            Rectangle2D label4bounds    = fm.getStringBounds(label4, g2d);
+            int buttonsPositionH        = (int)(windowHeight*.45);
+            int buttonsHeight           = 30;
+            Color orange                = new Color(255,102,0);
 
-            //desenha o título de seleção
+            //draw the initial label (at 1/4 of window height)
             this.g2d.setColor(Color.WHITE);
-            this.g2d.drawString(label1, (int)(windowXCenter - (label1bounds.getCenterX())), (int)(windowHeight*.30));
+            this.g2d.drawString(labels[0], (int)(windowXCenter - (labelbounds[0].getCenterX())), (int)(windowHeight*.25));
 
-            int windowHeightButtons = (int)(windowHeight*.4);
-            Color orange = new Color(255,102,0);
+            //space the buttons
+            int offset = 70; //in pixel
+            int freeSpace = (int)(this.windowWidth 
+                                    - labelbounds[1].getWidth() - 10
+                                    - labelbounds[2].getWidth() - 10
+                                    - labelbounds[3].getWidth() - 10
+                                    - offset    //to the left
+                                    - offset);  //to the right
+            int division = freeSpace / 2;
 
+            //draw the first button
+            int buttonsPositionX[] = new int[3];
+            buttonsPositionX[0] = offset;
             this.g2d.setColor(orange);
-            this.g2d.fillRect(20, windowHeightButtons, (int)(label2bounds.getWidth() + 10), 30);
+            this.g2d.fillRect(buttonsPositionX[0], 
+                              buttonsPositionH, 
+                              (int)(labelbounds[1].getWidth() + 10), 
+                              buttonsHeight);
             this.g2d.setColor(Color.BLACK);
-            this.g2d.drawString(label2, 20 + 5, (int)(windowHeightButtons + label2bounds.getHeight()));
+            this.g2d.drawString(labels[1], 
+                                buttonsPositionX[0] + 5,
+                                (int)(buttonsPositionH + labelbounds[1].getHeight()));
 
+            //draw the second button
+            buttonsPositionX[1] = (buttonsPositionX[0] +  (int)(labelbounds[1].getWidth() + 10) + division);
             this.g2d.setColor(orange);
-            this.g2d.fillRect(120, windowHeightButtons, (int)(label3bounds.getWidth() + 10), 30);
+            this.g2d.fillRect(buttonsPositionX[1], 
+                              buttonsPositionH, 
+                              (int)(labelbounds[2].getWidth() + 10), 
+                              buttonsHeight);
             this.g2d.setColor(Color.BLACK);
-            this.g2d.drawString(label3, 120 + 5, (int)(windowHeightButtons + label3bounds.getHeight()));
+            this.g2d.drawString(labels[2], 
+                                buttonsPositionX[1] + 5, 
+                                (int)(buttonsPositionH + labelbounds[2].getHeight()));
 
+            //draw the third button
+            buttonsPositionX[2] = (buttonsPositionX[1] +  (int)(labelbounds[2].getWidth() + 10) + division);
             this.g2d.setColor(orange);
-            this.g2d.fillRect(420, windowHeightButtons, (int)(label4bounds.getWidth() + 10), 30);
+            this.g2d.fillRect(buttonsPositionX[2], 
+                              buttonsPositionH, 
+                              (int)(labelbounds[3].getWidth() + 10), 
+                              buttonsHeight);
             this.g2d.setColor(Color.BLACK);
-            this.g2d.drawString(label4, 420 + 5, (int)(windowHeightButtons + label4bounds.getHeight()));
+            this.g2d.drawString(labels[3], 
+                                buttonsPositionX[2] + 5, 
+                                (int)(buttonsPositionH + labelbounds[3].getHeight()));
 
+            //draw the highlight
             this.g2d.setColor(Color.LIGHT_GRAY);
             this.g2d.setStroke(new BasicStroke(4.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
-            this.g2d.drawRect(14, windowHeightButtons - 6, (int)(label2bounds.getWidth() + 21), 41);
+            int highlightW = (int)labelbounds[selectedItem + 1].getWidth() + 21;
+            this.g2d.drawRect(buttonsPositionX[selectedItem] - 6, buttonsPositionH - 6, highlightW, buttonsHeight + 11);
 
+            //draw the exit message
+            this.g2d.setFont(new Font("Abadi", Font.PLAIN, 12));
+            this.g2d.setColor(Color.WHITE);
+            this.g2d.drawString(labels[4], 
+                                (int)(this.windowWidth - (fm.getStringBounds(labels[4], g2d)).getWidth()),
+                                (int)(this.windowHeight - 50));
 
-
-
-            //System.out.println("draw.....");
-
-            //Copia o buffer para o panel
+            //At least, copy the backbuffer to the canvas screen
             this.canvas.getGraphics().drawImage(this.bufferImage, 0, 0, this);
         }
     }
@@ -162,10 +250,17 @@ public class ConfigSplashScreen extends JFrame implements Runnable {
         System.out.println("running...");
     }
 
+    /*
+        Description: main method
+    */
     public static void main(String [] args) {
         new Thread(new ConfigSplashScreen(), "engine").start();
     }
 
+    /*
+        This subclass is still under development...
+        TODO: retrieve the parameters from the config file...
+    */
     @SuppressWarnings("unused")
     private class ConfigurationFile {
 
@@ -192,7 +287,7 @@ public class ConfigSplashScreen extends JFrame implements Runnable {
         private boolean fileExists              = false;
 
         /* Lê o arquivo de configurações */
-        public void loadConfigFile() {
+        public void verifyTheConfigurationFile() {
             
             //Indica o local do arquivo de configuração
             File configfile = new File("config.ini");
