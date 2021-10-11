@@ -254,7 +254,7 @@ public class ConfigSplashScreen extends JFrame implements Runnable {
         Description: main method
     */
     public static void main(String [] args) {
-        new Thread(new ConfigSplashScreen(), "engine").start();
+        new Thread(new ConfigSplashScreen(), "configScreen").start();
     }
 
     /*
