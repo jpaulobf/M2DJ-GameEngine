@@ -13,23 +13,23 @@ public class GameEngine implements Runnable {
     private long FPS30                  = (long)(1_000_000_000 / 30);
     private long TARGET_FRAMETIME       = FPS60;
     private boolean UNLIMITED_FPS       = true;
+    private Game game                   = null;
 
     /*
     TODO: provide the user parameters
     */
     public GameEngine() {
-
+        game = new Game();
     }
     
     /* Método de update, só executa quando a flag permite */
     public void update(long frametime) {
-        System.out.println(frametime);
-        //this.game.update(frametime);
+        this.game.update(frametime);
     }
 
     /* Método de desenho, só executa quando a flag permite */
     public void draw(long frametime) {
-        //game.draw(frametime);
+        this.game.draw(frametime);
     }
 
     /* Método de execução da thread */
@@ -44,17 +44,26 @@ public class GameEngine implements Runnable {
         long updateDiff         = 0;
         long totalExecutionTime = 0;
         long timeStamp          = 0;
+        int counter             = 0;
 
         if (UNLIMITED_FPS) {
             while (isEngineRunning) {
-
-                //TODO: CALC THE FRAMETIME
 
                 //mark the time before the iteration
                 timeStamp = System.nanoTime();
 
                 //compute the time from previous iteration and the current
                 timeElapsed = (timeStamp - timeReference);
+
+                //save the difference in an accumulator to control the pacing
+                accumulator += timeElapsed;
+                counter++;
+
+                if (accumulator >= 1_000_000_000) {
+                    accumulator = 0;
+                    System.out.println("Frametime: " + (1_000f / counter) + " ms");
+                    counter = 0;
+                }
 
                 //update the game (gathering input from user, and processing the necessary games updates)
                 this.update(timeElapsed);
@@ -127,9 +136,5 @@ public class GameEngine implements Runnable {
                 timeReference = timeStamp;
             }
         }
-    }
-
-    public static void main(String[] args) {
-        new Thread(new GameEngine(), "engine").start();
     }
 }
