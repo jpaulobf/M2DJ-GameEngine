@@ -13,7 +13,6 @@ public class GameEngine implements Runnable {
     private long FPS30                  = (long)(1_000_000_000 / 30);
     private long TARGET_FRAMETIME       = FPS60;
     private boolean UNLIMITED_FPS       = true;
-    private int counter=0;
 
     /*
     TODO: provide the user parameters
@@ -23,16 +22,14 @@ public class GameEngine implements Runnable {
     }
     
     /* Método de update, só executa quando a flag permite */
-    public void update(long timeElapsed) {
-        if (++counter < 200) {
-        System.out.println(timeElapsed);
-        }
-        //this.game.update(timeStamp);
+    public void update(long frametime) {
+        System.out.println(frametime);
+        //this.game.update(frametime);
     }
 
     /* Método de desenho, só executa quando a flag permite */
-    public void draw(long timeElapsed) {
-        //game.draw();
+    public void draw(long frametime) {
+        //game.draw(frametime);
     }
 
     /* Método de execução da thread */
@@ -50,6 +47,9 @@ public class GameEngine implements Runnable {
 
         if (UNLIMITED_FPS) {
             while (isEngineRunning) {
+
+                //TODO: CALC THE FRAMETIME
+
                 //mark the time before the iteration
                 timeStamp = System.nanoTime();
 
