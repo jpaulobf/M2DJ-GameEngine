@@ -41,10 +41,12 @@ public class Game extends JFrame {
     private GraphicsEnvironment ge              = null;
     private GraphicsDevice dsd                  = null;
     private Graphics2D g2d                      = null;
+    private boolean showFPS                     = true;
 
     //this screen control logic parameter   
     private double sp1x                         = 10;
     private double sp1y                         = 10;
+
     
     /*
         WTMD: some responsabilites here:
@@ -147,11 +149,13 @@ public class Game extends JFrame {
             this.g2d.clearRect(0, 0, this.resolutionW, this.resolutionH);
 
             rect = new Rectangle2D.Double(sp1x, sp1y, 60, 60);
-            this.g2d.setBackground(Color.WHITE);
+            this.g2d.setColor(Color.WHITE);
             this.g2d.draw(rect);
 
-            this.g2d.setColor(Color.WHITE);
-            this.g2d.drawString(frametime + "", 100, 100);
+            if (this.showFPS) {
+                this.g2d.setColor(new Color(255, 255, 255, 80));
+                this.g2d.drawString("fps: " + (int)(1_000_000_000D / frametime), this.windowWidth - 70, 20);
+            }
     
             //At least, copy the backbuffer to the canvas screen
             this.canvas.getGraphics().drawImage(this.bufferImage, 0, 0, this);
@@ -162,7 +166,7 @@ public class Game extends JFrame {
         Description: main method
     */
     public static void main(String[] args) throws Exception {
-        Thread thread1 = new Thread(new GameEngine(), "engine");
+        Thread thread1 = new Thread(new GameEngine(0), "engine");
         thread1.start();
     }
 }

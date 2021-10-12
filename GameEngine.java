@@ -8,6 +8,7 @@
 public class GameEngine implements Runnable {
 
     private boolean isEngineRunning     = true;
+    private long FPS240                 = (long)(1_000_000_000 / 240);
     private long FPS120                 = (long)(1_000_000_000 / 120);
     private long FPS60                  = (long)(1_000_000_000 / 60);
     private long FPS30                  = (long)(1_000_000_000 / 30);
@@ -17,9 +18,32 @@ public class GameEngine implements Runnable {
     //private long counter                 = 0;
 
     /*
-    TODO: provide the user parameters
+        WTMD: constructor
+                receives the target FPS (0, 30, 60, 120, 240) and starts the engine
     */
-    public GameEngine() {
+    public GameEngine(int targetFPF) {
+        this.UNLIMITED_FPS = false;
+        switch(targetFPF) {
+            case 30:
+                this.TARGET_FRAMETIME = FPS30;
+                break;
+            case 60:
+                this.TARGET_FRAMETIME = FPS60;
+                break;
+            case 120:
+                this.TARGET_FRAMETIME = FPS120;
+                break;
+            case 240:
+                this.TARGET_FRAMETIME = FPS240;
+                break;
+            case 0:
+                this.UNLIMITED_FPS = true;
+                break;
+            default:
+                this.TARGET_FRAMETIME = FPS30;
+                break;
+        }
+
         game = new Game();
     }
     
@@ -60,12 +84,6 @@ public class GameEngine implements Runnable {
                 //save the difference in an accumulator to control the pacing
                 accumulator += timeElapsed;
                 counter++;
-
-                if (accumulator >= 1_000_000_000) {
-                    accumulator = 0;
-                    System.out.println("Frametime: " + (1_000f / counter) + " ms");
-                    counter = 0;
-                }
 
                 //update the game (gathering input from user, and processing the necessary games updates)
                 this.update(timeElapsed);
