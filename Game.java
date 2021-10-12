@@ -9,6 +9,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.image.VolatileImage;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
+import java.awt.RenderingHints;
+import java.awt.geom.Rectangle2D;
 
 /*
     Project:    Modern 2D Java Game Engine
@@ -41,7 +43,8 @@ public class Game extends JFrame {
     private Graphics2D g2d                      = null;
 
     //this screen control logic parameter   
-    private int selectedItem                    = 0;
+    private double sp1x                         = 10;
+    private double sp1y                         = 10;
     
     /*
         WTMD: some responsabilites here:
@@ -74,9 +77,12 @@ public class Game extends JFrame {
         
         //add a keylistener
         this.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == 39) {sp1x++;}
+                if (e.getKeyCode() == 37) {sp1x--;}
+            }
             public void keyReleased(KeyEvent e) {
-                if (e.getKeyCode() == 39) {if (selectedItem < 2) { selectedItem++;paint(g2d);}}
-                if (e.getKeyCode() == 37) {if (selectedItem > 0) {selectedItem--;paint(g2d);}}
                 if (e.getKeyCode() == 27) {setVisible(false); System.exit(0);}
             }
         });
@@ -86,6 +92,7 @@ public class Game extends JFrame {
         this.dsd            = ge.getDefaultScreenDevice();
         this.bufferImage    = dsd.getDefaultConfiguration().createCompatibleVolatileImage(this.resolutionW, this.resolutionH);
         this.g2d            = (Graphics2D)bufferImage.getGraphics();
+        this.g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
         
         //////////////////////////////////////////////////////////////////////
         // ->>>  now, for the canvas
@@ -108,6 +115,17 @@ public class Game extends JFrame {
 
     public void update(long frametime) {
 
+        //how many pixels per second I want?
+        //ex.: movement at 200px/s
+        //To do so, I need to divide 1_000_000_000 by the exactly frametime to know the current FPS
+        //With this number in hand,  divide the pixel distance by the current fps
+        //this must be your maximum movement amount in pixels
+        double movementPerSecond = 200D;
+        double step = movementPerSecond / (double)(1_000_000_000D / (double)frametime);
+
+        //Let's try
+        sp1x += step;
+        
     }
     
     /*
@@ -117,8 +135,9 @@ public class Game extends JFrame {
     public void draw(long frametime) {
 
         //update the window size variables if the user resize it.
-        this.windowHeight = this.getHeight();
-        this.windowWidth  = this.getWidth();
+        this.windowHeight   = this.getHeight();
+        this.windowWidth    = this.getWidth();
+        Rectangle2D rect    = null;
 
         if (this.g2d != null) {
             
@@ -126,6 +145,10 @@ public class Game extends JFrame {
             //clear the stage
             this.g2d.setBackground(Color.BLACK);
             this.g2d.clearRect(0, 0, this.resolutionW, this.resolutionH);
+
+            rect = new Rectangle2D.Double(sp1x, sp1y, 60, 60);
+            this.g2d.setBackground(Color.WHITE);
+            this.g2d.draw(rect);
 
             this.g2d.setColor(Color.WHITE);
             this.g2d.drawString(frametime + "", 100, 100);

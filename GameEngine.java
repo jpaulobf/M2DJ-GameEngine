@@ -12,8 +12,9 @@ public class GameEngine implements Runnable {
     private long FPS60                  = (long)(1_000_000_000 / 60);
     private long FPS30                  = (long)(1_000_000_000 / 30);
     private long TARGET_FRAMETIME       = FPS60;
-    private boolean UNLIMITED_FPS       = true;
+    private boolean UNLIMITED_FPS       = false;
     private Game game                   = null;
+    //private long counter                 = 0;
 
     /*
     TODO: provide the user parameters
@@ -45,6 +46,7 @@ public class GameEngine implements Runnable {
         long totalExecutionTime = 0;
         long timeStamp          = 0;
         int counter             = 0;
+        long beforeDraw         = 0;
 
         if (UNLIMITED_FPS) {
             while (isEngineRunning) {
@@ -97,7 +99,7 @@ public class GameEngine implements Runnable {
                     beforeUpdate = System.nanoTime();
 
                     //update the game (gathering input from user, and processing the necessary games updates)
-                    this.update(timeElapsed);
+                    this.update(TARGET_FRAMETIME);
 
                     //reset the accumulator
                     accumulator = 0;
@@ -109,11 +111,14 @@ public class GameEngine implements Runnable {
                     //only draw if there is some (any) enough time
                     if ((TARGET_FRAMETIME - updateDiff) > 0) {
                         
+                        //take the time before draw
+                        beforeDraw = System.nanoTime();
+
                         //draw
-                        this.draw(timeElapsed);
+                        this.draw(TARGET_FRAMETIME);
                         
                         //and than, store the time spent
-                        afterDraw = System.nanoTime() - afterUpdate;
+                        afterDraw = beforeDraw - afterUpdate;
                     }
 
                     //sum the time to update + the time to draw
@@ -126,8 +131,9 @@ public class GameEngine implements Runnable {
                         is necessary to keep updating without render, to recover the pace.
                 */
                 while (totalExecutionTime > TARGET_FRAMETIME) {
+                    System.out.println("lost....");
                     beforeUpdate = System.nanoTime();
-                    this.update(timeElapsed);
+                    this.update(TARGET_FRAMETIME);
                     afterUpdate = System.nanoTime();
                     totalExecutionTime -= (afterUpdate - beforeUpdate);
                 }  
