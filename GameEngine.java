@@ -69,8 +69,6 @@ public class GameEngine implements Runnable {
         long updateDiff         = 0;
         long totalExecutionTime = 0;
         long timeStamp          = 0;
-        int counter             = 0;
-        long beforeDraw         = 0;
 
         if (UNLIMITED_FPS) {
             while (isEngineRunning) {
@@ -83,7 +81,6 @@ public class GameEngine implements Runnable {
 
                 //save the difference in an accumulator to control the pacing
                 accumulator += timeElapsed;
-                counter++;
 
                 //update the game (gathering input from user, and processing the necessary games updates)
                 this.update(timeElapsed);
@@ -129,14 +126,11 @@ public class GameEngine implements Runnable {
                     //only draw if there is some (any) enough time
                     if ((TARGET_FRAMETIME - updateDiff) > 0) {
                         
-                        //take the time before draw
-                        beforeDraw = System.nanoTime();
-
                         //draw
                         this.draw(TARGET_FRAMETIME);
                         
                         //and than, store the time spent
-                        afterDraw = beforeDraw - afterUpdate;
+                        afterDraw = System.nanoTime() - afterUpdate;
                     }
 
                     //sum the time to update + the time to draw
@@ -149,7 +143,7 @@ public class GameEngine implements Runnable {
                         is necessary to keep updating without render, to recover the pace.
                 */
                 while (totalExecutionTime > TARGET_FRAMETIME) {
-                    System.out.println("lost....");
+                    System.out.println("lost render frame....");
                     beforeUpdate = System.nanoTime();
                     this.update(TARGET_FRAMETIME);
                     afterUpdate = System.nanoTime();
