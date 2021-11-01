@@ -10,12 +10,11 @@ import java.awt.image.VolatileImage;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.RenderingHints;
-import java.awt.geom.Rectangle2D;
 
 /*
     Project:    Modern 2D Java Game Engine
     Purpose:    Provide basics functionalities to write 2D games in Java in a more modern approach
-    Author:     Mr. Joao P. B. Faria
+    Author:     Joao P. B. Faria
     Date:       Octuber 2021
     WTCD:       This class, provides a stage for the game.
 */
@@ -26,8 +25,8 @@ public class Game extends JFrame {
     //this window properties
     private int positionX                       = 0;
     private int positionY                       = 0;
-    private int windowWidth                     = 800;
-    private int windowHeight                    = 600;
+    private int windowWidth                     = 1344; //42
+    private int windowHeight                    = 832;  //24
 
     //desktop properties
     private int resolutionH                     = 0;
@@ -43,11 +42,9 @@ public class Game extends JFrame {
     private Graphics2D g2d                      = null;
     private boolean showFPS                     = true;
 
-    //this screen control logic parameter   
-    private double sp1x                         = 10;
-    private double sp1y                         = 10;
+    private Scenario scenario = null;
+    Frog frog = null;
 
-    
     /*
         WTMD: some responsabilites here:
     */
@@ -76,18 +73,6 @@ public class Game extends JFrame {
         this.positionX = (int)((size.getWidth() / 2) - (this.windowWidth / 2));
         this.positionY = (int)((size.getHeight() / 2) - (this.windowHeight / 2));
         this.setLocation(this.positionX, this.positionY);
-        
-        //add a keylistener
-        this.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == 39) {sp1x++;}
-                if (e.getKeyCode() == 37) {sp1x--;}
-            }
-            public void keyReleased(KeyEvent e) {
-                if (e.getKeyCode() == 27) {setVisible(false); System.exit(0);}
-            }
-        });
 
         //create the backbuffer from the size of screen resolution to avoid any resize process penalty
         this.ge             = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -111,6 +96,26 @@ public class Game extends JFrame {
         this.add(canvas);
         this.pack();
         this.setLocationRelativeTo(null);
+
+        //////////////////////////////////////////////////////////////////////
+        // ->>>  now, for the game elements
+        //////////////////////////////////////////////////////////////////////
+        scenario = new Scenario(g2d, this.windowWidth, this.windowHeight);
+        frog = new Frog(g2d, scenario);
+
+        //add a keylistener
+        this.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                frog.move(e.getKeyCode());
+            }
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == 27) {setVisible(false); System.exit(0);}
+            }
+        });
+
+
+        //show the game screen
         this.setVisible(true);
         this.requestFocus();
     }
@@ -122,12 +127,13 @@ public class Game extends JFrame {
         //To do so, I need to divide 1_000_000_000 by the exactly frametime to know the current FPS
         //With this number in hand,  divide the pixel distance by the current fps
         //this must be your maximum movement amount in pixels
-        double movementPerSecond = 200D;
+        double movementPerSecond = 100D;
         double step = movementPerSecond / (double)(1_000_000_000D / (double)frametime);
 
-        //Let's try
-        sp1x += step;
-        
+
+        scenario.update(frametime);
+        frog.update(frametime);
+      
     }
     
     /*
@@ -139,7 +145,6 @@ public class Game extends JFrame {
         //update the window size variables if the user resize it.
         this.windowHeight   = this.getHeight();
         this.windowWidth    = this.getWidth();
-        Rectangle2D rect    = null;
 
         if (this.g2d != null) {
             
@@ -148,9 +153,8 @@ public class Game extends JFrame {
             this.g2d.setBackground(Color.BLACK);
             this.g2d.clearRect(0, 0, this.resolutionW, this.resolutionH);
 
-            rect = new Rectangle2D.Double(sp1x, sp1y, 60, 60);
-            this.g2d.setColor(Color.WHITE);
-            this.g2d.draw(rect);
+            scenario.draw(frametime);
+            frog.draw(frametime);
 
             if (this.showFPS) {
                 this.g2d.setColor(new Color(255, 255, 255, 80));
@@ -166,7 +170,7 @@ public class Game extends JFrame {
         Description: main method
     */
     public static void main(String[] args) throws Exception {
-        Thread thread1 = new Thread(new GameEngine(0), "engine");
-        thread1.start();
+        Thread thread = new Thread(new GameEngine(0), "engine");
+        thread.start();
     }
 }
