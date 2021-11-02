@@ -32,19 +32,20 @@ public class Scenario {
      * @param windowHeight
      */
     public Scenario(Graphics2D g2d, int windowWidth, int windowHeight) {
-        this.g2d = g2d;
-        this.windowHeight = windowHeight;
-        this.windowWidth = windowWidth;
+        this.g2d            = g2d;
+        this.windowHeight   = windowHeight;
+        this.windowWidth    = windowWidth;
+        this.vehicle        = new Vehicle(g2d, windowWidth, windowHeight);
         this.drawBackground();
-        this.vehicle = new Vehicle(g2d, windowWidth, windowHeight);
     }
 
     /**
      * Getters
      * @return
      */
-    public byte getTileX() {return this.tileX;}
-    public byte getTileY() {return this.tileY;}
+    public byte getTileX()      {return this.tileX;}
+    public byte getTileY()      {return this.tileY;}
+    public byte getHalfTileY()  {return this.halfTileY;}
 
     /**
      * This private method construct the BG just once.
@@ -184,17 +185,13 @@ public class Scenario {
         short [][] velocities = {{400}, {280}, {400}, {330}, {300}};
         int [][] positionX    = {{300_000, 650_000, 1000_000}, {100_000, 400_000, 700_000}, {100_000, 500_000, 900_000}, {100_000}, {100_000, 750_000}};
 
-        //type, direction, position x, velocity
+        //type, direction, start-position-x, velocity
         int [][][] stg1 =  { { {4, LEFT,  positionX[4][0], velocities[4][0]}, {4, LEFT,  positionX[4][1], velocities[4][0]}},
                              { {1, RIGHT, positionX[3][0], velocities[3][0]}},
                              { {2, LEFT,  positionX[2][0], velocities[2][0]}, {3, LEFT,  positionX[2][1], velocities[2][0]}, {1, LEFT, positionX[2][2], velocities[2][0]}}, 
                              { {3, RIGHT, positionX[1][0], velocities[1][0]}, {1, RIGHT, positionX[1][1], velocities[1][0]}, {4, RIGHT, positionX[1][2], velocities[1][0]}},
                              { {0, LEFT,  positionX[0][0], velocities[0][0]}, {0, LEFT,  positionX[0][1], velocities[0][0]}, {3, LEFT, positionX[0][2], velocities[0][0]}}
                            };
-
-
-
-        private double x = 100D;
 
         /**
          * Load the tile image
@@ -290,14 +287,10 @@ public class Scenario {
 
         @Override
         public void draw(long frametime) {
-            // TODO Auto-generated method stub
-            
         }
 
         @Override
         public void update(long frametime) {
-            // TODO Auto-generated method stub
-            
         }
     }
 
@@ -305,14 +298,10 @@ public class Scenario {
 
         @Override
         public void draw(long frametime) {
-            // TODO Auto-generated method stub
-            
         }
 
         @Override
         public void update(long frametime) {
-            // TODO Auto-generated method stub
-            
         }
     }
 
@@ -320,14 +309,10 @@ public class Scenario {
 
         @Override
         public void draw(long frametime) {
-            // TODO Auto-generated method stub
-            
         }
 
         @Override
         public void update(long frametime) {
-            // TODO Auto-generated method stub
-            
         }
     }
 
@@ -335,14 +320,10 @@ public class Scenario {
 
         @Override
         public void draw(long frametime) {
-            // TODO Auto-generated method stub
-            
         }
 
         @Override
         public void update(long frametime) {
-            // TODO Auto-generated method stub
-            
         }
     }
 
@@ -350,14 +331,10 @@ public class Scenario {
 
         @Override
         public void draw(long frametime) {
-            // TODO Auto-generated method stub
-            
         }
 
         @Override
         public void update(long frametime) {
-            // TODO Auto-generated method stub
-            
         }
     }
 }

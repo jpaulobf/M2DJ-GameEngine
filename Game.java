@@ -127,9 +127,9 @@ public class Game extends JFrame {
         //To do so, I need to divide 1_000_000_000 by the exactly frametime to know the current FPS
         //With this number in hand,  divide the pixel distance by the current fps
         //this must be your maximum movement amount in pixels
-        double movementPerSecond = 100D;
-        double step = movementPerSecond / (double)(1_000_000_000D / (double)frametime);
-
+        //example:
+        //double movementPerSecond = 100D;
+        //double step = movementPerSecond / (double)(1_000_000_000D / (double)frametime);
 
         scenario.update(frametime);
         frog.update(frametime);
