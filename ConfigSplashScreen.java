@@ -66,6 +66,7 @@ public class ConfigSplashScreen extends JFrame implements Runnable {
 
         //////////////////////////////////////////////////////////////////////
         // ->>>  for the window
+        //////////////////////////////////////////////////////////////////////
 
         //load or provide the default configuration file
         new ConfigurationFile().verifyTheConfigurationFile();
@@ -108,6 +109,7 @@ public class ConfigSplashScreen extends JFrame implements Runnable {
         
         //////////////////////////////////////////////////////////////////////
         // ->>>  now, for the canvas
+        //////////////////////////////////////////////////////////////////////
 
         //initialize the canvas
         this.canvas = new JPanel(null);

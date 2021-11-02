@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
@@ -47,7 +46,14 @@ public class Frog extends Sprite {
     }
 
     
+    public byte getLives() {
+        return lives;
+    }
 
+    /**
+     * 
+     * @param keycode
+     */
     public void move(int keycode) {
         if (this.canMove) {
             if (keycode == 39) {

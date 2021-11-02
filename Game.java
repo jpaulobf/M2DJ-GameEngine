@@ -97,13 +97,16 @@ public class Game extends JFrame {
         this.pack();
         this.setLocationRelativeTo(null);
 
+        //show the game screen
+        this.setVisible(true);
+        this.requestFocus();
+
         //////////////////////////////////////////////////////////////////////
-        // ->>>  now, for the game elements
+        // ->>>  create the game elements objects
         //////////////////////////////////////////////////////////////////////
         scenario = new Scenario(g2d, this.windowWidth, this.windowHeight);
         frog = new Frog(g2d, scenario);
 
-        //add a keylistener
         this.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -113,11 +116,6 @@ public class Game extends JFrame {
                 if (e.getKeyCode() == 27) {setVisible(false); System.exit(0);}
             }
         });
-
-
-        //show the game screen
-        this.setVisible(true);
-        this.requestFocus();
     }
 
     public void update(long frametime) {
@@ -131,6 +129,10 @@ public class Game extends JFrame {
         //double movementPerSecond = 100D;
         //double step = movementPerSecond / (double)(1_000_000_000D / (double)frametime);
 
+
+        //////////////////////////////////////////////////////////////////////
+        // ->>>  update the game elements
+        //////////////////////////////////////////////////////////////////////
         scenario.update(frametime);
         frog.update(frametime);
       
@@ -153,9 +155,13 @@ public class Game extends JFrame {
             this.g2d.setBackground(Color.BLACK);
             this.g2d.clearRect(0, 0, this.resolutionW, this.resolutionH);
 
+            //////////////////////////////////////////////////////////////////////
+            // ->>>  draw the game elements
+            //////////////////////////////////////////////////////////////////////
             scenario.draw(frametime);
             frog.draw(frametime);
 
+            //verify if the user want to show the FPS
             if (this.showFPS) {
                 this.g2d.setColor(new Color(255, 255, 255, 80));
                 this.g2d.drawString("fps: " + (int)(1_000_000_000D / frametime), this.windowWidth - 70, 20);
