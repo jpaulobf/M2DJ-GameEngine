@@ -25,9 +25,12 @@ public class Game extends JFrame {
     //this window properties
     private int positionX                       = 0;
     private int positionY                       = 0;
-    //how many tiles in x and in y
-    private int windowWidth                     = 1344;
-    private int windowHeight                    = 832;
+
+    //width and height must keep the proportion 
+    //private int windowWidth                     = 1344;
+    //private int windowHeight                    = 832;
+    private int windowWidth                     = 819;
+    private int windowHeight                    = 507;
 
     //desktop properties
     private int resolutionH                     = 0;
@@ -43,6 +46,7 @@ public class Game extends JFrame {
     private Graphics2D g2d                      = null;
     private boolean showFPS                     = true;
 
+    //the game variables go here...
     private Scenario scenario = null;
     Frog frog = null;
 

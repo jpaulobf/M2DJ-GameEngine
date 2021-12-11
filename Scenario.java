@@ -46,7 +46,7 @@ public class Scenario {
         this.halfTileY      = (byte)(tileY / 2);
 
         this.vehicle        = new Vehicle(g2d, windowWidth, windowHeight);
-        this.drawBackground();
+        this.drawBackgroundInBuffer();
     }
 
     /**
@@ -61,7 +61,7 @@ public class Scenario {
      * This private method construct the BG just once.
      * Than, when necessary it is ploted in the backbuffer.
      */
-    private void drawBackground() {
+    private void drawBackgroundInBuffer() {
         if (this.bgd2 == null) {
 
             try {
@@ -97,29 +97,25 @@ public class Scenario {
             this.bgd2.fillRect(0, tileY * 12, this.windowWidth, this.tileY);
 
             //paint each frogger dock
-            //
-            int bgoffset = 22; //TODO: REFACTOR
+            int bgoffset = (int)(this.tileX * 0.75);
             this.bgd2.setColor(new Color(20, 20, 20));
+            //first dock
             this.bgd2.fillRect(this.halfTileX * 0  + bgoffset, 0, this.halfTileX, this.tileY);
             this.bgd2.fillRect(this.halfTileX * 1  + bgoffset, 0, this.halfTileX, this.tileY);
             this.bgd2.fillRect(this.halfTileX * 2  + bgoffset, 0, this.halfTileX, this.tileY);
-                
-            bgoffset = 34; //TODO: REFACTOR
+            //second dock
             this.bgd2.fillRect(this.halfTileX * 9  + bgoffset, 0, this.halfTileX, this.tileY);
             this.bgd2.fillRect(this.halfTileX * 10 + bgoffset, 0, this.halfTileX, this.tileY);
             this.bgd2.fillRect(this.halfTileX * 11 + bgoffset, 0, this.halfTileX, this.tileY);
- 
-            bgoffset = 46; //TODO: REFACTOR
+            //third dock 
             this.bgd2.fillRect(this.halfTileX * 18 + bgoffset, 0, this.halfTileX, this.tileY);
             this.bgd2.fillRect(this.halfTileX * 19 + bgoffset, 0, this.halfTileX, this.tileY);
             this.bgd2.fillRect(this.halfTileX * 20 + bgoffset, 0, this.halfTileX, this.tileY);
-
-            bgoffset = 58; //TODO: REFACTOR
+            //fourth dock
             this.bgd2.fillRect(this.halfTileX * 27 + bgoffset, 0, this.halfTileX, this.tileY);
             this.bgd2.fillRect(this.halfTileX * 28 + bgoffset, 0, this.halfTileX, this.tileY);
             this.bgd2.fillRect(this.halfTileX * 29 + bgoffset, 0, this.halfTileX, this.tileY);
-
-            bgoffset = 70; //TODO: REFACTOR
+            //fifth dock
             this.bgd2.fillRect(this.halfTileX * 36 + bgoffset, 0, this.halfTileX, this.tileY);
             this.bgd2.fillRect(this.halfTileX * 37 + bgoffset, 0, this.halfTileX, this.tileY);
             this.bgd2.fillRect(this.halfTileX * 38 + bgoffset, 0, this.halfTileX, this.tileY);
@@ -128,33 +124,30 @@ public class Scenario {
             for (byte i = 8; i < lines - 1; i++) {
                 this.bgd2.setStroke(new BasicStroke());
                 this.bgd2.setColor(new Color(150, 150, 0));
-                this.bgd2.drawLine(0, 
-                                   (tileY * i), 
-                                   this.windowWidth, 
-                                   (tileY * i));
+                this.bgd2.drawLine(0, (tileY * i), this.windowWidth, (tileY * i));
             }
 
             //draw lane inlines
             for (byte i = 7; i < lines - 1; i++) {
                 this.bgd2.setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0));
                 this.bgd2.setColor(new Color(150, 150, 0, 50));
-                this.bgd2.drawLine(0, 
-                                   (tileY * i) + halfTileY, 
-                                   this.windowWidth, 
-                                   (tileY * i) + halfTileY);
+                this.bgd2.drawLine(0, (tileY * i) + halfTileY, this.windowWidth, (tileY * i) + halfTileY);
             }
 
-            //TODO: REFACTOR
-            for (int i = 0; i < 30; i++) {
-                this.bgd2.drawImage(this.sidewalk, i * 45, 384, (i * 45) + 45, 384 + 64, //dest w1, h1, w2, h2
-                                                   0, 0, 45, 64, //source w1, h1, w2, h2
+            //fixed image source sizes
+            byte bgImageW = 45;
+            byte bgImageH = 64;
+            //calc the weight base on proportion of the original image and the current screen size
+            byte calcX = (byte)(tileX * (float)((float)bgImageW / (float)bgImageH));
+            int qtToDraw = (int)(this.windowWidth / calcX) + 1;
+
+            //draw the safe spot (middle and bottom)
+            for (int i = 0; i < qtToDraw; i++) {
+                this.bgd2.drawImage(this.sidewalk, i * calcX, (6 * tileY), ((i * calcX) + calcX), (7 * tileY),    //dest w1, h1, w2, h2
+                                                   0, 0, bgImageW, bgImageH,                                            //source w1, h1, w2, h2
                                                    null);
-            }
-
-            //TODO: REFACTOR
-            for (int i = 0; i < 30; i++) {
-                this.bgd2.drawImage(this.sidewalk, i * 45, 767, (i * 45) + 45, 767 + 64, //dest w1, h1, w2, h2
-                                                   0, 0, 45, 64, //source w1, h1, w2, h2
+                this.bgd2.drawImage(this.sidewalk, i * calcX, (12 * tileY), ((i * calcX) + calcX), (13 * tileY), //dest w1, h1, w2, h2
+                                                   0, 0, bgImageW, bgImageH,                                        //source w1, h1, w2, h2
                                                    null);
             }
         }
