@@ -141,13 +141,17 @@ public class GameEngine implements Runnable {
                     Explanation:
                         if the total time to execute, consumes more miliseconds than the target-frame's amount, 
                         is necessary to keep updating without render, to recover the pace.
+                    Important: Something here isn't working with very slow machines. 
+                               So, this compensation have to be re-tested with this new approuch (exiting beforeUpdate).
+                               Please test this code with your scenario.
                 */
+                beforeUpdate = System.nanoTime();
                 while (totalExecutionTime > TARGET_FRAMETIME) {
                     System.out.println("lost render frame....");
-                    beforeUpdate = System.nanoTime();
                     this.update(TARGET_FRAMETIME);
                     afterUpdate = System.nanoTime();
                     totalExecutionTime -= (afterUpdate - beforeUpdate);
+                    beforeUpdate = System.nanoTime();
                 }  
 
                 //update the referencial time with the initial time

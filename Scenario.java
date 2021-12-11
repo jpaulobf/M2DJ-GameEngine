@@ -182,7 +182,7 @@ public class Scenario {
         private int windowHeight                = 0;
 
 
-        short [][] velocities = {{400}, {280}, {400}, {330}, {300}};
+        short [][] velocities = {{100}, {180}, {50}, {330}, {300}};
         int [][] positionX    = {{300_000, 650_000, 1000_000}, {100_000, 400_000, 700_000}, {100_000, 500_000, 900_000}, {100_000}, {100_000, 750_000}};
 
         //type, direction, start-position-x, velocity
