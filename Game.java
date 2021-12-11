@@ -25,8 +25,9 @@ public class Game extends JFrame {
     //this window properties
     private int positionX                       = 0;
     private int positionY                       = 0;
-    private int windowWidth                     = 1344; //42
-    private int windowHeight                    = 832;  //24
+    //how many tiles in x and in y
+    private int windowWidth                     = 1344;
+    private int windowHeight                    = 832;
 
     //desktop properties
     private int resolutionH                     = 0;

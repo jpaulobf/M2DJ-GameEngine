@@ -16,14 +16,18 @@ public class Scenario {
     private Graphics2D g2d              = null;
     private int windowWidth             = 0;
     private int windowHeight            = 0;
-    private final byte tileX            = 64;
-    private final byte tileY            = 64;
-    private final byte halfTileX        = tileX/2;
-    private final byte halfTileY        = tileY/2;
     private VolatileImage bgBufferImage = null;
     private Graphics2D bgd2             = null;
     private Vehicle vehicle             = null;
     private BufferedImage sidewalk      = null;
+    //how many tiles in x and in y
+    private final byte tilesInX         = 21;
+    private final byte tilesInY         = 13;
+    //each tile propertie
+    private final byte tileX;
+    private final byte tileY;
+    private final byte halfTileX;
+    private final byte halfTileY;
 
     /**
      * Constructor
@@ -35,6 +39,12 @@ public class Scenario {
         this.g2d            = g2d;
         this.windowHeight   = windowHeight;
         this.windowWidth    = windowWidth;
+
+        this.tileX          = (byte)(this.windowWidth / tilesInX);
+        this.tileY          = (byte)(this.windowHeight / tilesInY);
+        this.halfTileX      = (byte)(tileX / 2);
+        this.halfTileY      = (byte)(tileY / 2);
+
         this.vehicle        = new Vehicle(g2d, windowWidth, windowHeight);
         this.drawBackground();
     }
@@ -87,6 +97,7 @@ public class Scenario {
             this.bgd2.fillRect(0, tileY * 12, this.windowWidth, this.tileY);
 
             //paint each frogger dock
+            //
             int bgoffset = 22; //TODO: REFACTOR
             this.bgd2.setColor(new Color(20, 20, 20));
             this.bgd2.fillRect(this.halfTileX * 0  + bgoffset, 0, this.halfTileX, this.tileY);
