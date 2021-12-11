@@ -58,8 +58,10 @@ public class Scenario {
                 this.sidewalk = ImageIO.read(new File("images\\sidewalk.png"));
             } catch (java.io.IOException e) {
                 e.printStackTrace();
+                return;
             }
 
+            //create a backbuffer image for doublebuffer
             byte lines          = (byte)(this.windowHeight / tileY);
             this.bgBufferImage  = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().createCompatibleVolatileImage(this.windowWidth, this.windowHeight);
             this.bgd2           = (Graphics2D)bgBufferImage.getGraphics();
@@ -72,39 +74,41 @@ public class Scenario {
             this.bgd2.setColor(new Color(0, 100, 0));
             this.bgd2.fillRect(0, 0, this.windowWidth, this.tileY);
             this.bgd2.setColor(new Color(0, 0, 100));
-            this.bgd2.fillRect(0, 64, this.windowWidth, this.tileY);
-            this.bgd2.fillRect(0, 128, this.windowWidth, this.tileY);
-            this.bgd2.fillRect(0, 192, this.windowWidth, this.tileY);
-            this.bgd2.fillRect(0, 256, this.windowWidth, this.tileY);
-            this.bgd2.fillRect(0, 320, this.windowWidth, this.tileY);
+            this.bgd2.fillRect(0, tileY, this.windowWidth, this.tileY);
+            this.bgd2.fillRect(0, tileY * 2, this.windowWidth, this.tileY);
+            this.bgd2.fillRect(0, tileY * 3, this.windowWidth, this.tileY);
+            this.bgd2.fillRect(0, tileY * 4, this.windowWidth, this.tileY);
+            this.bgd2.fillRect(0, tileY * 5, this.windowWidth, this.tileY);
+            //middle lane
             this.bgd2.setColor(new Color(0, 0, 100));
-            this.bgd2.fillRect(0, 384, this.windowWidth, this.tileY - 5);
+            this.bgd2.fillRect(0, tileY * 6, this.windowWidth, this.tileY - 5);
+            //final lane (goal)
             this.bgd2.setColor(new Color(0, 0, 0));
-            this.bgd2.fillRect(0, 768, this.windowWidth, this.tileY);
+            this.bgd2.fillRect(0, tileY * 12, this.windowWidth, this.tileY);
 
             //paint each frogger dock
-            int bgoffset = 22;
+            int bgoffset = 22; //TODO: REFACTOR
             this.bgd2.setColor(new Color(20, 20, 20));
-            this.bgd2.fillRect(this.halfTileX * 0 + bgoffset, 0, this.halfTileX, this.tileY);
-            this.bgd2.fillRect(this.halfTileX * 1 + bgoffset, 0, this.halfTileX, this.tileY);
-            this.bgd2.fillRect(this.halfTileX * 2 + bgoffset, 0, this.halfTileX, this.tileY);
+            this.bgd2.fillRect(this.halfTileX * 0  + bgoffset, 0, this.halfTileX, this.tileY);
+            this.bgd2.fillRect(this.halfTileX * 1  + bgoffset, 0, this.halfTileX, this.tileY);
+            this.bgd2.fillRect(this.halfTileX * 2  + bgoffset, 0, this.halfTileX, this.tileY);
                 
-            bgoffset = 34;
-            this.bgd2.fillRect(this.halfTileX * 9 + bgoffset, 0, this.halfTileX, this.tileY);
+            bgoffset = 34; //TODO: REFACTOR
+            this.bgd2.fillRect(this.halfTileX * 9  + bgoffset, 0, this.halfTileX, this.tileY);
             this.bgd2.fillRect(this.halfTileX * 10 + bgoffset, 0, this.halfTileX, this.tileY);
             this.bgd2.fillRect(this.halfTileX * 11 + bgoffset, 0, this.halfTileX, this.tileY);
-
-            bgoffset = 46;
+ 
+            bgoffset = 46; //TODO: REFACTOR
             this.bgd2.fillRect(this.halfTileX * 18 + bgoffset, 0, this.halfTileX, this.tileY);
             this.bgd2.fillRect(this.halfTileX * 19 + bgoffset, 0, this.halfTileX, this.tileY);
             this.bgd2.fillRect(this.halfTileX * 20 + bgoffset, 0, this.halfTileX, this.tileY);
 
-            bgoffset = 58;
+            bgoffset = 58; //TODO: REFACTOR
             this.bgd2.fillRect(this.halfTileX * 27 + bgoffset, 0, this.halfTileX, this.tileY);
             this.bgd2.fillRect(this.halfTileX * 28 + bgoffset, 0, this.halfTileX, this.tileY);
             this.bgd2.fillRect(this.halfTileX * 29 + bgoffset, 0, this.halfTileX, this.tileY);
 
-            bgoffset = 70;
+            bgoffset = 70; //TODO: REFACTOR
             this.bgd2.fillRect(this.halfTileX * 36 + bgoffset, 0, this.halfTileX, this.tileY);
             this.bgd2.fillRect(this.halfTileX * 37 + bgoffset, 0, this.halfTileX, this.tileY);
             this.bgd2.fillRect(this.halfTileX * 38 + bgoffset, 0, this.halfTileX, this.tileY);
@@ -114,9 +118,9 @@ public class Scenario {
                 this.bgd2.setStroke(new BasicStroke());
                 this.bgd2.setColor(new Color(150, 150, 0));
                 this.bgd2.drawLine(0, 
-                                    (tileY * i), 
-                                this.windowWidth, 
-                                    (tileY * i));
+                                   (tileY * i), 
+                                   this.windowWidth, 
+                                   (tileY * i));
             }
 
             //draw lane inlines
@@ -124,17 +128,19 @@ public class Scenario {
                 this.bgd2.setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0));
                 this.bgd2.setColor(new Color(150, 150, 0, 50));
                 this.bgd2.drawLine(0, 
-                                    (tileY * i) + 32, 
-                                this.windowWidth, 
-                                    (tileY * i) + 32);
+                                   (tileY * i) + halfTileY, 
+                                   this.windowWidth, 
+                                   (tileY * i) + halfTileY);
             }
 
+            //TODO: REFACTOR
             for (int i = 0; i < 30; i++) {
                 this.bgd2.drawImage(this.sidewalk, i * 45, 384, (i * 45) + 45, 384 + 64, //dest w1, h1, w2, h2
                                                    0, 0, 45, 64, //source w1, h1, w2, h2
                                                    null);
             }
 
+            //TODO: REFACTOR
             for (int i = 0; i < 30; i++) {
                 this.bgd2.drawImage(this.sidewalk, i * 45, 767, (i * 45) + 45, 767 + 64, //dest w1, h1, w2, h2
                                                    0, 0, 45, 64, //source w1, h1, w2, h2
