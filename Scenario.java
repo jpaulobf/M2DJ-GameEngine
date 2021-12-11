@@ -24,10 +24,10 @@ public class Scenario {
     private final byte tilesInX         = 21;
     private final byte tilesInY         = 13;
     //each tile propertie
-    private final byte tileX;
-    private final byte tileY;
-    private final byte halfTileX;
-    private final byte halfTileY;
+    private final byte tileX            = 64;
+    private final byte tileY            = 64;
+    private final byte halfTileX        = (byte)(tileX / 2);
+    private final byte halfTileY        = (byte)(tileY / 2);
 
     /**
      * Constructor
@@ -40,10 +40,13 @@ public class Scenario {
         this.windowHeight   = windowHeight;
         this.windowWidth    = windowWidth;
 
-        this.tileX          = (byte)(this.windowWidth / tilesInX);
+        //the game is construct having one resolution as target
+        //any different resolution is streched in the final process
+        //the code below, allow another approuche, calculating everything in a dynamic way (more cpu intensive)
+        /*this.tileX          = (byte)(this.windowWidth / tilesInX);
         this.tileY          = (byte)(this.windowHeight / tilesInY);
         this.halfTileX      = (byte)(tileX / 2);
-        this.halfTileY      = (byte)(tileY / 2);
+        this.halfTileY      = (byte)(tileY / 2);*/
 
         this.vehicle        = new Vehicle(g2d, windowWidth, windowHeight);
         this.drawBackgroundInBuffer();
@@ -137,17 +140,14 @@ public class Scenario {
             //fixed image source sizes
             byte bgImageW = 45;
             byte bgImageH = 64;
-            //calc the weight base on proportion of the original image and the current screen size
-            byte calcX = (byte)(tileX * (float)((float)bgImageW / (float)bgImageH));
-            int qtToDraw = (int)(this.windowWidth / calcX) + 1;
 
             //draw the safe spot (middle and bottom)
-            for (int i = 0; i < qtToDraw; i++) {
-                this.bgd2.drawImage(this.sidewalk, i * calcX, (6 * tileY), ((i * calcX) + calcX), (7 * tileY),    //dest w1, h1, w2, h2
-                                                   0, 0, bgImageW, bgImageH,                                            //source w1, h1, w2, h2
+            for (int i = 0; i < 30; i++) {
+                this.bgd2.drawImage(this.sidewalk, i * bgImageW, (6 * tileY), ((i * bgImageW) + bgImageW), (7 * tileY),     //dest w1, h1, w2, h2
+                                                   0, 0, bgImageW, bgImageH,                                                //source w1, h1, w2, h2
                                                    null);
-                this.bgd2.drawImage(this.sidewalk, i * calcX, (12 * tileY), ((i * calcX) + calcX), (13 * tileY), //dest w1, h1, w2, h2
-                                                   0, 0, bgImageW, bgImageH,                                        //source w1, h1, w2, h2
+                this.bgd2.drawImage(this.sidewalk, i * bgImageW, (12 * tileY), ((i * bgImageW) + bgImageW), (13 * tileY),   //dest w1, h1, w2, h2
+                                                   0, 0, bgImageW, bgImageH,                                                //source w1, h1, w2, h2
                                                    null);
             }
         }

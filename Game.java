@@ -26,11 +26,9 @@ public class Game extends JFrame {
     private int positionX                       = 0;
     private int positionY                       = 0;
 
-    //width and height must keep the proportion 
-    //private int windowWidth                     = 1344;
-    //private int windowHeight                    = 832;
-    private int windowWidth                     = 819;
-    private int windowHeight                    = 507;
+    //width and height of the window
+    private int windowWidth                     = 1344;
+    private int windowHeight                    = 832;
 
     //desktop properties
     private int resolutionH                     = 0;
@@ -45,6 +43,10 @@ public class Game extends JFrame {
     private GraphicsDevice dsd                  = null;
     private Graphics2D g2d                      = null;
     private boolean showFPS                     = true;
+    //width and height of window for base metrics of the game
+    private int wwm                             = 1344;
+    private int whm                             = 832;
+
 
     //the game variables go here...
     private Scenario scenario = null;
@@ -82,7 +84,7 @@ public class Game extends JFrame {
         //create the backbuffer from the size of screen resolution to avoid any resize process penalty
         this.ge             = GraphicsEnvironment.getLocalGraphicsEnvironment();
         this.dsd            = ge.getDefaultScreenDevice();
-        this.bufferImage    = dsd.getDefaultConfiguration().createCompatibleVolatileImage(this.resolutionW, this.resolutionH);
+        this.bufferImage    = dsd.getDefaultConfiguration().createCompatibleVolatileImage(this.wwm, this.whm);
         this.g2d            = (Graphics2D)bufferImage.getGraphics();
         this.g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
         
@@ -109,7 +111,7 @@ public class Game extends JFrame {
         //////////////////////////////////////////////////////////////////////
         // ->>>  create the game elements objects
         //////////////////////////////////////////////////////////////////////
-        scenario = new Scenario(g2d, this.windowWidth, this.windowHeight);
+        scenario = new Scenario(g2d, this.wwm, this.whm);
         frog = new Frog(g2d, scenario);
 
         this.addKeyListener(new KeyAdapter() {
@@ -169,11 +171,12 @@ public class Game extends JFrame {
             //verify if the user want to show the FPS
             if (this.showFPS) {
                 this.g2d.setColor(new Color(255, 255, 255, 80));
-                this.g2d.drawString("fps: " + (int)(1_000_000_000D / frametime), this.windowWidth - 70, 20);
+                this.g2d.drawString("fps: " + (int)(1_000_000_000D / frametime), this.wwm - 70, 20);
             }
-    
+
             //At least, copy the backbuffer to the canvas screen
-            this.canvas.getGraphics().drawImage(this.bufferImage, 0, 0, this);
+            this.canvas.getGraphics().drawImage(this.bufferImage, 0, 0, this.windowWidth, this.windowHeight, 
+                                                                  0, 0, this.wwm, this.whm, this);
         }
     }
 
