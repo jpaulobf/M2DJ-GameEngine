@@ -225,7 +225,6 @@ public class Scenario {
          * lanes { 0 - 4 }
         */ 
         private void drawVehicle(int type, int direction, int lane, int positionX) {
-            
             //filter invalid values
             if (type < 0 || type > 4 || (direction != LEFT && direction != RIGHT) || lane < 0 || lane > 4) {
                 return;
@@ -242,7 +241,6 @@ public class Scenario {
          * Draw the graphical vehicles elements
          */
         public void draw(long frametime) {
-
             byte direction  = 0;
             int position    = 0;
             byte type       = 0;
@@ -264,7 +262,6 @@ public class Scenario {
          * Updates the elements on the screen
          */
         public void update(long frametime) {
-
             double step     = 0d;
             double calcPos  = 0d;
             byte direction  = 0;

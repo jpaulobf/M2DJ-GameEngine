@@ -2,6 +2,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /*
     WTCD: This class represents the frog sprite
@@ -15,6 +17,8 @@ public class Frog extends Sprite {
     private final byte INITIAL_POS_X    = 10;
     private final byte INITIAL_POS_Y    = 12;
     private BufferedImage animalTiles   = null;
+    private boolean animating           = false;
+    private Map<Integer, Byte> keyMap   = null;
 
     /**
      * Frog constructor
@@ -27,22 +31,37 @@ public class Frog extends Sprite {
         this.height     = 32;
         this.width      = 32;
 
+        this.positionX = INITIAL_POS_X;
+        this.positionY = INITIAL_POS_Y;
+        this.direction = UP;
+
+        //retrieve the tile size
         this.tileX      = scenario.getTileX();
         this.tileY      = scenario.getTileY();
 
+        //calc the distance between the entire tile and the sprite
         this.offsetLeft = (byte)((this.tileX - this.width) / 2);
         this.offsetTop  = (byte)((this.tileY - this.height) / 2);
 
-        this.positionX = INITIAL_POS_X;
-        this.positionY = INITIAL_POS_Y;
+        //calc the pixel position of the sprite while animating       
+        this.inBetweenX = (short)((this.positionX * this.tileX) + this.offsetLeft);
+        this.inBetweenY = (short)((this.positionY * this.tileY) + this.offsetTop);
 
-        this.direction = UP;
+        //calc the pixel position of the sprite
+        this.pixelPosX = this.inBetweenX;
+        this.pixelPosY = this.inBetweenY;
 
         try {
             this.animalTiles = ImageIO.read(new File("images\\animals.png"));
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
+
+        this.keyMap = new HashMap<Integer, Byte>();
+        keyMap.put(39, RIGHT);
+        keyMap.put(37, LEFT);
+        keyMap.put(38, UP);
+        keyMap.put(40, DOWN);
     }
 
     
@@ -56,33 +75,44 @@ public class Frog extends Sprite {
      */
     public void move(int keycode) {
         if (this.canMove) {
-            if (keycode == 39) {
-                if (positionX < 20) {
-                    this.positionX++;
-                    this.direction = RIGHT;
-                }
-            } else if (keycode == 37) {
-                if (positionX > 0) {
-                    this.positionX--;
-                    this.direction = LEFT;
-                }
-            } else if (keycode == 38) {
-                if (positionY > 0) {
-                    this.positionY--;
-                    this.direction = UP;
-                }
-            } else if (keycode == 40) {
-                if (positionY < 12) {
-                    this.positionY++;
-                    this.direction = DOWN;
-                }
+            this.canMove    = false;
+            this.animating  = true;
+            if (keyMap.get(keycode) != null) {
+                execute(keyMap.get(keycode));
             }
         }
     }
 
+    /**
+     * Perform the moviment of the frog
+     * @param direction
+     */
+    public void execute(byte direction) {
+        if (direction == RIGHT) {
+            if (this.positionX < 20) {
+                this.positionX++;
+            }
+        } else if (direction == LEFT) {
+            if (this.positionX > 0) {
+                this.positionX--;
+            }
+        } else if (direction == UP) {
+            if (this.positionY > 0) {
+                this.positionY--;
+            }
+        } else if (direction == DOWN) {
+            if (this.positionY < 12) {
+                this.positionY++;
+            }
+        }
+
+        this.pixelPosX = (short)((this.positionX * this.tileX) + this.offsetLeft);
+        this.pixelPosY = (short)((this.positionY * this.tileY) + this.offsetTop);
+        this.direction = direction;
+    }
+
     @Override
     public void draw(long frametime) {
-    
         short imgX = 0;
         short imgY = 0;
         byte imgW = 32;
@@ -122,9 +152,38 @@ public class Frog extends Sprite {
     
     }
 
-
     @Override
     public void update(long frametime) {
-        // TODO Auto-generated method stub
+        
+        if (this.animating) {
+            short distance  = 64; //in pixel
+            short persecond = 2;
+            short velocity  = (short)(distance * persecond);
+            double step     = (double)velocity / (double)(1_000_000D / (double)frametime);
+
+            switch(this.direction) {
+                case UP:
+                    this.inBetweenY -= step;
+                    break;
+                case DOWN:
+                    this.inBetweenY += step;
+                    break;
+                case LEFT:
+                    this.inBetweenX -= step;
+                    break;
+                case RIGHT:
+                    this.inBetweenX += step;
+                    break;
+            }
+
+            if (this.inBetweenY >= this.positionY) {
+
+                System.out.println(this.inBetweenY);
+                System.out.println(this.positionY);
+
+                this.animating = false;
+                this.canMove = true;
+            }
+        }
     }
 }

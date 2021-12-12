@@ -18,6 +18,10 @@ public abstract class Sprite {
     protected byte velocity             = 0;
     protected byte positionX            = 0;
     protected byte positionY            = 0;
+    protected short pixelPosX           = 0;
+    protected short pixelPosY           = 0;
+    protected short inBetweenX          = 0;
+    protected short inBetweenY          = 0;
     protected byte width                = 0;
     protected byte height               = 0;
     protected byte offsetTop            = 0;
