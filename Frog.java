@@ -190,16 +190,6 @@ public class Frog extends Sprite {
                     }
                     break;
             }
-
-            /*
-            if (updown) {
-                
-            } else {
-                if ((short)(this.inBetweenX) <= this.pixelPosX) {
-                    this.animating = false;
-                    this.canMove = true;
-                }
-            }*/
         }
     }
 }
