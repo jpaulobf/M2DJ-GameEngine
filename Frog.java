@@ -159,35 +159,47 @@ public class Frog extends Sprite {
             short persecond = 1;
             short velocity  = (short)(distance / persecond);
             double step     = (double)velocity / (double)(1_000_000_000D / (double)frametime);
-            boolean updown  = false;
-            System.out.println(step);
 
             switch(this.direction) {
                 case UP:
-                    this.inBetweenY -= step; updown = true;
+                    this.inBetweenY -= step;
+                    if ((short)(this.inBetweenY) <= this.pixelPosY) {
+                        this.animating = false;
+                        this.canMove = true;
+                    }
                     break;
                 case DOWN:
-                    this.inBetweenY += step; updown = true;
+                    this.inBetweenY += step;
+                    if ((short)(this.inBetweenY) >= this.pixelPosY) {
+                        this.animating = false;
+                        this.canMove = true;
+                    }
                     break;
                 case LEFT:
-                    this.inBetweenX -= step; updown = false;
+                    this.inBetweenX -= step;
+                    if ((short)(this.inBetweenX) <= this.pixelPosX) {
+                        this.animating = false;
+                        this.canMove = true;
+                    }
                     break;
                 case RIGHT:
-                    this.inBetweenX += step; updown = false;
+                    this.inBetweenX += step;
+                    if ((short)(this.inBetweenX) >= this.pixelPosX) {
+                        this.animating = false;
+                        this.canMove = true;
+                    }
                     break;
             }
 
+            /*
             if (updown) {
-                if ((short)(this.inBetweenY) == this.pixelPosY) {
-                    this.animating = false;
-                    this.canMove = true;
-                }
+                
             } else {
-                if ((short)(this.inBetweenX) == this.pixelPosX) {
+                if ((short)(this.inBetweenX) <= this.pixelPosX) {
                     this.animating = false;
                     this.canMove = true;
                 }
-            }
+            }*/
         }
     }
 }
