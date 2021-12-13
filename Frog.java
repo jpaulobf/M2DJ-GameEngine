@@ -160,6 +160,7 @@ public class Frog extends Sprite {
             short velocity  = (short)(distance / persecond);
             double step     = (double)velocity / (double)(1_000_000_000D / (double)frametime);
             boolean updown  = false;
+            System.out.println(step);
 
             switch(this.direction) {
                 case UP:
