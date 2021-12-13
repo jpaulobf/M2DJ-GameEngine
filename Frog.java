@@ -48,8 +48,8 @@ public class Frog extends Sprite {
         this.inBetweenY = (short)((this.positionY * this.tileY) + this.offsetTop);
 
         //calc the pixel position of the sprite
-        this.pixelPosX = this.inBetweenX;
-        this.pixelPosY = this.inBetweenY;
+        this.pixelPosX = (short)this.inBetweenX;
+        this.pixelPosY = (short)this.inBetweenY;
 
         try {
             this.animalTiles = ImageIO.read(new File("images\\animals.png"));
@@ -141,8 +141,8 @@ public class Frog extends Sprite {
                 break;
         }
 
-        short dx1 = (short) ((this.positionX * this.tileX) + this.offsetLeft);
-        short dy1 = (short)((this.positionY * this.tileY) + this.offsetTop);
+        short dx1 = (short)(this.inBetweenX);
+        short dy1 = (short)(this.inBetweenY);
         short dx2 = (short)(dx1 + this.width);
         short dy2 = (short)(dy1 + this.height);
 
@@ -154,35 +154,38 @@ public class Frog extends Sprite {
 
     @Override
     public void update(long frametime) {
-        
         if (this.animating) {
-            short distance  = 64; //in pixel
-            short persecond = 2;
-            short velocity  = (short)(distance * persecond);
-            double step     = (double)velocity / (double)(1_000_000D / (double)frametime);
+            short distance  = 200; //in pixel
+            short persecond = 1;
+            short velocity  = (short)(distance / persecond);
+            double step     = (double)velocity / (double)(1_000_000_000D / (double)frametime);
+            boolean updown  = false;
 
             switch(this.direction) {
                 case UP:
-                    this.inBetweenY -= step;
+                    this.inBetweenY -= step; updown = true;
                     break;
                 case DOWN:
-                    this.inBetweenY += step;
+                    this.inBetweenY += step; updown = true;
                     break;
                 case LEFT:
-                    this.inBetweenX -= step;
+                    this.inBetweenX -= step; updown = false;
                     break;
                 case RIGHT:
-                    this.inBetweenX += step;
+                    this.inBetweenX += step; updown = false;
                     break;
             }
 
-            if (this.inBetweenY >= this.positionY) {
-
-                System.out.println(this.inBetweenY);
-                System.out.println(this.positionY);
-
-                this.animating = false;
-                this.canMove = true;
+            if (updown) {
+                if ((short)(this.inBetweenY) == this.pixelPosY) {
+                    this.animating = false;
+                    this.canMove = true;
+                }
+            } else {
+                if ((short)(this.inBetweenX) == this.pixelPosX) {
+                    this.animating = false;
+                    this.canMove = true;
+                }
             }
         }
     }
