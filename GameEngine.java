@@ -147,7 +147,6 @@ public class GameEngine implements Runnable {
                 */
                 beforeUpdate = System.nanoTime();
                 while (totalExecutionTime > TARGET_FRAMETIME) {
-                    System.out.println("lost render frame....");
                     this.update(TARGET_FRAMETIME);
                     afterUpdate = System.nanoTime();
                     totalExecutionTime -= (afterUpdate - beforeUpdate);

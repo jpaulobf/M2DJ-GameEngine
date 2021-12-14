@@ -184,7 +184,7 @@ public class Game extends JFrame {
         Description: main method
     */
     public static void main(String[] args) throws Exception {
-        Thread thread = new Thread(new GameEngine(60), "engine");
+        Thread thread = new Thread(new GameEngine(0), "engine");
         thread.start();
     }
 }

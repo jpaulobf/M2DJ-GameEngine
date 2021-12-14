@@ -20,6 +20,11 @@ public class Frog extends Sprite {
     private boolean animating           = false;
     private Map<Integer, Byte> keyMap   = null;
 
+    //animation parameters
+    private short distance              = 200; //in pixel
+    private short persecond             = 1;
+    private double frogVelocity         = (double)((double)distance / (double)persecond);
+
     /**
      * Frog constructor
      * @param g2d
@@ -75,9 +80,9 @@ public class Frog extends Sprite {
      */
     public void move(int keycode) {
         if (this.canMove) {
-            this.canMove    = false;
-            this.animating  = true;
             if (keyMap.get(keycode) != null) {
+                this.canMove    = false;
+                this.animating  = true;
                 execute(keyMap.get(keycode));
             }
         }
@@ -155,36 +160,36 @@ public class Frog extends Sprite {
     @Override
     public void update(long frametime) {
         if (this.animating) {
-            short distance  = 200; //in pixel
-            short persecond = 1;
-            short velocity  = (short)(distance / persecond);
-            double step     = (double)velocity / (double)(1_000_000_000D / (double)frametime);
-
+            double step = frogVelocity / (1_000_000_000D / (double)frametime);
             switch(this.direction) {
                 case UP:
                     this.inBetweenY -= step;
-                    if ((short)(this.inBetweenY) <= this.pixelPosY) {
+                    if ((short)(this.inBetweenY - step) <= this.pixelPosY) {
+                        this.inBetweenY = this.pixelPosY;
                         this.animating = false;
                         this.canMove = true;
                     }
                     break;
                 case DOWN:
                     this.inBetweenY += step;
-                    if ((short)(this.inBetweenY) >= this.pixelPosY) {
+                    if ((short)(this.inBetweenY + step) >= this.pixelPosY) {
+                        this.inBetweenY = this.pixelPosY;
                         this.animating = false;
                         this.canMove = true;
                     }
                     break;
                 case LEFT:
                     this.inBetweenX -= step;
-                    if ((short)(this.inBetweenX) <= this.pixelPosX) {
+                    if ((short)(this.inBetweenX - step) <= this.pixelPosX) {
+                        this.inBetweenX = this.pixelPosX;
                         this.animating = false;
                         this.canMove = true;
                     }
                     break;
                 case RIGHT:
                     this.inBetweenX += step;
-                    if ((short)(this.inBetweenX) >= this.pixelPosX) {
+                    if ((short)(this.inBetweenX + step) >= this.pixelPosX) {
+                        this.inBetweenX = this.pixelPosX;
                         this.animating = false;
                         this.canMove = true;
                     }
