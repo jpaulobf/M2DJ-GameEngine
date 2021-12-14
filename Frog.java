@@ -10,20 +10,29 @@ import java.util.Map;
 */
 public class Frog extends Sprite {
     
+    //game variable
     private byte lives                  = 3;
-    private byte tileX                  = 0;
-    private byte tileY                  = 0;
-    private boolean canMove             = true;
     private final byte INITIAL_POS_X    = 10;
     private final byte INITIAL_POS_Y    = 12;
+
+    //render variables
+    private byte tileX                  = 0;
+    private byte tileY                  = 0;
     private BufferedImage animalTiles   = null;
-    private boolean animating           = false;
     private Map<Integer, Byte> keyMap   = null;
 
     //animation parameters
-    private short distance              = 200; //in pixel
+    private boolean canMove             = true;
+    private boolean animating           = false;
+    private short distance              = 300; //in pixel
     private short persecond             = 1;
-    private double frogVelocity         = (double)((double)distance / (double)persecond);
+    private final double frogVelocity   = (double)((double)distance / (double)persecond);
+
+    //draw image parameters
+    private short drawImgX              = 0;
+    private short drawImgY              = 0;
+    private byte drawImgW               = 0;
+    private byte drawImgH               = 0;
 
     /**
      * Frog constructor
@@ -67,6 +76,12 @@ public class Frog extends Sprite {
         keyMap.put(37, LEFT);
         keyMap.put(38, UP);
         keyMap.put(40, DOWN);
+
+        //initial frog status
+        this.drawImgX   = 131;
+        this.drawImgY   = 3;
+        this.drawImgW   = 32;
+        this.drawImgH   = 25;
     }
 
     
@@ -117,131 +132,123 @@ public class Frog extends Sprite {
     }
 
     @Override
-    public void draw(long frametime) {
-        short imgX = 0;
-        short imgY = 0;
-        byte imgW = 0;
-        byte imgH = 0;
-
-        //TODO: MOVE THIS COMMANDS TO UPDATE
-        switch (this.direction) {
-            case UP:
-                if (this.canMove) {
-                    imgX = 131;
-                    imgY = 3;
-                    imgW = 32;
-                    imgH = 25;
-                    this.width = 32;
-                    this.height = 25;
-                } else {
-                    imgX = 131;
-                    imgY = 31;
-                    imgW = 32;
-                    imgH = 36;
-                    this.width = 32;
-                    this.height = 36;
-                }
-                break;
-            case DOWN:
-                if (this.canMove) {
-                    imgX = 164;
-                    imgY = 3;
-                    imgW = 32;
-                    imgH = 25;
-                    this.width = 32;
-                    this.height = 25;
-                } else {
-                    imgX = 164;
-                    imgY = 31;
-                    imgW = 32;
-                    imgH = 36;
-                    this.width = 32;
-                    this.height = 36;
-                }
-                break;
-            case LEFT:
-                if (this.canMove) {
-                    imgX = 197;
-                    imgY = 0;
-                    imgW = 25;
-                    imgH = 32;
-                    this.width = 25;
-                    this.height = 32;
-                } else {
-                    imgX = 197;
-                    imgY = 33;
-                    imgW = 36;
-                    imgH = 32;
-                    this.width = 36;
-                    this.height = 32;
-                }
-                break;
-            case RIGHT:
-                if (this.canMove) {
-                    imgX = 245;
-                    imgY = 0;
-                    imgW = 25;
-                    imgH = 32;
-                    this.width = 25;
-                    this.height = 32;
-                } else {
-                    imgX = 234;
-                    imgY = 33;
-                    imgW = 36;
-                    imgH = 32;
-                    this.width = 36;
-                    this.height = 32;
-                }
-                break;
-        }
-
+    public void draw(long frametime) {     
         short dx1 = (short)(this.inBetweenX);
         short dy1 = (short)(this.inBetweenY);
         short dx2 = (short)(dx1 + this.width);
         short dy2 = (short)(dy1 + this.height);
-
         this.g2d.drawImage(this.animalTiles, dx1, dy1, dx2, dy2, //dest w1, h1, w2, h2
-                                             imgX, imgY, imgX + imgW, imgY + imgH, //source w1, h1, w2, h2
+                                             drawImgX, drawImgY, drawImgX + drawImgW, drawImgY + drawImgH, //source w1, h1, w2, h2
                                              null);
     
     }
 
     @Override
+    /**
+     * Update the frog
+     */
     public void update(long frametime) {
+
+        //just if the frog is animating
         if (this.animating) {
+
+            //calc frog step for each cicle
             double step = frogVelocity / (1_000_000_000D / (double)frametime);
+
+            //switch the directin
             switch(this.direction) {
                 case UP:
-                    this.inBetweenY -= step;
+                    //calc the new Y
+                    this.inBetweenY    -= step;
+
+                    //update images position static-values
+                    this.drawImgX       = 131;
+                    this.drawImgW       = 32;
+                    this.width          = 32;
+                    this.drawImgY       = 31;
+                    this.drawImgH       = 36;
+                    this.height         = 36;
+
+                    //compare to verify if frog reach the target position
                     if ((short)(this.inBetweenY - step) <= this.pixelPosY) {
                         this.inBetweenY = this.pixelPosY;
-                        this.animating = false;
-                        this.canMove = true;
+                        this.animating  = false;
+                        this.canMove    = true;
+                        this.drawImgY   = 3;
+                        this.drawImgH   = 25;
+                        this.height     = 25;
                     }
+                    
                     break;
                 case DOWN:
+                    //calc the new Y
                     this.inBetweenY += step;
+                    
+                    //update images position static-values
+                    this.drawImgX       = 164;
+                    this.drawImgW       = 32;
+                    this.width          = 32;
+                    this.drawImgY       = 31;
+                    this.drawImgH       = 36;
+                    this.height         = 36;
+
+                    //compare to verify if frog reach the target position
                     if ((short)(this.inBetweenY + step) >= this.pixelPosY) {
                         this.inBetweenY = this.pixelPosY;
-                        this.animating = false;
-                        this.canMove = true;
+                        this.animating  = false;
+                        this.canMove    = true;
+                        this.drawImgY   = 3;
+                        this.drawImgH   = 25;
+                        this.height     = 25;
                     }
+
                     break;
                 case LEFT:
-                    this.inBetweenX -= step;
+                    //calc the new X
+                    this.inBetweenX    -= step;
+
+                    //update images position static-values
+                    this.drawImgX       = 197;
+                    this.drawImgH       = 32;
+                    this.height         = 32;
+                    this.drawImgY       = 33;
+                    this.drawImgW       = 36;
+                    this.width          = 36;
+
+                    //compare to verify if frog reach the target position
                     if ((short)(this.inBetweenX - step) <= this.pixelPosX) {
                         this.inBetweenX = this.pixelPosX;
-                        this.animating = false;
-                        this.canMove = true;
+                        this.animating  = false;
+                        this.canMove    = true;
+                        this.drawImgY   = 0;
+                        this.drawImgW   = 25;
+                        this.width      = 25;
                     }
+
                     break;
                 case RIGHT:
+                    //calc the new X
                     this.inBetweenX += step;
+
+                    //update images position dynamic-values
+                    this.drawImgH       = 32;
+                    this.height         = 32;
+                    this.drawImgX       = 234;
+                    this.drawImgY       = 33;
+                    this.drawImgW       = 36;
+                    this.width          = 36;
+
+                    //compare to verify if frog reach the target position
                     if ((short)(this.inBetweenX + step) >= this.pixelPosX) {
                         this.inBetweenX = this.pixelPosX;
-                        this.animating = false;
-                        this.canMove = true;
+                        this.animating  = false;
+                        this.canMove    = true;
+                        this.drawImgX   = 245;
+                        this.drawImgY   = 0;
+                        this.drawImgW   = 25;
+                        this.width      = 25;
                     }
+
                     break;
             }
         }
