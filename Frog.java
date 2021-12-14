@@ -33,7 +33,7 @@ public class Frog extends Sprite {
     public Frog(Graphics2D g2d, Scenario scenario) {
 
         this.g2d        = g2d;
-        this.height     = 32;
+        this.height     = 25;
         this.width      = 32;
 
         this.positionX = INITIAL_POS_X;
@@ -57,7 +57,7 @@ public class Frog extends Sprite {
         this.pixelPosY = (short)this.inBetweenY;
 
         try {
-            this.animalTiles = ImageIO.read(new File("images\\animals.png"));
+            this.animalTiles = ImageIO.read(new File("images\\animals1.png"));
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
@@ -120,29 +120,78 @@ public class Frog extends Sprite {
     public void draw(long frametime) {
         short imgX = 0;
         short imgY = 0;
-        byte imgW = 32;
-        byte imgH = 25;
+        byte imgW = 0;
+        byte imgH = 0;
 
+        //TODO: MOVE THIS COMMANDS TO UPDATE
         switch (this.direction) {
             case UP:
-                imgX = 132;
-                imgY = 4;
+                if (this.canMove) {
+                    imgX = 131;
+                    imgY = 3;
+                    imgW = 32;
+                    imgH = 25;
+                    this.width = 32;
+                    this.height = 25;
+                } else {
+                    imgX = 131;
+                    imgY = 31;
+                    imgW = 32;
+                    imgH = 36;
+                    this.width = 32;
+                    this.height = 36;
+                }
                 break;
             case DOWN:
-                imgX = 172;
-                imgY = 4;
+                if (this.canMove) {
+                    imgX = 164;
+                    imgY = 3;
+                    imgW = 32;
+                    imgH = 25;
+                    this.width = 32;
+                    this.height = 25;
+                } else {
+                    imgX = 164;
+                    imgY = 31;
+                    imgW = 32;
+                    imgH = 36;
+                    this.width = 32;
+                    this.height = 36;
+                }
                 break;
             case LEFT:
-                imgX = 212;
-                imgY = 0;
-                imgW = 25;
-                imgH = 32;
+                if (this.canMove) {
+                    imgX = 197;
+                    imgY = 0;
+                    imgW = 25;
+                    imgH = 32;
+                    this.width = 25;
+                    this.height = 32;
+                } else {
+                    imgX = 197;
+                    imgY = 33;
+                    imgW = 36;
+                    imgH = 32;
+                    this.width = 36;
+                    this.height = 32;
+                }
                 break;
             case RIGHT:
-                imgX = 244;
-                imgY = 0;
-                imgW = 25;
-                imgH = 32;
+                if (this.canMove) {
+                    imgX = 245;
+                    imgY = 0;
+                    imgW = 25;
+                    imgH = 32;
+                    this.width = 25;
+                    this.height = 32;
+                } else {
+                    imgX = 234;
+                    imgY = 33;
+                    imgW = 36;
+                    imgH = 32;
+                    this.width = 36;
+                    this.height = 32;
+                }
                 break;
         }
 
