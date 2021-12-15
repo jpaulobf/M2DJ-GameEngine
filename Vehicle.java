@@ -8,22 +8,26 @@ public class Vehicle extends Sprite {
         
     //The tile image, and its elements (positions)
     private BufferedImage vehiclesTile      = null;
-    private final int lanes[]               = { 461, 525, 589, 653, 716 };
-    private final int vehiclesW[]           = { 45, 45, 43, 41, 76 };
-    private final int vehiclesImgX[][]      = { {0,54}, {155,107}, {204,249}, {337,294}, {461,382} };
-    private final int vehicleH              = 38;
-    private final int largerVehicule        = 76_000;
     private int windowWidth                 = 0;
     private int windowHeight                = 0;
+    
+    //for the lane background
+    private final int lanes[]               = { 461, 525, 589, 653, 716 };
 
+    //for the vehicles tiles
+    private final int vehiclesImgX[][]      = { {0,54}, {155,107}, {204,249}, {337,294}, {461,382} };
+    private final int vehicleH              = 38;
+    private final int vehiclesW[]           = { 45, 45, 43, 41, 76 };
+    private final int largerVehicule        = 76_000;
 
     //Stage 1 parameters
     short [][] velocities = {{100}, {180}, {50}, {330}, {300}};
     int [][] positionX    = {{300_000, 650_000, 1000_000}, {100_000, 400_000, 700_000}, {100_000, 500_000, 900_000}, {100_000}, {100_000, 750_000}};
 
+    //for each lane, each car parameter
     //type, direction, start-position-x, velocity
     int [][][] stg1 =  { { {4, LEFT,  positionX[4][0], velocities[4][0]}, {4, LEFT,  positionX[4][1], velocities[4][0]}},
-                         { {1, RIGHT, positionX[3][0], velocities[3][0]}},
+                         { {1, RIGHT, positionX[3][0], velocities[3][0]}                                               },
                          { {2, LEFT,  positionX[2][0], velocities[2][0]}, {3, LEFT,  positionX[2][1], velocities[2][0]}, {1, LEFT, positionX[2][2], velocities[2][0]}}, 
                          { {3, RIGHT, positionX[1][0], velocities[1][0]}, {1, RIGHT, positionX[1][1], velocities[1][0]}, {4, RIGHT, positionX[1][2], velocities[1][0]}},
                          { {0, LEFT,  positionX[0][0], velocities[0][0]}, {0, LEFT,  positionX[0][1], velocities[0][0]}, {3, LEFT, positionX[0][2], velocities[0][0]}}
@@ -42,6 +46,7 @@ public class Vehicle extends Sprite {
             this.vehiclesTile = ImageIO.read(new File("images\\vehicules.png"));
         } catch (java.io.IOException e) {
             e.printStackTrace();
+            System.exit(-1);
         }
     }
 
