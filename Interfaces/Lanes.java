@@ -1,3 +1,5 @@
+package Interfaces;
+
 public interface Lanes {
     
     //for the lane background
