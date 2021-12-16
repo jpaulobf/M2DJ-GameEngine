@@ -1,3 +1,5 @@
+import Interfaces.IGame;
+
 /*
     Project:    Modern 2D Java Game Engine
     Purpose:    Provide basics functionalities to write 2D games in Java in a more modern approach

@@ -3,6 +3,8 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import Interfaces.Directions;
 import Interfaces.Lanes;
+import Interfaces.Stages;
+
 import java.io.File;
 
 public class Vehicles {

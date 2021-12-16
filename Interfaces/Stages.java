@@ -1,4 +1,4 @@
-import Interfaces.Directions;
+package Interfaces;
 
 public interface Stages extends Directions {
     
