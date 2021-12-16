@@ -18,7 +18,7 @@ import java.awt.RenderingHints;
     Date:       Octuber 2021
     WTCD:       This class, provides a stage for the game.
 */
-public class Game extends JFrame {
+public class Game extends JFrame implements IGame {
 
     private static final long serialVersionUID  = 1L;
 
@@ -47,10 +47,9 @@ public class Game extends JFrame {
     private int wwm                             = 1344;
     private int whm                             = 832;
 
-
     //the game variables go here...
-    private Scenario scenario = null;
-    Frog frog = null;
+    private Scenario scenario                   = null;
+    private Frog frog                           = null;
 
     /*
         WTMD: some responsabilites here:
@@ -60,7 +59,6 @@ public class Game extends JFrame {
         //////////////////////////////////////////////////////////////////////
         //set some properties for this window
         //////////////////////////////////////////////////////////////////////
-
         Dimension basic = new Dimension(this.windowWidth, this.windowHeight);
         this.setPreferredSize(basic);
         this.setMinimumSize(basic);
@@ -111,8 +109,8 @@ public class Game extends JFrame {
         //////////////////////////////////////////////////////////////////////
         // ->>>  create the game elements objects
         //////////////////////////////////////////////////////////////////////
-        scenario = new Scenario(g2d, this.wwm, this.whm);
-        frog = new Frog(g2d, scenario);
+        scenario    = new Scenario(g2d, this.wwm, this.whm);
+        frog        = new Frog(g2d, scenario);
 
         this.addKeyListener(new KeyAdapter() {
             @Override
@@ -125,6 +123,9 @@ public class Game extends JFrame {
         });
     }
 
+    /**
+     * update the game logic
+     */
     public void update(long frametime) {
 
         //how many pixels per second I want?
@@ -145,10 +146,10 @@ public class Game extends JFrame {
       
     }
     
-    /*
+    /**
         WTMD: This method draw the current screen, some steps described here:
-            1) Clear the stage
-        */
+        1) Clear the stage
+    */
     public void draw(long frametime) {
 
         //update the window size variables if the user resize it.
@@ -184,7 +185,7 @@ public class Game extends JFrame {
         Description: main method
     */
     public static void main(String[] args) throws Exception {
-        Thread thread = new Thread(new GameEngine(0), "engine");
+        Thread thread = new Thread(new GameEngine(0, new Game()), "engine");
         thread.start();
     }
 }

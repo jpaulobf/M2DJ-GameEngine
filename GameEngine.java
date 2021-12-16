@@ -1,7 +1,7 @@
 /*
     Project:    Modern 2D Java Game Engine
     Purpose:    Provide basics functionalities to write 2D games in Java in a more modern approach
-    Author:     Mr. Joao P. B. Faria
+    Author:     Joao P. B. Faria
     Date:       Octuber 2021
     WTCD:       This class implements the nano-precision gameloop, based on the user parameters.
 */
@@ -14,14 +14,13 @@ public class GameEngine implements Runnable {
     private long FPS30                  = (long)(1_000_000_000 / 30);
     private long TARGET_FRAMETIME       = FPS60;
     private boolean UNLIMITED_FPS       = false;
-    private Game game                   = null;
-    //private long counter                 = 0;
+    private IGame game                  = null;
 
     /*
         WTMD: constructor
                 receives the target FPS (0, 30, 60, 120, 240) and starts the engine
     */
-    public GameEngine(int targetFPF) {
+    public GameEngine(int targetFPF, IGame game) {
         this.UNLIMITED_FPS = false;
         switch(targetFPF) {
             case 30:
@@ -43,20 +42,9 @@ public class GameEngine implements Runnable {
                 this.TARGET_FRAMETIME = FPS30;
                 break;
         }
-
-        game = new Game();
+        this.game = game;
     }
     
-    /* Método de update, só executa quando a flag permite */
-    public void update(long frametime) {
-        this.game.update(frametime);
-    }
-
-    /* Método de desenho, só executa quando a flag permite */
-    public void draw(long frametime) {
-        this.game.draw(frametime);
-    }
-
     /* Método de execução da thread */
     public void run() {
         //this.game = new Game(FPS);
@@ -157,5 +145,15 @@ public class GameEngine implements Runnable {
                 timeReference = timeStamp;
             }
         }
+    }
+
+    /* Método de update, só executa quando a flag permite */
+    public void update(long frametime) {
+        this.game.update(frametime);
+    }
+
+    /* Método de desenho, só executa quando a flag permite */
+    public void draw(long frametime) {
+        this.game.draw(frametime);
     }
 }

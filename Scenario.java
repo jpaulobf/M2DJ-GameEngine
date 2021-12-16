@@ -71,7 +71,7 @@ public class Scenario {
                 this.sidewalk = ImageIO.read(new File("images\\sidewalk.png"));
             } catch (java.io.IOException e) {
                 e.printStackTrace();
-                return;
+                System.exit(-1);
             }
 
             //create a backbuffer image for doublebuffer
@@ -154,19 +154,6 @@ public class Scenario {
     }
 
     /**
-     * 
-     * @param frametime
-     */
-    public void draw(long frametime) {
-        
-        //After draw the bg once, copy it to the graphic device
-        this.g2d.drawImage(this.bgBufferImage, 0, 0, null);
-        
-        //draw the vehicles
-        this.vehicle.draw(frametime);
-    }
-
-    /**
      * Update the scenario and its elements
      * @param frametime
      */
@@ -174,5 +161,18 @@ public class Scenario {
 
         //update the vehicles
         this.vehicle.update(frametime);
+    }
+
+    /**
+     * 
+     * @param frametime
+     */
+    public void draw(long frametime) {
+
+        //After construct the bg once, copy it to the graphic device
+        this.g2d.drawImage(this.bgBufferImage, 0, 0, null);
+        
+        //draw the vehicles
+        this.vehicle.draw(frametime);
     }
 }
