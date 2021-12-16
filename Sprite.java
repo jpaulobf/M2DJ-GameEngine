@@ -1,5 +1,6 @@
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import Interfaces.Directions;
 
 /*
     WTCD: This abstract class store the common characteristics and methods of a sprite

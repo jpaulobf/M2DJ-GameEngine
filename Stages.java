@@ -1,3 +1,5 @@
+import Interfaces.Directions;
+
 public interface Stages extends Directions {
     
     //Stage 1 parameters

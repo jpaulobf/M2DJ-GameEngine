@@ -1,6 +1,7 @@
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+import Interfaces.Directions;
 import java.io.File;
 
 public class Vehicles {

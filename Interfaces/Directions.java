@@ -1,3 +1,4 @@
+package Interfaces;
 /**
  * Define the frogger and sprites directions
  */
