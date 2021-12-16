@@ -124,19 +124,19 @@ public class Game extends JFrame implements IGame {
     }
 
     /**
-     * update the game logic
+     * Update the game logic / receives the frametime
+     * @param frametime
      */
     public void update(long frametime) {
 
         //how many pixels per second I want?
         //ex.: movement at 200px/s
-        //To do so, I need to divide 1_000_000_000 by the exactly frametime to know the current FPS
-        //With this number in hand,  divide the pixel distance by the current fps
+        //To do so, I need to divide 1_000_000_000 (1 second) by the exactly frametime to know the current FPS
+        //With this number in hand, divide the pixel distance by the current fps
         //this must be your maximum movement amount in pixels
         //example:
         //double movementPerSecond = 100D;
         //double step = movementPerSecond / (double)(1_000_000_000D / (double)frametime);
-
 
         //////////////////////////////////////////////////////////////////////
         // ->>>  update the game elements
@@ -147,9 +147,11 @@ public class Game extends JFrame implements IGame {
     }
     
     /**
-        WTMD: This method draw the current screen, some steps described here:
-        1) Clear the stage
-    */
+     * Draw the game / receives the frametime
+     * WTMD: This method draw the current screen, some steps described here:
+                1) Clear the stage
+     * @param frametime
+     */
     public void draw(long frametime) {
 
         //update the window size variables if the user resize it.
