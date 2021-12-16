@@ -18,11 +18,13 @@ public class Scenario {
     private int windowHeight            = 0;
     private VolatileImage bgBufferImage = null;
     private Graphics2D bgd2             = null;
-    private Vehicle vehicle             = null;
+    private Vehicles vehicles           = null;
     private BufferedImage sidewalk      = null;
+
     //how many tiles in x and in y
-    private final byte tilesInX         = 21;
-    private final byte tilesInY         = 13;
+    protected final byte tilesInX       = 21;
+    protected final byte tilesInY       = 13;
+    
     //each tile propertie
     private final byte tileX            = 64;
     private final byte tileY            = 64;
@@ -48,7 +50,7 @@ public class Scenario {
         this.halfTileX      = (byte)(tileX / 2);
         this.halfTileY      = (byte)(tileY / 2);*/
 
-        this.vehicle        = new Vehicle(g2d, windowWidth, windowHeight);
+        this.vehicles       = new Vehicles(g2d, windowWidth, windowHeight);
         this.drawBackgroundInBuffer();
     }
 
@@ -160,7 +162,7 @@ public class Scenario {
     public void update(long frametime) {
 
         //update the vehicles
-        this.vehicle.update(frametime);
+        this.vehicles.update(frametime);
     }
 
     /**
@@ -173,6 +175,6 @@ public class Scenario {
         this.g2d.drawImage(this.bgBufferImage, 0, 0, null);
         
         //draw the vehicles
-        this.vehicle.draw(frametime);
+        this.vehicles.draw(frametime);
     }
 }

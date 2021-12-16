@@ -4,20 +4,14 @@ import java.awt.geom.Rectangle2D;
 /*
     WTCD: This abstract class store the common characteristics and methods of a sprite
 */
-public abstract class Sprite {
-
-    //constants
-    protected final byte LEFT           = -1;
-    protected final byte RIGHT          = 1;
-    protected final byte UP             = 2;
-    protected final byte DOWN           = 3;
+public abstract class Sprite implements Directions {
 
     //variable member values 
     protected byte type                 = 0;
     protected byte direction            = LEFT;
     protected byte velocity             = 0;
-    protected byte positionX            = 0;
-    protected byte positionY            = 0;
+    protected short positionX           = 0;
+    protected short positionY           = 0;
     protected short pixelPosX           = 0;
     protected short pixelPosY           = 0;
     protected double inBetweenX         = 0;
