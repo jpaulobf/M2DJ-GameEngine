@@ -23,7 +23,7 @@ public class Vehicles {
         private BufferedImage vehiclesTile      = null;
 
         //define the vehicules array
-        private Vehicle [] vehicle              =  new Vehicle[12];
+        private Vehicle [] vehicles              =  new Vehicle[12];
 
         /**
          * Load the tile image
@@ -41,9 +41,29 @@ public class Vehicles {
                 System.exit(-1);
             }
 
-            for (byte i = 0; i < vehicle.length; i++) {
-                vehicle[i] = new Vehicle(g2d);
+            for (byte i = 0; i < vehicles.length; i++) {
+                vehicles[i] = new Vehicle(g2d);
             }
+        }
+
+        /**
+         * Test if some of the vehicles are coliding
+         * Return a number # of the coliding vehicle or #-1 if don't
+         * @param sprite
+         */
+        public int testColision(Sprite sprite) {
+            //gate check
+            if (sprite == null) return -1;
+            
+            //important: it's not necessary to test if the vehicle array is null, because it was initialized in the constructor
+            for (int cnt = 0; cnt < this.vehicles.length; cnt++) {
+                if (this.vehicles[cnt].isColiding(sprite)) {
+                    return (cnt);
+                }
+            }
+
+            //if the code reach here, no colision
+            return (-1);
         }
     
         /**
@@ -77,11 +97,11 @@ public class Vehicles {
                     Stages.stg1[i][j][2]        = (int)Math.round(calcPos);
 
                     //recupera e atualiza cada veículo
-                    vehicle[index].type         = (byte)Stages.stg1[i][j][0];
-                    vehicle[index].direction    = (byte)Stages.stg1[i][j][1];
-                    vehicle[index].positionX    = (short)(Stages.stg1[i][j][2]/1000);
+                    vehicles[index].type         = (byte)Stages.stg1[i][j][0];
+                    vehicles[index].direction    = (byte)Stages.stg1[i][j][1];
+                    vehicles[index].positionX    = (short)(Stages.stg1[i][j][2]/1000);
                     //incrementa o index ao final
-                    vehicle[index++].positionY  = (short)Lanes.lanes[i];
+                    vehicles[index++].positionY  = (short)Lanes.lanes[i];
                 }
             }
         }
@@ -93,7 +113,7 @@ public class Vehicles {
             int index = 0;
             for (byte i = 0; i < Stages.stg1.length; i++) {
                 for (byte j = 0; j < Stages.stg1[i].length; j++) {
-                    vehicle[index++].draw(this.vehiclesTile, vehiclesImgX, vehiclesW);
+                    vehicles[index++].draw(this.vehiclesTile, vehiclesImgX, vehiclesW);
                 }
             }
         }
