@@ -272,6 +272,7 @@ public class Frog extends SpriteImpl {
         if (!this.isDead) {
             //this line test the colisions only with the cars, in the lanes.
             if (this.positionY > Lanes.lanes[0]) {
+                System.out.println("testing...");
                 coliding = this.scenario.getVehicles().testColision(this);
             }
             if (coliding != -1) {
