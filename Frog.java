@@ -1,10 +1,12 @@
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+
+import Interfaces.Lanes;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.awt.geom.Rectangle2D;
 
 /*
     WTCD: This class represents the frog sprite
@@ -266,11 +268,10 @@ public class Frog extends SpriteImpl {
             }
         }
 
-        //TODO: this must be changed in future to test just in the correct LANE
-        //for now, test at every moment
         int coliding = -1;
         if (!this.isDead) {
-            if (true) {
+            //this line test the colisions only with the cars, in the lanes.
+            if (this.positionY > Lanes.lanes[0]) {
                 coliding = this.scenario.getVehicles().testColision(this);
             }
             if (coliding != -1) {
