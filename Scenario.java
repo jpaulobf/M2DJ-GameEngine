@@ -31,6 +31,11 @@ public class Scenario {
     private final byte halfTileX        = (byte)(tileX / 2);
     private final byte halfTileY        = (byte)(tileY / 2);
 
+    //getters
+    public Vehicles getVehicles() {
+        return (this.vehicles);
+    }
+
     /**
      * Constructor
      * @param g2d
@@ -160,7 +165,6 @@ public class Scenario {
      * @param frametime
      */
     public void update(long frametime) {
-
         //update the vehicles
         this.vehicles.update(frametime);
     }
@@ -170,7 +174,6 @@ public class Scenario {
      * @param frametime
      */
     public void draw(long frametime) {
-
         //After construct the bg once, copy it to the graphic device
         this.g2d.drawImage(this.bgBufferImage, 0, 0, null);
         

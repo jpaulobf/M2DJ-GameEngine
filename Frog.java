@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.awt.geom.Rectangle2D;
 
 /*
     WTCD: This class represents the frog sprite
@@ -12,8 +13,9 @@ public class Frog extends SpriteImpl {
     
     //game variable
     private byte lives                  = 3;
-    private final byte INITIAL_POS_X    = 10;
-    private final byte INITIAL_POS_Y    = 12;
+    private final byte INITIAL_T_POS_X  = 10;
+    private final byte INITIAL_T_POS_Y  = 12;
+    private boolean isDead              = false;
 
     //render variables
     private byte tileX                  = 0;
@@ -33,6 +35,10 @@ public class Frog extends SpriteImpl {
     private short drawImgY              = 0;
     private byte drawImgW               = 0;
     private byte drawImgH               = 0;
+    protected short positionInTileX     = 0;
+    protected short positionInTileY     = 0;
+
+    private Scenario scenario           = null;
 
     /**
      * Frog constructor
@@ -45,11 +51,12 @@ public class Frog extends SpriteImpl {
         this.height     = 25;
         this.width      = 32;
 
-        this.positionX = INITIAL_POS_X;
-        this.positionY = INITIAL_POS_Y;
+        this.positionInTileX = INITIAL_T_POS_X;
+        this.positionInTileY = INITIAL_T_POS_Y;
         this.direction = UP;
 
         //retrieve the tile size
+        this.scenario   = scenario;
         this.tileX      = scenario.getTileX();
         this.tileY      = scenario.getTileY();
 
@@ -58,12 +65,12 @@ public class Frog extends SpriteImpl {
         this.offsetTop  = (byte)((this.tileY - this.height) / 2);
 
         //calc the pixel position of the sprite while animating       
-        this.inBetweenX = (short)((this.positionX * this.tileX) + this.offsetLeft);
-        this.inBetweenY = (short)((this.positionY * this.tileY) + this.offsetTop);
+        this.inBetweenX = (short)((this.positionInTileX * this.tileX) + this.offsetLeft);
+        this.inBetweenY = (short)((this.positionInTileY * this.tileY) + this.offsetTop);
 
         //calc the pixel position of the sprite
-        this.pixelPosX = (short)this.inBetweenX;
-        this.pixelPosY = (short)this.inBetweenY;
+        this.positionX = (short)this.inBetweenX;
+        this.positionY = (short)this.inBetweenY;
 
         try {
             this.animalTiles = ImageIO.read(new File("images\\animals1.png"));
@@ -111,38 +118,42 @@ public class Frog extends SpriteImpl {
      */
     public void execute(byte direction) {
         if (direction == RIGHT) {
-            if (this.positionX < 20) {
-                this.positionX++;
+            if (this.positionInTileX < 20) {
+                this.positionInTileX++;
             }
         } else if (direction == LEFT) {
-            if (this.positionX > 0) {
-                this.positionX--;
+            if (this.positionInTileX > 0) {
+                this.positionInTileX--;
             }
         } else if (direction == UP) {
-            if (this.positionY > 0) {
-                this.positionY--;
+            if (this.positionInTileY > 0) {
+                this.positionInTileY--;
             }
         } else if (direction == DOWN) {
-            if (this.positionY < 12) {
-                this.positionY++;
+            if (this.positionInTileY < 12) {
+                this.positionInTileY++;
             }
         }
 
-        this.pixelPosX = (short)((this.positionX * this.tileX) + this.offsetLeft);
-        this.pixelPosY = (short)((this.positionY * this.tileY) + this.offsetTop);
+        this.positionX = (short)((this.positionInTileX * this.tileX) + this.offsetLeft);
+        this.positionY = (short)((this.positionInTileY * this.tileY) + this.offsetTop);
         this.direction = direction;
     }
 
     @Override
     public void draw(long frametime) {     
-        short dx1 = (short)(this.inBetweenX);
-        short dy1 = (short)(this.inBetweenY);
-        short dx2 = (short)(dx1 + this.width);
-        short dy2 = (short)(dy1 + this.height);
-        this.g2d.drawImage(this.animalTiles, dx1, dy1, dx2, dy2, //dest w1, h1, w2, h2
-                                             drawImgX, drawImgY, drawImgX + drawImgW, drawImgY + drawImgH, //source w1, h1, w2, h2
-                                             null);
-    
+
+        if (this.isDead) {
+            //TODO: Draw dead animation...
+        } else {
+            short dx1 = (short)(this.inBetweenX);
+            short dy1 = (short)(this.inBetweenY);
+            short dx2 = (short)(dx1 + this.width);
+            short dy2 = (short)(dy1 + this.height);
+            this.g2d.drawImage(this.animalTiles, dx1, dy1, dx2, dy2, //dest w1, h1, w2, h2
+                                                drawImgX, drawImgY, drawImgX + drawImgW, drawImgY + drawImgH, //source w1, h1, w2, h2
+                                                null);
+        }
     }
 
     @Override
@@ -172,8 +183,8 @@ public class Frog extends SpriteImpl {
                     this.height         = 36;
 
                     //compare to verify if frog reach the target position
-                    if ((short)(this.inBetweenY - step) <= this.pixelPosY) {
-                        this.inBetweenY = this.pixelPosY;
+                    if ((short)(this.inBetweenY - step) <= this.positionY) {
+                        this.inBetweenY = this.positionY;
                         this.animating  = false;
                         this.canMove    = true;
                         this.drawImgY   = 3;
@@ -195,8 +206,8 @@ public class Frog extends SpriteImpl {
                     this.height         = 36;
 
                     //compare to verify if frog reach the target position
-                    if ((short)(this.inBetweenY + step) >= this.pixelPosY) {
-                        this.inBetweenY = this.pixelPosY;
+                    if ((short)(this.inBetweenY + step) >= this.positionY) {
+                        this.inBetweenY = this.positionY;
                         this.animating  = false;
                         this.canMove    = true;
                         this.drawImgY   = 3;
@@ -218,8 +229,8 @@ public class Frog extends SpriteImpl {
                     this.width          = 36;
 
                     //compare to verify if frog reach the target position
-                    if ((short)(this.inBetweenX - step) <= this.pixelPosX) {
-                        this.inBetweenX = this.pixelPosX;
+                    if ((short)(this.inBetweenX - step) <= this.positionX) {
+                        this.inBetweenX = this.positionX;
                         this.animating  = false;
                         this.canMove    = true;
                         this.drawImgY   = 0;
@@ -241,8 +252,8 @@ public class Frog extends SpriteImpl {
                     this.width          = 36;
 
                     //compare to verify if frog reach the target position
-                    if ((short)(this.inBetweenX + step) >= this.pixelPosX) {
-                        this.inBetweenX = this.pixelPosX;
+                    if ((short)(this.inBetweenX + step) >= this.positionX) {
+                        this.inBetweenX = this.positionX;
                         this.animating  = false;
                         this.canMove    = true;
                         this.drawImgX   = 245;
@@ -253,6 +264,22 @@ public class Frog extends SpriteImpl {
 
                     break;
             }
+        }
+
+        //TODO: this must be changed in future to test just in the correct LANE
+        //for now, test at every moment
+        int coliding = -1;
+        if (!this.isDead) {
+            if (true) {
+                coliding = this.scenario.getVehicles().testColision(this);
+            }
+            if (coliding != -1) {
+                this.canMove    = false;
+                this.isDead     = true;
+                this.animating  = false;
+            }
+        } else {
+            //TODO: Invoke and control dead animation frametime
         }
     }
 }

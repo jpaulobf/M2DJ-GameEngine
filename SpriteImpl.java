@@ -14,8 +14,6 @@ public abstract class SpriteImpl implements Sprite, Directions {
     protected byte velocity             = 0;
     protected short positionX           = 0;
     protected short positionY           = 0;
-    protected short pixelPosX           = 0;
-    protected short pixelPosY           = 0;
     protected double inBetweenX         = 0;
     protected double inBetweenY         = 0;
     protected byte width                = 0;

@@ -3,11 +3,13 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import Interfaces.Directions;
 import Interfaces.Lanes;
+import Interfaces.Sprite;
 import Interfaces.Stages;
+import Interfaces.SpriteCollection;
 
 import java.io.File;
 
-public class Vehicles {
+public class Vehicles implements SpriteCollection {
  
         //The tile image, and its elements (positions)
         protected int windowWidth               = 0;
@@ -45,27 +47,7 @@ public class Vehicles {
                 vehicles[i] = new Vehicle(g2d);
             }
         }
-
-        /**
-         * Test if some of the vehicles are coliding
-         * Return a number # of the coliding vehicle or #-1 if don't
-         * @param sprite
-         */
-        public int testColision(SpriteImpl sprite) {
-            //gate check
-            if (sprite == null) return -1;
             
-            //important: it's not necessary to test if the vehicle array is null, because it was initialized in the constructor
-            for (int cnt = 0; cnt < this.vehicles.length; cnt++) {
-                if (this.vehicles[cnt].isColiding(sprite)) {
-                    return (cnt);
-                }
-            }
-
-            //if the code reach here, no colision
-            return (-1);
-        }
-    
         /**
          * Updates the elements on the screen
          */
@@ -101,6 +83,7 @@ public class Vehicles {
                     vehicles[index].direction    = (byte)Stages.stg1[i][j][1];
                     vehicles[index].positionX    = (short)(Stages.stg1[i][j][2]/1000);
                     //incrementa o index ao final
+                    vehicles[index].width        = (byte)vehiclesW[vehicles[index].type];
                     vehicles[index++].positionY  = (short)Lanes.lanes[i];
                 }
             }
@@ -116,6 +99,27 @@ public class Vehicles {
                     vehicles[index++].draw(this.vehiclesTile, vehiclesImgX, vehiclesW);
                 }
             }
+        }
+
+        /**
+         * Test if some of the vehicles are coliding
+         * Return a number # of the coliding vehicle or #-1 if don't
+         * @param sprite
+         */
+        @Override
+        public int testColision(Sprite sprite) {
+            //gate check
+            if (sprite == null) return -1;
+            
+            //important: it's not necessary to test if the vehicle array is null, because it was initialized in the constructor
+            for (int cnt = 0; cnt < this.vehicles.length; cnt++) {
+                if (this.vehicles[cnt].isColiding(sprite)) {
+                    return (cnt);
+                }
+            }
+
+            //if the code reach here, no colision
+            return (-1);
         }
     }
     
