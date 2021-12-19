@@ -141,7 +141,7 @@ public class Frog extends SpriteImpl {
         this.distanceY = (short)(this.inBetweenY - this.positionY);
         this.canMove    = false;
         this.animating  = true;
-        //System.out.println(distanceY);
+        System.out.println(distanceY);
     }
 
     @Override
