@@ -1,4 +1,4 @@
-public class Snake extends Sprite {
+public class Snake extends SpriteImpl {
 
     @Override
     public void draw(long frametime) {

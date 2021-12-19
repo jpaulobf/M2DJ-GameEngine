@@ -1,4 +1,4 @@
-public class Gator extends Sprite {
+public class Gator extends SpriteImpl {
 
     @Override
     public void draw(long frametime) {

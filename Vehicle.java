@@ -1,7 +1,7 @@
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-public class Vehicle extends Sprite {
+public class Vehicle extends SpriteImpl {
         
     //The tile image, and its elements (positions)
     protected int type                      = 0;

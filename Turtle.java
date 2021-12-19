@@ -1,4 +1,4 @@
-public class Turtle extends Sprite {
+public class Turtle extends SpriteImpl {
 
     @Override
     public void draw(long frametime) {

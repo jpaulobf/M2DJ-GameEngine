@@ -1,4 +1,4 @@
-public class TreeTrunk  extends Sprite {
+public class TreeTrunk  extends SpriteImpl {
 
     @Override
     public void draw(long frametime) {

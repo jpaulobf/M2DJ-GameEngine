@@ -1,11 +1,12 @@
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import Interfaces.Directions;
+import Interfaces.Sprite;
 
 /*
     WTCD: This abstract class store the common characteristics and methods of a sprite
 */
-public abstract class Sprite implements Directions {
+public abstract class SpriteImpl implements Sprite, Directions {
 
     //variable member values 
     protected byte type                 = 0;
@@ -25,15 +26,24 @@ public abstract class Sprite implements Directions {
     protected Graphics2D g2d            = null;
 
     /**
+     * Abstract methods
+     */
+    public abstract void draw(long frametime);
+    public abstract void update(long frametime);
+
+    /**
      * WTMD: Return a rectangle with the current XY position
      */
-    private Rectangle2D calcMyRect() {
+    public Rectangle2D calcMyRect() {
         this.rectangle = new Rectangle2D.Double(this.positionX, this.positionY, this.width, this.height);
         return (this.rectangle);
     }
 
-    public abstract void draw(long frametime);
-    public abstract void update(long frametime);
+    /**
+     * Verify if this sprite is coliding with other
+     * @param sprite
+     * @return
+     */
     public boolean isColiding(Sprite sprite) {
         return (calcMyRect().intersects(sprite.calcMyRect()));
     }

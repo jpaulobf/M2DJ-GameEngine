@@ -51,7 +51,7 @@ public class Vehicles {
          * Return a number # of the coliding vehicle or #-1 if don't
          * @param sprite
          */
-        public int testColision(Sprite sprite) {
+        public int testColision(SpriteImpl sprite) {
             //gate check
             if (sprite == null) return -1;
             

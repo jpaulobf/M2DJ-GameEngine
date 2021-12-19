@@ -8,7 +8,7 @@ import java.util.Map;
 /*
     WTCD: This class represents the frog sprite
 */
-public class Frog extends Sprite {
+public class Frog extends SpriteImpl {
     
     //game variable
     private byte lives                  = 3;
@@ -84,7 +84,9 @@ public class Frog extends Sprite {
         this.drawImgH   = 25;
     }
 
-    
+    /**
+     * Get the remained lives from the frog 
+    */
     public byte getLives() {
         return lives;
     }

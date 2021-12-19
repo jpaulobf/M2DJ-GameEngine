@@ -1,4 +1,4 @@
-public class Monster extends Sprite {
+public class Monster extends SpriteImpl {
 
     @Override
     public void draw(long frametime) {
