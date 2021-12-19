@@ -51,6 +51,7 @@ public class Game extends JFrame implements IGame {
     //the game variables go here...
     private Scenario scenario                   = null;
     private Frog frog                           = null;
+    private volatile boolean canContinue        = true;
 
     /*
         WTMD: some responsabilites here:
@@ -115,11 +116,15 @@ public class Game extends JFrame implements IGame {
 
         this.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyPressed(KeyEvent e) {
-                frog.move(e.getKeyCode());
+            public synchronized void keyPressed(KeyEvent e) {
+                if (canContinue) {
+                    canContinue = false;
+                    frog.move(e.getKeyCode());
+                }
             }
             @Override
-            public void keyReleased(KeyEvent e) {
+            public synchronized void keyReleased(KeyEvent e) {
+                canContinue = true;
                 if (e.getKeyCode() == 27) {setVisible(false); System.exit(0);}
             }
         });

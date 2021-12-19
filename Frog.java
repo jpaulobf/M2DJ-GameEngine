@@ -106,8 +106,6 @@ public class Frog extends SpriteImpl {
     public synchronized void move(int keycode) {
         if (this.canMove) {
             if (keyMap.get(keycode) != null) {
-                this.canMove    = false;
-                this.animating  = true;
                 execute(keyMap.get(keycode));
             }
         }
@@ -136,15 +134,14 @@ public class Frog extends SpriteImpl {
             }
         }
 
-        this.positionX = (short)((this.positionInTileX * this.tileX) + this.offsetLeft);
-        this.positionY = (short)((this.positionInTileY * this.tileY) + this.offsetTop);
-        this.direction = direction;
-
-        /*
+        this.positionX  = (short)((this.positionInTileX * this.tileX) + this.offsetLeft);
+        this.positionY  = (short)((this.positionInTileY * this.tileY) + this.offsetTop);
+        this.direction  = direction;
         this.distanceX = (short)(this.inBetweenX - this.positionX);
         this.distanceY = (short)(this.inBetweenY - this.positionY);
-        System.out.println(distanceY);
-        */
+        this.canMove    = false;
+        this.animating  = true;
+        //System.out.println(distanceY);
     }
 
     @Override
@@ -187,7 +184,6 @@ public class Frog extends SpriteImpl {
                     this.drawImgY       = 31;
                     
                     /*if (true) {
-                        
                     } else {
                         this.drawImgY       = 68;
                     }*/
