@@ -9,9 +9,9 @@ public interface Stages extends Directions {
     //for each lane, each car parameter
     //type, direction, start-position-x, velocity
     public static int [][][] stg1               =  { { {4, LEFT,  positionsX[4][0], velocities[4][0]}, {4, LEFT,  positionsX[4][1], velocities[4][0]}},
-                                                     { {1, RIGHT, positionsX[3][0], velocities[3][0]}                                                 },
-                                                     { {2, LEFT,  positionsX[2][0], velocities[2][0]}, {3, LEFT,  positionsX[2][1], velocities[2][0]}, {1, LEFT,  positionsX[2][2], velocities[2][0]} }, 
-                                                     { {3, RIGHT, positionsX[1][0], velocities[1][0]}, {1, RIGHT, positionsX[1][1], velocities[1][0]}, {4, RIGHT, positionsX[1][2], velocities[1][0]} },
-                                                     { {0, LEFT,  positionsX[0][0], velocities[0][0]}, {0, LEFT,  positionsX[0][1], velocities[0][0]}, {3, LEFT,  positionsX[0][2], velocities[0][0]} } };
+                                                     { {3, RIGHT, positionsX[3][0], velocities[3][0]}                                                 },
+                                                     { {2, LEFT,  positionsX[2][0], velocities[2][0]}, {2, LEFT,  positionsX[2][1], velocities[2][0]}, {2, LEFT,  positionsX[2][2], velocities[2][0]} }, 
+                                                     { {1, RIGHT, positionsX[1][0], velocities[1][0]}, {1, RIGHT, positionsX[1][1], velocities[1][0]}, {1, RIGHT, positionsX[1][2], velocities[1][0]} },
+                                                     { {0, LEFT,  positionsX[0][0], velocities[0][0]}, {0, LEFT,  positionsX[0][1], velocities[0][0]}, {0, LEFT,  positionsX[0][2], velocities[0][0]} } };
 
 }

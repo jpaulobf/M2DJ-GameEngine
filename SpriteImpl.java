@@ -9,19 +9,19 @@ import Interfaces.Sprite;
 public abstract class SpriteImpl implements Sprite, Directions {
 
     //variable member values 
-    protected byte type                 = 0;
-    protected byte direction            = LEFT;
-    protected byte velocity             = 0;
-    protected short positionX           = 0;
-    protected short positionY           = 0;
-    protected double inBetweenX         = 0;
-    protected double inBetweenY         = 0;
-    protected byte width                = 0;
-    protected byte height               = 0;
-    protected byte offsetTop            = 0;
-    protected byte offsetLeft           = 0;
-    protected Rectangle2D rectangle     = null;
-    protected Graphics2D g2d            = null;
+    protected byte type                     = 0;
+    protected volatile byte direction       = LEFT;
+    protected byte velocity                 = 0;
+    protected volatile short positionX      = 0;
+    protected volatile short positionY      = 0;
+    protected volatile double inBetweenX    = 0;
+    protected volatile double inBetweenY    = 0;
+    protected byte width                    = 0;
+    protected byte height                   = 0;
+    protected byte offsetTop                = 0;
+    protected byte offsetLeft               = 0;
+    protected Rectangle2D rectangle         = null;
+    protected Graphics2D g2d                = null;
 
     /**
      * Abstract methods

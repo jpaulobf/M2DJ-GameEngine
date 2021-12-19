@@ -141,7 +141,7 @@ public class GameEngine implements Runnable {
                     afterUpdate = System.nanoTime();
                     totalExecutionTime -= (afterUpdate - beforeUpdate);
                     beforeUpdate = System.nanoTime();
-                }  
+                } 
 
                 //update the referencial time with the initial time
                 timeReference = timeStamp;

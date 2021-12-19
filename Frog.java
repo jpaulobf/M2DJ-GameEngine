@@ -1,9 +1,7 @@
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
-
 import Interfaces.Lanes;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,33 +12,34 @@ import java.util.Map;
 public class Frog extends SpriteImpl {
     
     //game variable
-    private byte lives                  = 3;
-    private final byte INITIAL_T_POS_X  = 10;
-    private final byte INITIAL_T_POS_Y  = 12;
-    private boolean isDead              = false;
+    private byte lives                      = 3;
+    private final byte INITIAL_T_POS_X      = 10;
+    private final byte INITIAL_T_POS_Y      = 12;
+    private boolean isDead                  = false;
+    private Scenario scenario               = null;
 
     //render variables
-    private byte tileX                  = 0;
-    private byte tileY                  = 0;
-    private BufferedImage animalTiles   = null;
-    private Map<Integer, Byte> keyMap   = null;
+    private byte tileX                      = 0;
+    private byte tileY                      = 0;
+    private BufferedImage animalTiles       = null;
+    private Map<Integer, Byte> keyMap       = null;
 
     //animation parameters
-    private boolean canMove             = true;
-    private boolean animating           = false;
-    private short distance              = 300; //in pixel
-    private short persecond             = 1;
-    private final double frogVelocity   = (double)((double)distance / (double)persecond);
+    private volatile boolean canMove        = true;
+    private volatile boolean animating      = false;
+    private short distance                  = 300; //in pixel
+    private short persecond                 = 1;
+    private final double frogVelocity       = (double)((double)distance / (double)persecond);
 
     //draw image parameters
-    private short drawImgX              = 0;
-    private short drawImgY              = 0;
-    private byte drawImgW               = 0;
-    private byte drawImgH               = 0;
-    protected short positionInTileX     = 0;
-    protected short positionInTileY     = 0;
-
-    private Scenario scenario           = null;
+    private volatile short drawImgX         = 0;
+    private volatile short drawImgY         = 0;
+    private volatile byte drawImgW          = 0;
+    private volatile byte drawImgH          = 0;
+    private volatile short positionInTileX  = 0;
+    private volatile short positionInTileY  = 0;
+    private volatile short distanceX        = 0;
+    private volatile short distanceY        = 0;
 
     /**
      * Frog constructor
@@ -104,7 +103,7 @@ public class Frog extends SpriteImpl {
      * 
      * @param keycode
      */
-    public void move(int keycode) {
+    public synchronized void move(int keycode) {
         if (this.canMove) {
             if (keyMap.get(keycode) != null) {
                 this.canMove    = false;
@@ -118,7 +117,7 @@ public class Frog extends SpriteImpl {
      * Perform the moviment of the frog
      * @param direction
      */
-    public void execute(byte direction) {
+    public synchronized void execute(byte direction) {
         if (direction == RIGHT) {
             if (this.positionInTileX < 20) {
                 this.positionInTileX++;
@@ -140,6 +139,12 @@ public class Frog extends SpriteImpl {
         this.positionX = (short)((this.positionInTileX * this.tileX) + this.offsetLeft);
         this.positionY = (short)((this.positionInTileY * this.tileY) + this.offsetTop);
         this.direction = direction;
+
+        /*
+        this.distanceX = (short)(this.inBetweenX - this.positionX);
+        this.distanceY = (short)(this.inBetweenY - this.positionY);
+        System.out.println(distanceY);
+        */
     }
 
     @Override
@@ -153,8 +158,8 @@ public class Frog extends SpriteImpl {
             short dx2 = (short)(dx1 + this.width);
             short dy2 = (short)(dy1 + this.height);
             this.g2d.drawImage(this.animalTiles, dx1, dy1, dx2, dy2, //dest w1, h1, w2, h2
-                                                drawImgX, drawImgY, drawImgX + drawImgW, drawImgY + drawImgH, //source w1, h1, w2, h2
-                                                null);
+                                                 drawImgX, drawImgY, drawImgX + drawImgW, drawImgY + drawImgH, //source w1, h1, w2, h2
+                                                 null);
         }
     }
 
@@ -163,7 +168,6 @@ public class Frog extends SpriteImpl {
      * Update the frog
      */
     public void update(long frametime) {
-
         //just if the frog is animating
         if (this.animating) {
 
@@ -181,11 +185,18 @@ public class Frog extends SpriteImpl {
                     this.drawImgW       = 32;
                     this.width          = 32;
                     this.drawImgY       = 31;
+                    
+                    /*if (true) {
+                        
+                    } else {
+                        this.drawImgY       = 68;
+                    }*/
+                    
                     this.drawImgH       = 36;
                     this.height         = 36;
-
+                    
                     //compare to verify if frog reach the target position
-                    if ((short)(this.inBetweenY - step) <= this.positionY) {
+                    if ((short)(this.inBetweenY - step) <= this.positionY) {                      
                         this.inBetweenY = this.positionY;
                         this.animating  = false;
                         this.canMove    = true;
@@ -193,7 +204,7 @@ public class Frog extends SpriteImpl {
                         this.drawImgH   = 25;
                         this.height     = 25;
                     }
-                    
+
                     break;
                 case DOWN:
                     //calc the new Y
@@ -268,11 +279,11 @@ public class Frog extends SpriteImpl {
             }
         }
 
+        /*
         int coliding = -1;
         if (!this.isDead) {
             //this line test the colisions only with the cars, in the lanes.
             if (this.positionY > Lanes.lanes[0]) {
-                System.out.println("testing...");
                 coliding = this.scenario.getVehicles().testColision(this);
             }
             if (coliding != -1) {
@@ -282,6 +293,6 @@ public class Frog extends SpriteImpl {
             }
         } else {
             //TODO: Invoke and control dead animation frametime
-        }
+        }*/
     }
 }

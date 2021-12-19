@@ -1,8 +1,6 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 import Interfaces.IGame;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -120,6 +118,7 @@ public class Game extends JFrame implements IGame {
             public void keyPressed(KeyEvent e) {
                 frog.move(e.getKeyCode());
             }
+            @Override
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyCode() == 27) {setVisible(false); System.exit(0);}
             }
@@ -130,7 +129,7 @@ public class Game extends JFrame implements IGame {
      * Update the game logic / receives the frametime
      * @param frametime
      */
-    public void update(long frametime) {
+    public synchronized void update(long frametime) {
 
         //how many pixels per second I want?
         //ex.: movement at 200px/s
@@ -155,7 +154,7 @@ public class Game extends JFrame implements IGame {
                 1) Clear the stage
      * @param frametime
      */
-    public void draw(long frametime) {
+    public synchronized void draw(long frametime) {
 
         //update the window size variables if the user resize it.
         this.windowHeight   = this.getHeight();
