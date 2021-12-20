@@ -234,9 +234,13 @@ public class Frog extends SpriteImpl {
                     this.drawImgX       = 197;
                     this.drawImgH       = 32;
                     this.height         = 32;
-                    this.drawImgY       = 33;
                     this.drawImgW       = 36;
                     this.width          = 36;
+                    if ((double)(this.inBetweenX - (double)this.positionX) <= (0.2 * distanceX)) {
+                        this.drawImgY   = 70;
+                    } else {
+                        this.drawImgY   = 33;
+                    }
 
                     //compare to verify if frog reach the target position
                     if ((short)(this.inBetweenX - step) <= this.positionX) {
@@ -257,9 +261,13 @@ public class Frog extends SpriteImpl {
                     this.drawImgH       = 32;
                     this.height         = 32;
                     this.drawImgX       = 234;
-                    this.drawImgY       = 33;
                     this.drawImgW       = 36;
                     this.width          = 36;
+                    if ((double)(this.inBetweenX - (double)this.positionX) <= (0.8 * distanceX)) {
+                        this.drawImgY   = 70;
+                    } else {
+                        this.drawImgY   = 33;
+                    }
 
                     //compare to verify if frog reach the target position
                     if ((short)(this.inBetweenX + step) >= this.positionX) {
