@@ -276,7 +276,6 @@ public class Frog extends SpriteImpl {
             }
         }
 
-        /*
         int coliding = -1;
         if (!this.isDead) {
             //this line test the colisions only with the cars, in the lanes.
@@ -290,6 +289,6 @@ public class Frog extends SpriteImpl {
             }
         } else {
             //TODO: Invoke and control dead animation frametime
-        }*/
+        }
     }
 }
