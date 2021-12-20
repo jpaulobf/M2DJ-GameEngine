@@ -197,7 +197,6 @@ public class Frog extends SpriteImpl {
                         this.drawImgH   = 25;
                         this.height     = 25;
                     }
-
                     break;
                 case DOWN:
                     //calc the new Y
@@ -224,7 +223,6 @@ public class Frog extends SpriteImpl {
                         this.drawImgH   = 25;
                         this.height     = 25;
                     }
-
                     break;
                 case LEFT:
                     //calc the new X
@@ -251,7 +249,6 @@ public class Frog extends SpriteImpl {
                         this.drawImgW   = 25;
                         this.width      = 25;
                     }
-
                     break;
                 case RIGHT:
                     //calc the new X
@@ -279,7 +276,6 @@ public class Frog extends SpriteImpl {
                         this.drawImgW   = 25;
                         this.width      = 25;
                     }
-
                     break;
             }
         }
