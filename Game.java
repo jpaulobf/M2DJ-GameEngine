@@ -28,8 +28,8 @@ public class Game extends JFrame implements IGame {
     private int positionY                       = 0;
 
     //width and height of the window
-    //private int windowWidth                     = 1344;
-    //private int windowHeight                    = 832;
+    //private int windowWidth                   = 1344;
+    //private int windowHeight                  = 832;
 
     private int windowWidth                     = 1200;
     private int windowHeight                    = 700;

@@ -135,6 +135,7 @@ public class Scenario {
                 this.bgd2.setStroke(new BasicStroke());
                 this.bgd2.setColor(new Color(150, 150, 0));
                 this.bgd2.drawLine(0, (tileY * i), this.windowWidth, (tileY * i));
+                this.bgd2.drawLine(0, (tileY * i)+1, this.windowWidth, (tileY * i)+1);
             }
 
             //draw lane inlines
