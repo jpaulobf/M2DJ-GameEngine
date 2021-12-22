@@ -86,7 +86,6 @@ public class GameEngine implements Runnable {
         } else {
             
             while (isEngineRunning) {
-                //TODO: Review the calc for low performance pc
                 //mark the time before the iteration
                 timeStamp = System.nanoTime();
 
