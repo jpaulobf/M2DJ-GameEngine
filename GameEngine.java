@@ -57,8 +57,6 @@ public class GameEngine implements Runnable {
         long afterDraw          = 0;
         long accumulator        = 0;
         long timeElapsed        = 0;
-        long updateDiff         = 0;
-        long totalExecutionTime = 0;
         long timeStamp          = 0;
         long counter            = 0;
 
@@ -86,68 +84,56 @@ public class GameEngine implements Runnable {
         } else {
             
             while (isEngineRunning) {
-                //mark the time before the iteration
-                timeStamp = System.nanoTime();
 
-                //compute the time from previous iteration and the current
-                timeElapsed = (timeStamp - timeReference);
+                accumulator = 0;
 
-                //save the difference in an accumulator to control the pacing
-                accumulator += timeElapsed;
- 
-                //reset total execution time                
-                totalExecutionTime = 0;
+                //calc the update time
+                beforeUpdate = System.nanoTime();
 
-                //if the accumulator surpass the desired FPS, allow new update
-                if (accumulator >= TARGET_FRAMETIME) {
+                //update the game (gathering input from user, and processing the necessary games updates)
+                this.update(TARGET_FRAMETIME);
 
-                    //calc the update time
-                    beforeUpdate = System.nanoTime();
-
-                    //update the game (gathering input from user, and processing the necessary games updates)
-                    this.update(accumulator);
-
-                    //reset the accumulator
-                    accumulator = 0;
-
-                    //get the timestamp after the update
-                    updateDiff = System.nanoTime() - beforeUpdate;
-                    
-                    //only draw if there is some (any) enough time
-                    if ((TARGET_FRAMETIME - updateDiff) > 0) {
-                        
-                        beforeDraw = System.nanoTime();
-
-                        //draw
-                        this.draw(TARGET_FRAMETIME);
-                        
-                        //and than, store the time spent
-                        afterDraw = System.nanoTime() - beforeDraw;
-                    }
-
-                    //sum the time to update + the time to draw
-                    totalExecutionTime = updateDiff + afterDraw;
-                }
+                //get the timestamp after the update
+                afterUpdate = System.nanoTime() - beforeUpdate;
                 
-                /*  
+                //only draw if there is some (any) enough time
+                if ((TARGET_FRAMETIME - afterUpdate) > 0) {
+                    
+                    beforeDraw = System.nanoTime();
+
+                    //draw
+                    this.draw(TARGET_FRAMETIME);
+                    
+                    //and than, store the time spent
+                    afterDraw = System.nanoTime() - beforeDraw;
+                }
+
+                //reset the accumulator
+                accumulator = TARGET_FRAMETIME - (afterUpdate + afterDraw);
+
+                if (accumulator > 0) {
+                    try {
+                        Thread.sleep((long)(accumulator * 0.000001));
+                        Thread.yield();
+                    } catch (Exception e) {}
+                } else {
+                    /*  
                     Explanation:
                         if the total time to execute, consumes more miliseconds than the target-frame's amount, 
                         is necessary to keep updating without render, to recover the pace.
                     Important: Something here isn't working with very slow machines. 
                                So, this compensation have to be re-tested with this new approuch (exiting beforeUpdate).
                                Please test this code with your scenario.
-                */
-                beforeUpdate = System.nanoTime();
-                while (totalExecutionTime > TARGET_FRAMETIME) {
-                    System.out.println("Lost frame... " + ++counter);
-                    this.update(TARGET_FRAMETIME);
-                    afterUpdate = System.nanoTime();
-                    totalExecutionTime -= (afterUpdate - beforeUpdate);
+                    */
                     beforeUpdate = System.nanoTime();
-                } 
-
-                //update the referencial time with the initial time
-                timeReference = timeStamp;
+                    System.out.println("Lost frame... " + ++counter);
+                    while (accumulator < 0) {
+                        this.update(TARGET_FRAMETIME);
+                        afterUpdate = System.nanoTime();
+                        accumulator += (afterUpdate - beforeUpdate);
+                        beforeUpdate = System.nanoTime();
+                    }
+                }
             }
         }
     }
