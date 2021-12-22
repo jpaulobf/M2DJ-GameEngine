@@ -122,7 +122,6 @@ public class GameEngine implements Runnable {
                 if (accumulator > 0) {
                     try {
                         Thread.sleep((long)(accumulator * 0.000001));
-                        //Thread.yield();
                     } catch (Exception e) {}
                 } else {
                     /*  
@@ -133,15 +132,12 @@ public class GameEngine implements Runnable {
                                So, this compensation have to be re-tested with this new approuch (exiting beforeUpdate).
                                Please test this code with your scenario.
                     */
-                    //beforeUpdate = System.nanoTime();
                     System.out.println("Skip 1 frame... " + ++counter + " time(s)");
                     if (accumulator < 0) {
                         this.update(TARGET_FRAMETIME);
-                        //afterUpdate = System.nanoTime();
-                        //accumulator += (afterUpdate - beforeUpdate);
-                        //beforeUpdate = System.nanoTime();
                     }
                 }
+                Thread.yield();
             }
         }
     }

@@ -31,8 +31,8 @@ public class Frogger extends JFrame implements Game {
     //private int windowWidth                   = 1344;
     //private int windowHeight                  = 832;
 
-    private int windowWidth                     = 1200;
-    private int windowHeight                    = 700;
+    private int windowWidth                     = 1240;
+    private int windowHeight                    = 768;
 
     //desktop properties
     private int resolutionH                     = 0;
