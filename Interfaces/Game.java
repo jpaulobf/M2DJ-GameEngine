@@ -1,6 +1,6 @@
 package Interfaces;
 
-public interface IGame {
+public interface Game {
     /**
      * Update the game logic / receives the frametime
      * @param frametime

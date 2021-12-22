@@ -68,7 +68,7 @@ public class Vehicles implements SpriteCollection {
                     calcPos     = position + (step * direction);
                     if (direction == Directions.RIGHT) {
                         if (calcPos > (this.windowWidth * 1000) + largerVehicule) {
-                            calcPos = 0;
+                            calcPos = 0 - largerVehicule;
                         }
                     } else {
                         if (calcPos < -largerVehicule) {

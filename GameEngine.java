@@ -1,4 +1,4 @@
-import Interfaces.IGame;
+import Interfaces.Game;
 
 /*
     Project:    Modern 2D Java Game Engine
@@ -12,17 +12,22 @@ public class GameEngine implements Runnable {
     private boolean isEngineRunning     = true;
     private long FPS240                 = (long)(1_000_000_000 / 240);
     private long FPS120                 = (long)(1_000_000_000 / 120);
+    private long FPS90                  = (long)(1_000_000_000 / 90);
     private long FPS60                  = (long)(1_000_000_000 / 60);
     private long FPS30                  = (long)(1_000_000_000 / 30);
     private long TARGET_FRAMETIME       = FPS60;
     private boolean UNLIMITED_FPS       = false;
-    private IGame game                  = null;
+    private Game game                  = null;
 
     /*
         WTMD: constructor
                 receives the target FPS (0, 30, 60, 120, 240) and starts the engine
     */
-    public GameEngine(int targetFPF, IGame game) {
+    public GameEngine(int targetFPF, Game game) {
+
+        //enable openGL
+        System.setProperty("-Dsun.java2d.opengl", "True");
+
         this.UNLIMITED_FPS = false;
         switch(targetFPF) {
             case 30:
@@ -30,6 +35,9 @@ public class GameEngine implements Runnable {
                 break;
             case 60:
                 this.TARGET_FRAMETIME = FPS60;
+                break;
+            case 90:
+                this.TARGET_FRAMETIME = FPS90;
                 break;
             case 120:
                 this.TARGET_FRAMETIME = FPS120;
@@ -114,7 +122,7 @@ public class GameEngine implements Runnable {
                 if (accumulator > 0) {
                     try {
                         Thread.sleep((long)(accumulator * 0.000001));
-                        Thread.yield();
+                        //Thread.yield();
                     } catch (Exception e) {}
                 } else {
                     /*  
@@ -125,13 +133,13 @@ public class GameEngine implements Runnable {
                                So, this compensation have to be re-tested with this new approuch (exiting beforeUpdate).
                                Please test this code with your scenario.
                     */
-                    beforeUpdate = System.nanoTime();
-                    System.out.println("Lost frame... " + ++counter);
-                    while (accumulator < 0) {
+                    //beforeUpdate = System.nanoTime();
+                    System.out.println("Skip 1 frame... " + ++counter + " time(s)");
+                    if (accumulator < 0) {
                         this.update(TARGET_FRAMETIME);
-                        afterUpdate = System.nanoTime();
-                        accumulator += (afterUpdate - beforeUpdate);
-                        beforeUpdate = System.nanoTime();
+                        //afterUpdate = System.nanoTime();
+                        //accumulator += (afterUpdate - beforeUpdate);
+                        //beforeUpdate = System.nanoTime();
                     }
                 }
             }

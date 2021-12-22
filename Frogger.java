@@ -1,6 +1,6 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import Interfaces.IGame;
+import Interfaces.Game;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -19,7 +19,7 @@ import java.awt.RenderingHints;
     Date:       Octuber 2021
     WTCD:       This class, provides a stage for the game.
 */
-public class Game extends JFrame implements IGame {
+public class Frogger extends JFrame implements Game {
 
     private static final long serialVersionUID  = 1L;
 
@@ -59,7 +59,7 @@ public class Game extends JFrame implements IGame {
     /*
         WTMD: some responsabilites here:
     */
-    public Game() {
+    public Frogger() {
 
         //////////////////////////////////////////////////////////////////////
         //set some properties for this window
@@ -90,22 +90,32 @@ public class Game extends JFrame implements IGame {
         this.bufferImage    = dsd.getDefaultConfiguration().createCompatibleVolatileImage(this.wwm, this.whm);
         this.g2d            = (Graphics2D)bufferImage.getGraphics();
         this.g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
-        
+
+        boolean isFullScreen = dsd.isFullScreenSupported();
+        setUndecorated(isFullScreen);
+        setResizable(!isFullScreen);
+
         //////////////////////////////////////////////////////////////////////
         // ->>>  now, for the canvas
         //////////////////////////////////////////////////////////////////////
-
         //initialize the canvas
         this.canvas = new JPanel(null);
         this.canvas.setSize(windowWidth, windowHeight);
         this.canvas.setBackground(Color.BLACK);
-        this.setVisible(true);
         this.canvas.setOpaque(true);
         
         //final parameters for the window
         this.add(canvas);
-        this.pack();
-        this.setLocationRelativeTo(null);
+
+        //verify if fullscreen mode is supported
+        if (isFullScreen) {
+            // set to Full-screen mode
+            dsd.setFullScreenWindow(this);
+            validate();
+        } else {
+            this.pack();
+            this.setLocationRelativeTo(null);
+        }
 
         //show the game screen
         this.setVisible(true);
@@ -197,7 +207,11 @@ public class Game extends JFrame implements IGame {
         Description: main method
     */
     public static void main(String[] args) throws Exception {
-        Thread thread = new Thread(new GameEngine(60, new Game()), "engine");
+        //enable openGL
+        System.setProperty("-Dsun.java2d.opengl", "True");
+
+        //start the thread
+        Thread thread = new Thread(new GameEngine(60, new Frogger()), "engine");
         thread.start();
     }
 }
