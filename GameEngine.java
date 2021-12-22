@@ -84,7 +84,7 @@ public class GameEngine implements Runnable {
         } else {
             
             while (isEngineRunning) {
-
+                //TODO: Review the calc for low performance pc
                 //mark the time before the iteration
                 timeStamp = System.nanoTime();
 
@@ -137,6 +137,7 @@ public class GameEngine implements Runnable {
                 */
                 beforeUpdate = System.nanoTime();
                 while (totalExecutionTime > TARGET_FRAMETIME) {
+                    System.out.println("Lost frame...");
                     this.update(TARGET_FRAMETIME);
                     afterUpdate = System.nanoTime();
                     totalExecutionTime -= (afterUpdate - beforeUpdate);
