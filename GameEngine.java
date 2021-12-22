@@ -53,12 +53,14 @@ public class GameEngine implements Runnable {
         long timeReference      = System.nanoTime();
         long beforeUpdate       = 0;
         long afterUpdate        = 0;
+        long beforeDraw         = 0;
         long afterDraw          = 0;
         long accumulator        = 0;
         long timeElapsed        = 0;
         long updateDiff         = 0;
         long totalExecutionTime = 0;
         long timeStamp          = 0;
+        long counter            = 0;
 
         if (UNLIMITED_FPS) {
             while (isEngineRunning) {
@@ -104,23 +106,24 @@ public class GameEngine implements Runnable {
                     beforeUpdate = System.nanoTime();
 
                     //update the game (gathering input from user, and processing the necessary games updates)
-                    this.update(TARGET_FRAMETIME);
+                    this.update(accumulator);
 
                     //reset the accumulator
                     accumulator = 0;
 
                     //get the timestamp after the update
-                    afterUpdate = System.nanoTime();
-                    updateDiff = afterUpdate - beforeUpdate;
+                    updateDiff = System.nanoTime() - beforeUpdate;
                     
                     //only draw if there is some (any) enough time
                     if ((TARGET_FRAMETIME - updateDiff) > 0) {
                         
+                        beforeDraw = System.nanoTime();
+
                         //draw
                         this.draw(TARGET_FRAMETIME);
                         
                         //and than, store the time spent
-                        afterDraw = System.nanoTime() - afterUpdate;
+                        afterDraw = System.nanoTime() - beforeDraw;
                     }
 
                     //sum the time to update + the time to draw
@@ -137,7 +140,7 @@ public class GameEngine implements Runnable {
                 */
                 beforeUpdate = System.nanoTime();
                 while (totalExecutionTime > TARGET_FRAMETIME) {
-                    System.out.println("Lost frame...");
+                    System.out.println("Lost frame... " + ++counter);
                     this.update(TARGET_FRAMETIME);
                     afterUpdate = System.nanoTime();
                     totalExecutionTime -= (afterUpdate - beforeUpdate);
