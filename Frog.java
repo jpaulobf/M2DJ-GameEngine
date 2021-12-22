@@ -74,7 +74,7 @@ public class Frog extends SpriteImpl {
         this.positionY = (short)this.inBetweenY;
 
         try {
-            this.animalTiles = ImageIO.read(new File("images\\animals1.png"));
+            this.animalTiles = ImageIO.read(new File("images\\animals2.png"));
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
