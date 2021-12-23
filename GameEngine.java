@@ -137,7 +137,6 @@ public class GameEngine implements Runnable {
                         this.update(TARGET_FRAMETIME);
                     }
                 }
-                //Thread.yield();
             }
         }
     }

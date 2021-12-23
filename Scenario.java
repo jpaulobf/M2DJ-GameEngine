@@ -31,11 +31,6 @@ public class Scenario {
     private final byte halfTileX        = (byte)(tileX / 2);
     private final byte halfTileY        = (byte)(tileY / 2);
 
-    public void setG2d(Graphics2D g2d) { 
-        this.g2d = g2d;
-        this.vehicles.setG2d(g2d);
-    }
-
     //getters
     public Vehicles getVehicles() {
         return (this.vehicles);

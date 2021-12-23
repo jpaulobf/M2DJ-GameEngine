@@ -27,10 +27,6 @@ public class Vehicles implements SpriteCollection {
         //define the vehicules array
         private Vehicle [] vehicles              =  new Vehicle[12];
 
-        public void setG2d(Graphics2D g2d) { 
-            this.g2d = g2d;
-        }
-
         /**
          * Load the tile image
          * @param g2d
