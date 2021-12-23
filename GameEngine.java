@@ -17,7 +17,7 @@ public class GameEngine implements Runnable {
     private long FPS30                  = (long)(1_000_000_000 / 30);
     private long TARGET_FRAMETIME       = FPS60;
     private boolean UNLIMITED_FPS       = false;
-    private Game game                  = null;
+    private Game game                   = null;
 
     /*
         WTMD: constructor
@@ -26,7 +26,7 @@ public class GameEngine implements Runnable {
     public GameEngine(int targetFPF, Game game) {
 
         //enable openGL
-        System.setProperty("-Dsun.java2d.opengl", "True");
+        //System.setProperty("sun.java2d.opengl", "True");
 
         this.UNLIMITED_FPS = false;
         switch(targetFPF) {
@@ -132,12 +132,12 @@ public class GameEngine implements Runnable {
                                So, this compensation have to be re-tested with this new approuch (exiting beforeUpdate).
                                Please test this code with your scenario.
                     */
-                    System.out.println("Skip 1 frame... " + ++counter + " time(s)");
+                    //System.out.println("Skip 1 frame... " + ++counter + " time(s)");
                     if (accumulator < 0) {
                         this.update(TARGET_FRAMETIME);
                     }
                 }
-                Thread.yield();
+                //Thread.yield();
             }
         }
     }
