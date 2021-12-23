@@ -9,11 +9,9 @@ public class Vehicle extends SpriteImpl {
 
     /**
      * Load the tile image
-     * @param g2d
      */
-    public Vehicle(Graphics2D g2d) {
+    public Vehicle() {
         //recupera o G2D
-        this.g2d        = g2d;
         this.height     = 38;
     }
     
@@ -25,10 +23,10 @@ public class Vehicle extends SpriteImpl {
      * veicules types { 0 - car1 | 1 - car2 | 2 - car3 | 3 - tractor | 4 - truck }
      * lanes { 0 - 4 }
     */ 
-    protected void draw(BufferedImage vehiclesTile, int [][]vehiclesImgX, int []vehiclesW) {
+    protected void draw(BufferedImage vehiclesTile, int [][]vehiclesImgX, int []vehiclesW, Graphics2D g2d) {
         //draw the selected image
         direction = (direction == LEFT)?0:direction;
-        this.g2d.drawImage(vehiclesTile, this.positionX, this.positionY, this.positionX + vehiclesW[this.type], this.positionY + this.height, //dest w1, h1, w2, h2
+        g2d.drawImage(vehiclesTile, this.positionX, this.positionY, this.positionX + vehiclesW[this.type], this.positionY + this.height, //dest w1, h1, w2, h2
                                          vehiclesImgX[this.type][this.direction], 0, vehiclesImgX[this.type][this.direction] + vehiclesW[this.type], this.height, //source w1, h1, w2, h2
                                          null);
     }

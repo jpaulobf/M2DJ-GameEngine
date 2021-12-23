@@ -27,6 +27,10 @@ public class Vehicles implements SpriteCollection {
         //define the vehicules array
         private Vehicle [] vehicles              =  new Vehicle[12];
 
+        public void setG2d(Graphics2D g2d) { 
+            this.g2d = g2d;
+        }
+
         /**
          * Load the tile image
          * @param g2d
@@ -44,7 +48,7 @@ public class Vehicles implements SpriteCollection {
             }
 
             for (byte i = 0; i < vehicles.length; i++) {
-                vehicles[i] = new Vehicle(g2d);
+                vehicles[i] = new Vehicle();
             }
         }
             
@@ -96,7 +100,7 @@ public class Vehicles implements SpriteCollection {
             int index = 0;
             for (byte i = 0; i < Stages.stg1.length; i++) {
                 for (byte j = 0; j < Stages.stg1[i].length; j++) {
-                    vehicles[index++].draw(this.vehiclesTile, vehiclesImgX, vehiclesW);
+                    vehicles[index++].draw(this.vehiclesTile, vehiclesImgX, vehiclesW, this.g2d);
                 }
             }
         }

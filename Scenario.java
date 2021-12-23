@@ -31,6 +31,11 @@ public class Scenario {
     private final byte halfTileX        = (byte)(tileX / 2);
     private final byte halfTileY        = (byte)(tileY / 2);
 
+    public void setG2d(Graphics2D g2d) { 
+        this.g2d = g2d;
+        this.vehicles.setG2d(g2d);
+    }
+
     //getters
     public Vehicles getVehicles() {
         return (this.vehicles);
@@ -150,7 +155,7 @@ public class Scenario {
             byte bgImageH = 64;
 
             //draw the safe spot (middle and bottom)
-            for (int i = 0; i < 30; i++) {
+            for (int i = 0; i < 31; i++) {
                 this.bgd2.drawImage(this.sidewalk, i * bgImageW, (6 * tileY), ((i * bgImageW) + bgImageW), (7 * tileY),     //dest w1, h1, w2, h2
                                                    0, 0, bgImageW, bgImageH,                                                //source w1, h1, w2, h2
                                                    null);
