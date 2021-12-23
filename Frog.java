@@ -41,6 +41,8 @@ public class Frog extends SpriteImpl {
     private volatile double distanceX       = 0;
     private volatile double distanceY       = 0;
 
+    public void setG2d(Graphics2D g2d) { this.g2d = g2d;}
+
     /**
      * Frog constructor
      * @param g2d

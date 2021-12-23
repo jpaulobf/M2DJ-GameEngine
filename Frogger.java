@@ -7,10 +7,12 @@ import java.awt.Toolkit;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.image.BufferStrategy;
 import java.awt.image.VolatileImage;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.RenderingHints;
+import java.awt.EventQueue;
 
 /*
     Project:    Modern 2D Java Game Engine
@@ -30,9 +32,8 @@ public class Frogger extends JFrame implements Game {
     //width and height of the window
     //private int windowWidth                   = 1344;
     //private int windowHeight                  = 832;
-
     private int windowWidth                     = 1240;
-    private int windowHeight                    = 768;
+    private int windowHeight                    = 700;
 
     //desktop properties
     private int resolutionH                     = 0;
@@ -46,6 +47,7 @@ public class Frogger extends JFrame implements Game {
     private GraphicsEnvironment ge              = null;
     private GraphicsDevice dsd                  = null;
     private Graphics2D g2d                      = null;
+    private BufferStrategy bufferStrategy       = null;
     private boolean showFPS                     = true;
     //width and height of window for base metrics of the game
     private int wwm                             = 1344;
@@ -55,6 +57,8 @@ public class Frogger extends JFrame implements Game {
     private Scenario scenario                   = null;
     private Frog frog                           = null;
     private volatile boolean canContinue        = true;
+    private boolean fullscreen                  = true;
+    private boolean isFullScreenAvailable       = false;
 
     /*
         WTMD: some responsabilites here:
@@ -91,9 +95,10 @@ public class Frogger extends JFrame implements Game {
         this.g2d            = (Graphics2D)bufferImage.getGraphics();
         this.g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 
-        boolean isFullScreen = dsd.isFullScreenSupported();
-        setUndecorated(isFullScreen);
-        setResizable(!isFullScreen);
+        //verify if fullscreen is posible
+        this.isFullScreenAvailable = dsd.isFullScreenSupported();
+        this.setUndecorated(true);
+        this.setResizable(false);
 
         //////////////////////////////////////////////////////////////////////
         // ->>>  now, for the canvas
@@ -107,10 +112,12 @@ public class Frogger extends JFrame implements Game {
         //final parameters for the window
         this.add(canvas);
 
-        //verify if fullscreen mode is supported
-        if (isFullScreen) {
+        //verify if fullscreen mode is supported & desired
+        if (fullscreen && isFullScreenAvailable) {
             // set to Full-screen mode
+            this.setIgnoreRepaint(true);
             dsd.setFullScreenWindow(this);
+            this.setBufferStrategy();
             validate();
         } else {
             this.pack();
@@ -163,7 +170,6 @@ public class Frogger extends JFrame implements Game {
         //////////////////////////////////////////////////////////////////////
         scenario.update(frametime);
         frog.update(frametime);
-      
     }
     
     /**
@@ -178,29 +184,92 @@ public class Frogger extends JFrame implements Game {
         this.windowHeight   = this.getHeight();
         this.windowWidth    = this.getWidth();
 
-        if (this.g2d != null) {
-            
-            //this graphical device (g2d) points to backbuffer, so, we are making things behide the scenes
-            //clear the stage
-            this.g2d.setBackground(Color.BLACK);
-            this.g2d.clearRect(0, 0, this.resolutionW, this.resolutionH);
+        if (fullscreen && isFullScreenAvailable) {
+            //set the buffer strategy
+            this.g2d = (Graphics2D)this.bufferStrategy.getDrawGraphics();
 
-            //////////////////////////////////////////////////////////////////////
-            // ->>>  draw the game elements
-            //////////////////////////////////////////////////////////////////////
-            scenario.draw(frametime);
-            frog.draw(frametime);
+            //render the game elements
+            this.renderGameElements(frametime);
 
-            //verify if the user want to show the FPS
-            if (this.showFPS) {
-                this.g2d.setColor(new Color(255, 255, 255, 80));
-                this.g2d.drawString("fps: " + (int)(1_000_000_000D / frametime), this.wwm - 70, 20);
+            //At least, copy the backbuffer to the backbuffer
+            this.g2d.drawImage(this.bufferImage, 0, 0, this.windowWidth, this.windowHeight, 
+                                                 0, 0, this.wwm, this.whm, this);
+
+            this.renderFPSLayer(frametime, this.g2d);
+
+            //show the buffer content
+            this.g2d.dispose();
+            if (!this.bufferStrategy.contentsLost()) {
+                this.bufferStrategy.show();
             }
+        } else {
+            //verify if the Graphics element isn't lost
+            if (this.g2d != null) {
+            
+                //render the game elements
+                this.renderGameElements(frametime);
+    
+                this.renderFPSLayer(frametime, (Graphics2D)this.bufferImage.getGraphics());
 
-            //At least, copy the backbuffer to the canvas screen
-            this.canvas.getGraphics().drawImage(this.bufferImage, 0, 0, this.windowWidth, this.windowHeight, 
-                                                                  0, 0, this.wwm, this.whm, this);
+                //At least, copy the backbuffer to the canvas screen
+                this.canvas.getGraphics().drawImage(this.bufferImage, 0, 0, this.windowWidth, this.windowHeight, 
+                                                                      0, 0, this.wwm, this.whm, this);
+
+                
+            }
         }
+    }
+
+    /**
+     * Show FPS Layer
+     * @param frametime
+     * @param g
+     */
+    private void renderFPSLayer(long frametime, Graphics2D g) {
+        //verify if the user want to show the FPS
+        if (this.showFPS) {
+            g.setColor(Color.WHITE);
+            g.drawString("fps: " + (int)(1_000_000_000D / frametime), 10, 20);
+        }
+    }
+
+    /**
+     * Render the game elements
+     * @param frametime
+     */
+    private void renderGameElements(long frametime) {
+        //this graphical device (g2d) points to backbuffer, so, we are making things behide the scenes
+        //clear the stage
+        this.g2d.setBackground(Color.BLACK);
+        this.g2d.clearRect(0, 0, this.resolutionW, this.resolutionH);
+   
+        //////////////////////////////////////////////////////////////////////
+        // ->>>  draw the game elements
+        //////////////////////////////////////////////////////////////////////
+        //if (g2d != null) {
+        //    scenario.setG2d(g2d);
+        //    frog.setG2d(g2d);
+        //}
+        scenario.draw(frametime);
+        frog.draw(frametime);
+    }
+
+    /**
+     * Create the bufferstrategy
+     */
+    private void setBufferStrategy() { 
+        try {
+            EventQueue.invokeAndWait(new Runnable() {
+                public void run() { 
+                    createBufferStrategy(2); 
+                }});
+        } catch (Exception e) {
+            System.exit(0);
+        }
+        try {     
+            Thread.sleep(500);
+        } catch(InterruptedException ex){}
+        this.bufferStrategy = super.getBufferStrategy();
     }
 
     /*
@@ -208,10 +277,11 @@ public class Frogger extends JFrame implements Game {
     */
     public static void main(String[] args) throws Exception {
         //enable openGL
-        System.setProperty("-Dsun.java2d.opengl", "True");
+        System.setProperty("sun.java2d.opengl", "True");
 
         //start the thread
-        Thread thread = new Thread(new GameEngine(60, new Frogger()), "engine");
+        Thread thread = new Thread(new GameEngine(0, new Frogger()), "engine");
+        thread.setPriority(Thread.MAX_PRIORITY);
         thread.start();
     }
 }
