@@ -56,6 +56,7 @@ public class GameEngine implements Runnable {
     }
     
     /* Método de execução da thread */
+    @SuppressWarnings("unused") //just temporary, for the counter variable... delete this...
     public void run() {
         //this.game = new Game(FPS);
         long timeReference      = System.nanoTime();
