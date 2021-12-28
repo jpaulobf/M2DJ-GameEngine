@@ -30,6 +30,8 @@ public class Frog extends SpriteImpl {
     private short distance                  = 300; //in pixel
     private short persecond                 = 1;
     private final double frogVelocity       = (double)((double)distance / (double)persecond);
+    private byte froggerDeadAnimationFrame  = 0;
+    private int animationCounter            = 0;
 
     //draw image parameters
     private volatile short drawImgX         = 0;
@@ -275,7 +277,22 @@ public class Frog extends SpriteImpl {
                 this.isDead     = true;
                 this.animating  = false;
             }
+            this.animationCounter = 0;
         } else {
+            this.animationCounter++;
+            if (this.animationCounter < 250_000_000) {
+                froggerDeadAnimationFrame = 0;
+            } else if (this.animationCounter < 500_000_000) {
+                froggerDeadAnimationFrame = 1;
+            } else if (this.animationCounter < 750_000_000) {
+                froggerDeadAnimationFrame = 2;
+            } else if (this.animationCounter < 1_000_000_000) {
+                froggerDeadAnimationFrame = 3;
+            } else {
+                this.animationCounter = 0;
+                this.isDead = false;
+                this.lives--; //TODO: CONTROL THE LIVES
+            }
             //TODO: Invoke and control dead animation frametime
         }
     }
