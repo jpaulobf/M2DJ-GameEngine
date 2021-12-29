@@ -255,9 +255,9 @@ public class ConfigSplashScreen extends JFrame implements Runnable {
     /*
         Description: main method
     */
-    public static void main(String [] args) {
+    /*public static void main(String [] args) {
         new Thread(new ConfigSplashScreen(), "configScreen").start();
-    }
+    }*/
 
     /*
         This subclass is still under development...

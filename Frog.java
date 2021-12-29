@@ -131,10 +131,10 @@ public class Frog extends SpriteImpl {
     public void draw(long frametime) {     
 
         if (this.isDead) {
-            short dx1 = (short)(this.positionX);
-            short dy1 = (short)(this.positionY);
-            short dx2 = (short)(dx1 + this.width);
-            short dy2 = (short)(dy1 + this.height);
+            short dx1 = (short)(this.positionX - ((this.drawImgW - this.width) / 2));
+            short dy1 = (short)(this.positionY - ((this.drawImgH - this.height) / 2));
+            short dx2 = (short)(dx1 + this.drawImgW);
+            short dy2 = (short)(dy1 + this.drawImgH);
 
             this.g2d.drawImage(this.froggerDeadTiles, dx1, dy1, dx2, dy2, //dest w1, h1, w2, h2
                                                       drawImgX, drawImgY, drawImgX + drawImgW, drawImgY + drawImgH, //source w1, h1, w2, h2
@@ -268,9 +268,7 @@ public class Frog extends SpriteImpl {
             }
             this.animationCounter = 0;
         } else {
-            System.out.println(this.animationCounter);
             this.animationCounter += frametime;
-
             if (this.animationCounter < 250_000_000) {
                 this.drawImgX   = 1;
                 this.drawImgY   = 5;
@@ -292,11 +290,9 @@ public class Frog extends SpriteImpl {
                 this.drawImgW   = 56;
                 this.drawImgH   = 58;
             } else {
-                System.out.println(this.animationCounter);
                 this.animationCounter = 0;
                 this.isDead = false;
                 this.lives--; //TODO: CONTROL THE LIVES
-
                 this.frogReset();
             }
         }
