@@ -50,31 +50,18 @@ public class Frog extends SpriteImpl {
      */
     public Frog(Graphics2D g2d, Scenario scenario) {
 
+        //store the G2D
         this.g2d        = g2d;
-        this.height     = 25;
-        this.width      = 32;
-
-        this.positionInTileX = INITIAL_T_POS_X;
-        this.positionInTileY = INITIAL_T_POS_Y;
-        this.direction = UP;
-
+        
         //retrieve the tile size
         this.scenario   = scenario;
         this.tileX      = scenario.getTileX();
         this.tileY      = scenario.getTileY();
 
-        //calc the distance between the entire tile and the sprite
-        this.offsetLeft = (byte)((this.tileX - this.width) / 2);
-        this.offsetTop  = (byte)((this.tileY - this.height) / 2);
+        //start the frog parameters
+        this.frogReset();
 
-        //calc the pixel position of the sprite while animating       
-        this.inBetweenX = (short)((this.positionInTileX * this.tileX) + this.offsetLeft);
-        this.inBetweenY = (short)((this.positionInTileY * this.tileY) + this.offsetTop);
-
-        //calc the pixel position of the sprite
-        this.positionX = (short)this.inBetweenX;
-        this.positionY = (short)this.inBetweenY;
-
+        //load the tiles and sprites
         try {
             this.animalTiles = ImageIO.read(new File("images\\animals2.png"));
             this.froggerDeadTiles = ImageIO.read(new File("images\\froggerdead.png"));
@@ -87,12 +74,6 @@ public class Frog extends SpriteImpl {
         keyMap.put(37, LEFT);
         keyMap.put(38, UP);
         keyMap.put(40, DOWN);
-
-        //initial frog status
-        this.drawImgX   = 131;
-        this.drawImgY   = 3;
-        this.drawImgW   = 32;
-        this.drawImgH   = 25;
     }
 
     /**
@@ -288,7 +269,8 @@ public class Frog extends SpriteImpl {
             this.animationCounter = 0;
         } else {
             System.out.println(this.animationCounter);
-            this.animationCounter++;
+            this.animationCounter += frametime;
+
             if (this.animationCounter < 250_000_000) {
                 this.drawImgX   = 1;
                 this.drawImgY   = 5;
@@ -314,7 +296,39 @@ public class Frog extends SpriteImpl {
                 this.animationCounter = 0;
                 this.isDead = false;
                 this.lives--; //TODO: CONTROL THE LIVES
+
+                this.frogReset();
             }
         }
+    }
+
+    private void frogReset() {
+        //initial tile status
+        this.height     = 25;
+        this.width      = 32;
+
+        this.positionInTileX = INITIAL_T_POS_X;
+        this.positionInTileY = INITIAL_T_POS_Y;
+        this.direction = UP;
+
+        //calc the distance between the entire tile and the sprite
+        this.offsetLeft = (byte)((this.tileX - this.width) / 2);
+        this.offsetTop  = (byte)((this.tileY - this.height) / 2);
+
+        //calc the pixel position of the sprite while animating       
+        this.inBetweenX = (short)((this.positionInTileX * this.tileX) + this.offsetLeft);
+        this.inBetweenY = (short)((this.positionInTileY * this.tileY) + this.offsetTop);
+
+        //calc the pixel position of the sprite
+        this.positionX = (short)this.inBetweenX;
+        this.positionY = (short)this.inBetweenY;
+
+        //initial frog status
+        this.drawImgX   = 131;
+        this.drawImgY   = 3;
+        this.drawImgW   = 32;
+        this.drawImgH   = 25;
+
+        this.canMove = true;
     }
 }
