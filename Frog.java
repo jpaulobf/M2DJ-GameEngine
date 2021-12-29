@@ -31,7 +31,6 @@ public class Frog extends SpriteImpl {
     private short distance                  = 300; //in pixel
     private short persecond                 = 1;
     private final double frogVelocity       = (double)((double)distance / (double)persecond);
-    private byte froggerDeadAnimationFrame  = 0;
     private int animationCounter            = 0;
 
     //draw image parameters
@@ -151,10 +150,14 @@ public class Frog extends SpriteImpl {
     public void draw(long frametime) {     
 
         if (this.isDead) {
-            //TODO: Draw dead animation...
+            short dx1 = (short)(this.positionX);
+            short dy1 = (short)(this.positionY);
+            short dx2 = (short)(dx1 + this.width);
+            short dy2 = (short)(dy1 + this.height);
 
-            this.froggerDeadAnimationFrame;
-
+            this.g2d.drawImage(this.froggerDeadTiles, dx1, dy1, dx2, dy2, //dest w1, h1, w2, h2
+                                                      drawImgX, drawImgY, drawImgX + drawImgW, drawImgY + drawImgH, //source w1, h1, w2, h2
+                                                      null);
         } else {
             short dx1 = (short)(this.inBetweenX);
             short dy1 = (short)(this.inBetweenY);
@@ -284,21 +287,34 @@ public class Frog extends SpriteImpl {
             }
             this.animationCounter = 0;
         } else {
+            System.out.println(this.animationCounter);
             this.animationCounter++;
             if (this.animationCounter < 250_000_000) {
-                this.froggerDeadAnimationFrame = 0;
+                this.drawImgX   = 1;
+                this.drawImgY   = 5;
+                this.drawImgW   = 45;
+                this.drawImgH   = 48;
             } else if (this.animationCounter < 500_000_000) {
-                this.froggerDeadAnimationFrame = 1;
+                this.drawImgX   = 72;
+                this.drawImgY   = 2;
+                this.drawImgW   = 54;
+                this.drawImgH   = 56;
             } else if (this.animationCounter < 750_000_000) {
-                this.froggerDeadAnimationFrame = 2;
+                this.drawImgX   = 148;
+                this.drawImgY   = 0;
+                this.drawImgW   = 61;
+                this.drawImgH   = 58;
             } else if (this.animationCounter < 1_000_000_000) {
-                this.froggerDeadAnimationFrame = 3;
+                this.drawImgX   = 228;
+                this.drawImgY   = 0;
+                this.drawImgW   = 56;
+                this.drawImgH   = 58;
             } else {
+                System.out.println(this.animationCounter);
                 this.animationCounter = 0;
                 this.isDead = false;
                 this.lives--; //TODO: CONTROL THE LIVES
             }
-            //TODO: Invoke and control dead animation frametime
         }
     }
 }
