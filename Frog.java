@@ -22,6 +22,7 @@ public class Frog extends SpriteImpl {
     private byte tileX                      = 0;
     private byte tileY                      = 0;
     private BufferedImage animalTiles       = null;
+    private BufferedImage froggerDeadTiles  = null;
     private Map<Integer, Byte> keyMap       = null;
 
     //animation parameters
@@ -77,6 +78,7 @@ public class Frog extends SpriteImpl {
 
         try {
             this.animalTiles = ImageIO.read(new File("images\\animals2.png"));
+            this.froggerDeadTiles = ImageIO.read(new File("images\\froggerdead.png"));
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
@@ -150,6 +152,9 @@ public class Frog extends SpriteImpl {
 
         if (this.isDead) {
             //TODO: Draw dead animation...
+
+            this.froggerDeadAnimationFrame;
+
         } else {
             short dx1 = (short)(this.inBetweenX);
             short dy1 = (short)(this.inBetweenY);
@@ -281,13 +286,13 @@ public class Frog extends SpriteImpl {
         } else {
             this.animationCounter++;
             if (this.animationCounter < 250_000_000) {
-                froggerDeadAnimationFrame = 0;
+                this.froggerDeadAnimationFrame = 0;
             } else if (this.animationCounter < 500_000_000) {
-                froggerDeadAnimationFrame = 1;
+                this.froggerDeadAnimationFrame = 1;
             } else if (this.animationCounter < 750_000_000) {
-                froggerDeadAnimationFrame = 2;
+                this.froggerDeadAnimationFrame = 2;
             } else if (this.animationCounter < 1_000_000_000) {
-                froggerDeadAnimationFrame = 3;
+                this.froggerDeadAnimationFrame = 3;
             } else {
                 this.animationCounter = 0;
                 this.isDead = false;
