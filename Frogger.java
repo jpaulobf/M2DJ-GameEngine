@@ -56,6 +56,7 @@ public class Frogger extends JFrame implements Game {
     //the game variables go here...
     private Scenario scenario                   = null;
     private Frog frog                           = null;
+    private boolean gameOver                    = false;
     private volatile boolean canContinue        = true;
     private boolean fullscreen                  = true;
     private boolean isFullScreenAvailable       = false;
@@ -168,8 +169,10 @@ public class Frogger extends JFrame implements Game {
         //////////////////////////////////////////////////////////////////////
         // ->>>  update the game elements
         //////////////////////////////////////////////////////////////////////
-        scenario.update(frametime);
-        frog.update(frametime);
+        if (!gameOver) {
+            scenario.update(frametime);
+            frog.update(frametime);
+        }
     }
     
     /**
