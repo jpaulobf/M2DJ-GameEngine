@@ -64,8 +64,8 @@ public class GameOver {
             this.bgd2.setBackground(Color.BLACK);
             this.bgd2.clearRect(0, 0, this.windowWidth, this.windowHeight);
             
-            //TODO: PASTE THE BACKGROUND IMAGE
-           
+            //TODO: center the image...
+            this.bgd2.drawImage(this.bgBufferImage, 0, 0, null);
         }
     }
 
