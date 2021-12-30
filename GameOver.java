@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.BasicStroke;
 import java.awt.image.VolatileImage;
 import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
