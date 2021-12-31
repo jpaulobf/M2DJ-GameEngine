@@ -56,9 +56,10 @@ public class Frogger extends JFrame implements Game {
     //the game variables go here...
     private Scenario scenario                   = null;
     private Frog frog                           = null;
-    private boolean gameOver                    = false;
+    private GameOver gameOver                   = null;
+    private boolean isTheGameOver               = true;
     private volatile boolean canContinue        = true;
-    private boolean fullscreen                  = true;
+    private boolean fullscreen                  = false;
     private boolean isFullScreenAvailable       = false;
 
     /*
@@ -134,6 +135,7 @@ public class Frogger extends JFrame implements Game {
         //////////////////////////////////////////////////////////////////////
         scenario    = new Scenario(g2d, this.wwm, this.whm);
         frog        = new Frog(g2d, scenario);
+        gameOver    = new GameOver(g2d, this.wwm, this.whm);
 
         this.addKeyListener(new KeyAdapter() {
             @Override
@@ -169,7 +171,7 @@ public class Frogger extends JFrame implements Game {
         //////////////////////////////////////////////////////////////////////
         // ->>>  update the game elements
         //////////////////////////////////////////////////////////////////////
-        if (!gameOver) {
+        if (!isTheGameOver) {
             scenario.update(frametime);
             frog.update(frametime);
         }
@@ -253,8 +255,12 @@ public class Frogger extends JFrame implements Game {
         //    scenario.setG2d(g2d);
         //    frog.setG2d(g2d);
         //}
-        scenario.draw(frametime);
-        frog.draw(frametime);
+        if (!this.isTheGameOver) {
+            scenario.draw(frametime);
+            frog.draw(frametime);
+        } else {
+            gameOver.draw(frametime);
+        }
     }
 
     /**

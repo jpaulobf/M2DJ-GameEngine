@@ -18,17 +18,6 @@ public class GameOver {
     private VolatileImage bgBufferImage = null;
     private BufferedImage gameover      = null;
 
-    //how many tiles in x and in y
-    protected final byte tilesInX       = 21;
-    protected final byte tilesInY       = 13;
-    
-    //each tile propertie
-    private final byte tileX            = 64;
-    private final byte tileY            = 64;
-    private final byte halfTileX        = (byte)(tileX / 2);
-    private final byte halfTileY        = (byte)(tileY / 2);
-
-
     /**
      * Constructor
      * @param g2d
@@ -65,7 +54,7 @@ public class GameOver {
             this.bgd2.clearRect(0, 0, this.windowWidth, this.windowHeight);
             
             //TODO: center the image...
-            this.bgd2.drawImage(this.bgBufferImage, 0, 0, null);
+            this.bgd2.drawImage(this.gameover, 0, 0, null);
         }
     }
 
