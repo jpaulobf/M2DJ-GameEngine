@@ -61,6 +61,7 @@ public class Frogger extends JFrame implements Game {
     private volatile boolean canContinue        = true;
     private boolean fullscreen                  = false;
     private boolean isFullScreenAvailable       = false;
+    private long framecounter                   = 0;
 
     /*
         WTMD: some responsabilites here:
@@ -175,6 +176,16 @@ public class Frogger extends JFrame implements Game {
             scenario.update(frametime);
             frog.update(frametime);
             if (frog.getLives() == 0) {
+                this.isTheGameOver = true;
+            }
+        } else {
+            this.framecounter += frametime;
+            if (framecounter >= 2_000_000_000L) {
+                this.framecounter = 0;
+                frog.frogReset();
+                frog.resetLives();
+                this.isTheGameOver = false;
+            } else {
                 this.isTheGameOver = true;
             }
         }

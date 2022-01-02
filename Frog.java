@@ -298,7 +298,11 @@ public class Frog extends SpriteImpl {
         }
     }
 
-    private void frogReset() {
+    public void resetLives() {
+        this.lives = 3;
+    }
+
+    public void frogReset() {
         //initial tile status
         this.height     = 25;
         this.width      = 32;
