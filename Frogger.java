@@ -57,7 +57,7 @@ public class Frogger extends JFrame implements Game {
     private Scenario scenario                   = null;
     private Frog frog                           = null;
     private GameOver gameOver                   = null;
-    private boolean isTheGameOver               = true;
+    private boolean isTheGameOver               = false;
     private volatile boolean canContinue        = true;
     private boolean fullscreen                  = false;
     private boolean isFullScreenAvailable       = false;
