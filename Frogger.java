@@ -174,6 +174,9 @@ public class Frogger extends JFrame implements Game {
         if (!isTheGameOver) {
             scenario.update(frametime);
             frog.update(frametime);
+            if (frog.getLives() == 0) {
+                this.isTheGameOver = true;
+            }
         }
     }
     
@@ -219,8 +222,6 @@ public class Frogger extends JFrame implements Game {
                 //At least, copy the backbuffer to the canvas screen
                 this.canvas.getGraphics().drawImage(this.bufferImage, 0, 0, this.windowWidth, this.windowHeight, 
                                                                       0, 0, this.wwm, this.whm, this);
-
-                
             }
         }
     }
