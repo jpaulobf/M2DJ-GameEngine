@@ -53,8 +53,13 @@ public class GameOver {
             this.bgd2.setBackground(Color.BLACK);
             this.bgd2.clearRect(0, 0, this.windowWidth, this.windowHeight);
             
-            //TODO: center the image...
-            this.bgd2.drawImage(this.gameover, 0, 0, null);
+            int imgW = this.gameover.getWidth();
+            int imgH = this.gameover.getHeight();
+            int imgX = ((this.windowWidth - imgW)/2);
+            int imgY = ((this.windowHeight - imgH)/2);
+
+            this.bgd2.drawImage(this.gameover, imgX, imgY, imgW + imgX, imgH + imgY, 
+                                               0, 0, imgW, imgH, null);
         }
     }
 
