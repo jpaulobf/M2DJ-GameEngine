@@ -60,7 +60,6 @@ public class Frogger extends JFrame implements Game {
     private Scenario scenario                   = null;
     private Frog frog                           = null;
     private GameOver gameOver                   = null;
-    private boolean isTheGameOver               = false;
     private volatile boolean canContinue        = true;
     private boolean fullscreen                  = false;
     private boolean isFullScreenAvailable       = false;
@@ -176,21 +175,22 @@ public class Frogger extends JFrame implements Game {
         //////////////////////////////////////////////////////////////////////
         // ->>>  update the game elements
         //////////////////////////////////////////////////////////////////////
-        if (!isTheGameOver) {
+        if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
             scenario.update(frametime);
             frog.update(frametime);
+            //after possible colision, check lives.
             if (frog.getLives() == 0) {
-                this.isTheGameOver = true;
+                this.gameState.setCurrentState(StateMachine.GAME_OVER);
             }
-        } else {
+        } else if (this.gameState.getCurrentState() == StateMachine.GAME_OVER) {
             this.framecounter += frametime;
             if (framecounter >= 2_000_000_000L) {
                 this.framecounter = 0;
                 frog.frogReset();
                 frog.resetLives();
-                this.isTheGameOver = false;
+                this.gameState.setCurrentState(StateMachine.IN_GAME);
             } else {
-                this.isTheGameOver = true;
+                this.gameState.setCurrentState(StateMachine.GAME_OVER);
             }
         }
     }
@@ -271,10 +271,10 @@ public class Frogger extends JFrame implements Game {
         //    scenario.setG2d(g2d);
         //    frog.setG2d(g2d);
         //}
-        if (!this.isTheGameOver) {
+        if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
             scenario.draw(frametime);
             frog.draw(frametime);
-        } else {
+        } else if (this.gameState.getCurrentState() == StateMachine.GAME_OVER) {
             gameOver.draw(frametime);
         }
     }
