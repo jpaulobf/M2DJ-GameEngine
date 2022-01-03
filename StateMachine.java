@@ -10,15 +10,16 @@ public class StateMachine {
     public final static int IN_GAME     = 5;
     public final static int CONTINUE    = 6;
     public final static int GAME_OVER   = 7;
-    protected int currentState          = LOADING;
+    protected int currentState          = IN_GAME;
     protected Game referencetToGame     = null;
 
     public StateMachine(Game game) {
-        this.currentState = LOADING;
+        this.currentState = IN_GAME;
+        this.referencetToGame = game;
     }
 
     public int getCurrentState() {
-        return 0;
+        return (this.currentState);
     }
 
     public void setCurrentState(int state) {
