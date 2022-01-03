@@ -53,6 +53,9 @@ public class Frogger extends JFrame implements Game {
     private int wwm                             = 1344;
     private int whm                             = 832;
 
+    //the game statemachine goes here
+    private StateMachine gameState              = null;
+
     //the game variables go here...
     private Scenario scenario                   = null;
     private Frog frog                           = null;
@@ -137,6 +140,7 @@ public class Frogger extends JFrame implements Game {
         scenario    = new Scenario(g2d, this.wwm, this.whm);
         frog        = new Frog(g2d, scenario);
         gameOver    = new GameOver(g2d, this.wwm, this.whm);
+        gameState   = new StateMachine(this);
 
         this.addKeyListener(new KeyAdapter() {
             @Override
