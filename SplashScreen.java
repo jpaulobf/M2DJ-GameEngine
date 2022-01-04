@@ -164,11 +164,11 @@ public class SplashScreen extends JFrame implements Runnable {
 
         if (this.g2d != null) {
             
-            //this graphical device (g2d) points to backbuffer, so, we are making things behide the scenes
-
             //clear the stage
             this.g2d.setBackground(new Color(9, 26, 52));
             this.g2d.clearRect(0, 0, this.resolutionW, this.resolutionH);
+
+            //draw the splash image
             this.g2d.drawImage(this.splashImage, x, 0, w + x, h + y, //dest w1, h1, w2, h2
                                                  0, 0, w, h, //source w1, h1, w2, h2
                                                  null);
