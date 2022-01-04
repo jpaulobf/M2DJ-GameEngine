@@ -172,96 +172,6 @@ public class SplashScreen extends JFrame implements Runnable {
             this.g2d.drawImage(this.splashImage, x, 0, w + x, h + y, //dest w1, h1, w2, h2
                                                  0, 0, w, h, //source w1, h1, w2, h2
                                                  null);
-            
-            /*
-            this.g2d.setFont(new Font("Abadi", Font.PLAIN, 18));
-            this.g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            //Define some labels
-            FontMetrics fm              = this.g2d.getFontMetrics();
-            String labels[]             = new String[5];
-            Rectangle2D labelbounds[]   = new Rectangle2D[5];
-            labels[0]                   = "Please, select the screen mode!";
-            labels[1]                   = "Windowed";
-            labels[2]                   = "FullScreen Window-Borderless";
-            labels[3]                   = "FullScreen (V-Synced)";
-            labels[4]                   = "ESC to exit";
-            labelbounds[0]              = fm.getStringBounds(labels[0], g2d);
-            labelbounds[1]              = fm.getStringBounds(labels[1], g2d);
-            labelbounds[2]              = fm.getStringBounds(labels[2], g2d);
-            labelbounds[3]              = fm.getStringBounds(labels[3], g2d);
-
-            //retrieve some common values in some variables
-            int windowXCenter           = (int)(this.getWidth() / 2);
-            int windowHeight            = (int)(this.getHeight());
-            int buttonsPositionH        = (int)(windowHeight*.45);
-            int buttonsHeight           = 30;
-            Color orange                = new Color(255,102,0);
-
-            //draw the initial label (at 1/4 of window height)
-            this.g2d.setColor(Color.WHITE);
-            this.g2d.drawString(labels[0], (int)(windowXCenter - (labelbounds[0].getCenterX())), (int)(windowHeight*.25));
-
-            //space the buttons
-            int offset = 70; //in pixel
-            int freeSpace = (int)(this.windowWidth 
-                                    - labelbounds[1].getWidth() - 10
-                                    - labelbounds[2].getWidth() - 10
-                                    - labelbounds[3].getWidth() - 10
-                                    - offset    //to the left
-                                    - offset);  //to the right
-            int division = freeSpace / 2;
-
-            //draw the first button
-            int buttonsPositionX[] = new int[3];
-            buttonsPositionX[0] = offset;
-            this.g2d.setColor(orange);
-            this.g2d.fillRect(buttonsPositionX[0], 
-                              buttonsPositionH, 
-                              (int)(labelbounds[1].getWidth() + 10), 
-                              buttonsHeight);
-            this.g2d.setColor(Color.BLACK);
-            this.g2d.drawString(labels[1], 
-                                buttonsPositionX[0] + 5,
-                                (int)(buttonsPositionH + labelbounds[1].getHeight()));
-
-            //draw the second button
-            buttonsPositionX[1] = (buttonsPositionX[0] +  (int)(labelbounds[1].getWidth() + 10) + division);
-            this.g2d.setColor(orange);
-            this.g2d.fillRect(buttonsPositionX[1], 
-                              buttonsPositionH, 
-                              (int)(labelbounds[2].getWidth() + 10), 
-                              buttonsHeight);
-            this.g2d.setColor(Color.BLACK);
-            this.g2d.drawString(labels[2], 
-                                buttonsPositionX[1] + 5, 
-                                (int)(buttonsPositionH + labelbounds[2].getHeight()));
-
-            //draw the third button
-            buttonsPositionX[2] = (buttonsPositionX[1] +  (int)(labelbounds[2].getWidth() + 10) + division);
-            this.g2d.setColor(orange);
-            this.g2d.fillRect(buttonsPositionX[2], 
-                              buttonsPositionH, 
-                              (int)(labelbounds[3].getWidth() + 10), 
-                              buttonsHeight);
-            this.g2d.setColor(Color.BLACK);
-            this.g2d.drawString(labels[3], 
-                                buttonsPositionX[2] + 5, 
-                                (int)(buttonsPositionH + labelbounds[3].getHeight()));
-
-            //draw the highlight
-            this.g2d.setColor(Color.LIGHT_GRAY);
-            this.g2d.setStroke(new BasicStroke(4.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
-            int highlightW = (int)labelbounds[selectedItem + 1].getWidth() + 21;
-            this.g2d.drawRect(buttonsPositionX[selectedItem] - 6, buttonsPositionH - 6, highlightW, buttonsHeight + 11);
-
-            //draw the exit message
-            this.g2d.setFont(new Font("Abadi", Font.PLAIN, 12));
-            this.g2d.setColor(Color.WHITE);
-            this.g2d.drawString(labels[4], 
-                                (int)(this.windowWidth - (fm.getStringBounds(labels[4], g2d)).getWidth()),
-                                (int)(this.windowHeight - 50));
-            */
 
             //At least, copy the backbuffer to the canvas screen
             this.canvas.getGraphics().drawImage(this.bufferImage, 0, 0, this);
@@ -447,3 +357,99 @@ public class SplashScreen extends JFrame implements Runnable {
         public int getFrameCap()        {   return frameCap;        }
     }
 }
+
+
+/*** old code
+ * 
+ * /*
+            this.g2d.setFont(new Font("Abadi", Font.PLAIN, 18));
+            this.g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            //Define some labels
+            FontMetrics fm              = this.g2d.getFontMetrics();
+            String labels[]             = new String[5];
+            Rectangle2D labelbounds[]   = new Rectangle2D[5];
+            labels[0]                   = "Please, select the screen mode!";
+            labels[1]                   = "Windowed";
+            labels[2]                   = "FullScreen Window-Borderless";
+            labels[3]                   = "FullScreen (V-Synced)";
+            labels[4]                   = "ESC to exit";
+            labelbounds[0]              = fm.getStringBounds(labels[0], g2d);
+            labelbounds[1]              = fm.getStringBounds(labels[1], g2d);
+            labelbounds[2]              = fm.getStringBounds(labels[2], g2d);
+            labelbounds[3]              = fm.getStringBounds(labels[3], g2d);
+
+            //retrieve some common values in some variables
+            int windowXCenter           = (int)(this.getWidth() / 2);
+            int windowHeight            = (int)(this.getHeight());
+            int buttonsPositionH        = (int)(windowHeight*.45);
+            int buttonsHeight           = 30;
+            Color orange                = new Color(255,102,0);
+
+            //draw the initial label (at 1/4 of window height)
+            this.g2d.setColor(Color.WHITE);
+            this.g2d.drawString(labels[0], (int)(windowXCenter - (labelbounds[0].getCenterX())), (int)(windowHeight*.25));
+
+            //space the buttons
+            int offset = 70; //in pixel
+            int freeSpace = (int)(this.windowWidth 
+                                    - labelbounds[1].getWidth() - 10
+                                    - labelbounds[2].getWidth() - 10
+                                    - labelbounds[3].getWidth() - 10
+                                    - offset    //to the left
+                                    - offset);  //to the right
+            int division = freeSpace / 2;
+
+            //draw the first button
+            int buttonsPositionX[] = new int[3];
+            buttonsPositionX[0] = offset;
+            this.g2d.setColor(orange);
+            this.g2d.fillRect(buttonsPositionX[0], 
+                              buttonsPositionH, 
+                              (int)(labelbounds[1].getWidth() + 10), 
+                              buttonsHeight);
+            this.g2d.setColor(Color.BLACK);
+            this.g2d.drawString(labels[1], 
+                                buttonsPositionX[0] + 5,
+                                (int)(buttonsPositionH + labelbounds[1].getHeight()));
+
+            //draw the second button
+            buttonsPositionX[1] = (buttonsPositionX[0] +  (int)(labelbounds[1].getWidth() + 10) + division);
+            this.g2d.setColor(orange);
+            this.g2d.fillRect(buttonsPositionX[1], 
+                              buttonsPositionH, 
+                              (int)(labelbounds[2].getWidth() + 10), 
+                              buttonsHeight);
+            this.g2d.setColor(Color.BLACK);
+            this.g2d.drawString(labels[2], 
+                                buttonsPositionX[1] + 5, 
+                                (int)(buttonsPositionH + labelbounds[2].getHeight()));
+
+            //draw the third button
+            buttonsPositionX[2] = (buttonsPositionX[1] +  (int)(labelbounds[2].getWidth() + 10) + division);
+            this.g2d.setColor(orange);
+            this.g2d.fillRect(buttonsPositionX[2], 
+                              buttonsPositionH, 
+                              (int)(labelbounds[3].getWidth() + 10), 
+                              buttonsHeight);
+            this.g2d.setColor(Color.BLACK);
+            this.g2d.drawString(labels[3], 
+                                buttonsPositionX[2] + 5, 
+                                (int)(buttonsPositionH + labelbounds[3].getHeight()));
+
+            //draw the highlight
+            this.g2d.setColor(Color.LIGHT_GRAY);
+            this.g2d.setStroke(new BasicStroke(4.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
+            int highlightW = (int)labelbounds[selectedItem + 1].getWidth() + 21;
+            this.g2d.drawRect(buttonsPositionX[selectedItem] - 6, buttonsPositionH - 6, highlightW, buttonsHeight + 11);
+
+            //draw the exit message
+            this.g2d.setFont(new Font("Abadi", Font.PLAIN, 12));
+            this.g2d.setColor(Color.WHITE);
+            this.g2d.drawString(labels[4], 
+                                (int)(this.windowWidth - (fm.getStringBounds(labels[4], g2d)).getWidth()),
+                                (int)(this.windowHeight - 50));
+            
+
+
+ */
