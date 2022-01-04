@@ -15,11 +15,13 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.RenderingHints;
 import java.awt.image.VolatileImage;
+import java.awt.image.BufferedImage;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.geom.Rectangle2D;
 import java.awt.FontMetrics;
 import java.awt.BasicStroke;
+import javax.imageio.ImageIO;
 
 /*
     Project:    Modern 2D Java Game Engine
@@ -46,6 +48,7 @@ public class SplashScreen extends JFrame implements Runnable {
     //the first 'canvas' & the backbuffer (for simple doublebuffer strategy)
     private JPanel canvas                       = null;
     private VolatileImage bufferImage           = null;
+    private BufferedImage splashImage           = null;
 
     //some support and the graphical device itself
     private GraphicsEnvironment ge              = null;
@@ -107,6 +110,13 @@ public class SplashScreen extends JFrame implements Runnable {
         this.bufferImage    = dsd.getDefaultConfiguration().createCompatibleVolatileImage(this.resolutionW, this.resolutionH);
         this.g2d            = (Graphics2D)bufferImage.getGraphics();
         
+        //read the splash screen image
+        try {
+            this.splashImage = ImageIO.read(new File("images\\splash.png"));
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+
         //////////////////////////////////////////////////////////////////////
         // ->>>  now, for the canvas
         //////////////////////////////////////////////////////////////////////
@@ -152,7 +162,7 @@ public class SplashScreen extends JFrame implements Runnable {
             //this graphical device (g2d) points to backbuffer, so, we are making things behide the scenes
 
             //clear the stage
-            this.g2d.setBackground(Color.BLACK);
+            this.g2d.setBackground(new Color(9, 26, 52));
             this.g2d.clearRect(0, 0, this.resolutionW, this.resolutionH);
             this.g2d.setFont(new Font("Abadi", Font.PLAIN, 18));
             this.g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -249,7 +259,6 @@ public class SplashScreen extends JFrame implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("running...");
     }
 
     /*
