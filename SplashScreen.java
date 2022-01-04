@@ -39,7 +39,7 @@ public class SplashScreen extends JFrame implements Runnable {
     private int positionX                       = 0;
     private int positionY                       = 0;
     private int windowWidth                     = 800;
-    private int windowHeight                    = 600;
+    private int windowHeight                    = 650;
     private int w, h, x, y                      = 0;
 
     //desktop properties
@@ -58,6 +58,7 @@ public class SplashScreen extends JFrame implements Runnable {
 
     //this screen control logic parameter   
     private int selectedItem                    = 0;
+    private Long firstRun                       = null;
     
     /*
         WTMD: some responsabilites here:
@@ -169,7 +170,7 @@ public class SplashScreen extends JFrame implements Runnable {
             this.g2d.clearRect(0, 0, this.resolutionW, this.resolutionH);
 
             //draw the splash image
-            this.g2d.drawImage(this.splashImage, x, 0, w + x, h + y, //dest w1, h1, w2, h2
+            this.g2d.drawImage(this.splashImage, x, y, w + x, h + y, //dest w1, h1, w2, h2
                                                  0, 0, w, h, //source w1, h1, w2, h2
                                                  null);
 
@@ -180,6 +181,14 @@ public class SplashScreen extends JFrame implements Runnable {
 
     @Override
     public void run() {
+        try {
+            Thread.sleep(1_000);
+            this.setVisible(false);
+            //start the thread
+            Thread thread = new Thread(new GameEngine(0, new Frogger()), "engine");
+            thread.setPriority(Thread.MAX_PRIORITY);
+            thread.start();
+        } catch (Exception e) {}
     }
 
     /*

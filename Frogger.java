@@ -61,7 +61,7 @@ public class Frogger extends JFrame implements Game {
     private Frog frog                           = null;
     private GameOver gameOver                   = null;
     private volatile boolean canContinue        = true;
-    private boolean fullscreen                  = false;
+    private boolean fullscreen                  = true;
     private boolean isFullScreenAvailable       = false;
     private long framecounter                   = 0;
 
@@ -184,7 +184,7 @@ public class Frogger extends JFrame implements Game {
             }
         } else if (this.gameState.getCurrentState() == StateMachine.GAME_OVER) {
             this.framecounter += frametime;
-            if (framecounter >= 2_000_000_000L) {
+            if (framecounter >= 3_000_000_000L) {
                 this.framecounter = 0;
                 frog.frogReset();
                 frog.resetLives();
@@ -300,6 +300,7 @@ public class Frogger extends JFrame implements Game {
     /*
         Description: main method
     */
+    /*
     public static void main(String[] args) throws Exception {
         //enable openGL
         System.setProperty("sun.java2d.opengl", "True");
@@ -308,5 +309,5 @@ public class Frogger extends JFrame implements Game {
         Thread thread = new Thread(new GameEngine(0, new Frogger()), "engine");
         thread.setPriority(Thread.MAX_PRIORITY);
         thread.start();
-    }
+    }*/
 }
