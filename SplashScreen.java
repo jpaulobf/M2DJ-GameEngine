@@ -2,7 +2,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.io.File;
@@ -13,15 +12,16 @@ import java.io.IOException;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.RenderingHints;
+import javax.imageio.ImageIO;
 import java.awt.image.VolatileImage;
 import java.awt.image.BufferedImage;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
-import java.awt.geom.Rectangle2D;
-import java.awt.FontMetrics;
-import java.awt.BasicStroke;
-import javax.imageio.ImageIO;
+//import java.awt.geom.Rectangle2D;
+//import java.awt.FontMetrics;
+//import java.awt.BasicStroke;
+//import java.awt.Font;
+//import java.awt.RenderingHints;
 
 /*
     Project:    Modern 2D Java Game Engine
@@ -40,6 +40,7 @@ public class SplashScreen extends JFrame implements Runnable {
     private int positionY                       = 0;
     private int windowWidth                     = 800;
     private int windowHeight                    = 600;
+    private int w, h, x, y                      = 0;
 
     //desktop properties
     private int resolutionH                     = 0;
@@ -120,6 +121,10 @@ public class SplashScreen extends JFrame implements Runnable {
         //////////////////////////////////////////////////////////////////////
         // ->>>  now, for the canvas
         //////////////////////////////////////////////////////////////////////
+        this.w = this.splashImage.getWidth();
+        this.h = this.splashImage.getHeight();
+        this.x = (this.windowWidth - this.w) / 2;
+        this.y = (this.windowHeight - this.h) / 2;
 
         //initialize the canvas
         this.canvas = new JPanel(null);
@@ -164,6 +169,11 @@ public class SplashScreen extends JFrame implements Runnable {
             //clear the stage
             this.g2d.setBackground(new Color(9, 26, 52));
             this.g2d.clearRect(0, 0, this.resolutionW, this.resolutionH);
+            this.g2d.drawImage(this.splashImage, x, 0, w + x, h + y, //dest w1, h1, w2, h2
+                                                 0, 0, w, h, //source w1, h1, w2, h2
+                                                 null);
+            
+            /*
             this.g2d.setFont(new Font("Abadi", Font.PLAIN, 18));
             this.g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -251,6 +261,7 @@ public class SplashScreen extends JFrame implements Runnable {
             this.g2d.drawString(labels[4], 
                                 (int)(this.windowWidth - (fm.getStringBounds(labels[4], g2d)).getWidth()),
                                 (int)(this.windowHeight - 50));
+            */
 
             //At least, copy the backbuffer to the canvas screen
             this.canvas.getGraphics().drawImage(this.bufferImage, 0, 0, this);
