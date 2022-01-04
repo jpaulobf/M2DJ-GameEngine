@@ -29,7 +29,7 @@ import java.awt.BasicStroke;
     WTCD:       This class, provides a selection screen, that could be hide forever, that allow the user to choose between window format (full, pseudo-full, windowed)
                 and than, the syncronization method, frame cap, screen size & resolution.
 */
-public class ConfigSplashScreen extends JFrame implements Runnable {
+public class SplashScreen extends JFrame implements Runnable {
 
     private static final long serialVersionUID  = 1L;
 
@@ -62,7 +62,7 @@ public class ConfigSplashScreen extends JFrame implements Runnable {
             3) add a keylistener
             4) initialize the canvas and retrieve the graphical device objects
     */
-    public ConfigSplashScreen() {
+    public SplashScreen() {
 
         //////////////////////////////////////////////////////////////////////
         // ->>>  for the window
@@ -255,13 +255,26 @@ public class ConfigSplashScreen extends JFrame implements Runnable {
     /*
         Description: main method
     */
+    public static void main(String[] args) throws Exception {
+        //enable openGL
+        System.setProperty("sun.java2d.opengl", "True");
+
+        //start the thread
+        Thread thread = new Thread(new SplashScreen(), "engine");
+        thread.setPriority(Thread.MAX_PRIORITY);
+        thread.start();
+    }
+
+
+    /*
+        Description: main method
+    */
     /*public static void main(String [] args) {
         new Thread(new ConfigSplashScreen(), "configScreen").start();
     }*/
 
     /*
         This subclass is still under development...
-        TODO: retrieve the parameters from the config file...
     */
     @SuppressWarnings("unused")
     private class ConfigurationFile {
