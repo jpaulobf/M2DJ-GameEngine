@@ -62,12 +62,15 @@ public class Frog extends SpriteImpl {
         this.frogReset();
 
         //load the tiles and sprites
-        try {
+        this.animalTiles        = (BufferedImage)LoadingStuffs.getInstance().getStuff("animalTiles");
+        this.froggerDeadTiles   = (BufferedImage)LoadingStuffs.getInstance().getStuff("froggerDeadTiles");
+        
+        /*try {
             this.animalTiles = ImageIO.read(new File("images\\animals2.png"));
             this.froggerDeadTiles = ImageIO.read(new File("images\\froggerdead.png"));
         } catch (java.io.IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
         this.keyMap = new HashMap<Integer, Byte>();
         keyMap.put(39, RIGHT);

@@ -42,6 +42,9 @@ public class LoadingStuffs {
             image = ImageIO.read(new File("images\\froggerdead.png"));
             stuffs.put("froggerDeadTiles", image);
 
+            image = ImageIO.read(new File("images\\gameover.png"));
+            stuffs.put("gameover", image);
+
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }

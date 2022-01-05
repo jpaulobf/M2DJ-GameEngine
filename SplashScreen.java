@@ -71,6 +71,7 @@ public class SplashScreen extends JFrame implements Runnable {
         //////////////////////////////////////////////////////////////////////
         // ->>>  for the window
         //////////////////////////////////////////////////////////////////////
+        LoadingStuffs.getInstance();
 
         //load or provide the default configuration file
         new ConfigurationFile().verifyTheConfigurationFile();
