@@ -1,4 +1,8 @@
 import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is responsible for load the game stuffs
@@ -6,12 +10,8 @@ import java.awt.image.BufferedImage;
 public class LoadingStuffs {
     
     //private instance of loader
-    private LoadingStuffs instance          = null;
+    private static LoadingStuffs instance   = null;
     private int chargeStatus                = 0;
-
-    //frog tiles
-    private BufferedImage animalTiles       = null;
-    private BufferedImage froggerDeadTiles  = null;
 
     //gameover tiles
     private BufferedImage gameover          = null;
@@ -25,22 +25,48 @@ public class LoadingStuffs {
     //vehicles tiles
     private BufferedImage vehiclesTile      = null;
 
+    //Stuffs Map
+    private Map<String, Object> stuffs      = new HashMap<String, Object>();
+
     /**
      * Constructor... load the game stuffs...
      */
     private LoadingStuffs() {
-        //TODO:
+        //load the tiles and sprites
+        try {
+            BufferedImage image;
+            
+            image = ImageIO.read(new File("images\\animals2.png"));
+            stuffs.put("animalTiles", image);
+
+            image = ImageIO.read(new File("images\\froggerdead.png"));
+            stuffs.put("froggerDeadTiles", image);
+
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    /**
+     * Recover the stored object
+     * @param objectName
+     * @return
+     */
+    public Object getStuff(String objectName) {
+        return (this.stuffs.get(objectName));
     }
 
     /**
      * Recover the singleton instance  
      * @return
      */
-    public LoadingStuffs getInstance() {
-        if (this.instance == null) {
-            this.instance = new LoadingStuffs();
+    public static LoadingStuffs getInstance() {
+        if (instance == null) {
+            instance = new LoadingStuffs();
         }
-        return this.instance;
+        return instance;
     }
 
     /**
