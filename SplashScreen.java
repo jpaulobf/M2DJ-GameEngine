@@ -58,7 +58,6 @@ public class SplashScreen extends JFrame implements Runnable {
 
     //this screen control logic parameter   
     private int selectedItem                    = 0;
-    private Long firstRun                       = null;
     
     /*
         WTMD: some responsabilites here:
