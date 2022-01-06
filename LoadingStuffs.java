@@ -13,12 +13,6 @@ public class LoadingStuffs {
     private static LoadingStuffs instance   = null;
     private int chargeStatus                = 0;
 
-    //scenario tiles
-    private BufferedImage sidewalk          = null;
-
-    //splash screen
-    private BufferedImage splashImage       = null;
-
     //vehicles tiles
     private BufferedImage vehiclesTile      = null;
 
@@ -44,6 +38,9 @@ public class LoadingStuffs {
 
             image = ImageIO.read(new File("images\\sidewalk.png"));
             stuffs.put("sidewalk", image);
+
+            image = ImageIO.read(new File("images\\splash.png"));
+            stuffs.put("splashImage", image);
 
         } catch (java.io.IOException e) {
             e.printStackTrace();

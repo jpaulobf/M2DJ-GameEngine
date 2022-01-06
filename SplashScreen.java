@@ -112,12 +112,8 @@ public class SplashScreen extends JFrame implements Runnable {
         this.bufferImage    = dsd.getDefaultConfiguration().createCompatibleVolatileImage(this.resolutionW, this.resolutionH);
         this.g2d            = (Graphics2D)bufferImage.getGraphics();
         
-        //read the splash screen image
-        try {
-            this.splashImage = ImageIO.read(new File("images\\splash.png"));
-        } catch (java.io.IOException e) {
-            e.printStackTrace();
-        }
+        //Get the already loaded image from loader
+        this.splashImage    = (BufferedImage)LoadingStuffs.getInstance().getStuff("splashImage");
 
         //////////////////////////////////////////////////////////////////////
         // ->>>  now, for the canvas
