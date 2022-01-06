@@ -36,12 +36,8 @@ public class Vehicles implements SpriteCollection {
             this.windowWidth    = windowWidth;
             this.windowHeight   = windowHeight;
     
-            try {
-                this.vehiclesTile = ImageIO.read(new File("images\\vehicules.png"));
-            } catch (java.io.IOException e) {
-                e.printStackTrace();
-                System.exit(-1);
-            }
+            //Get the already loaded image from loader
+            this.vehiclesTile   = (BufferedImage)LoadingStuffs.getInstance().getStuff("vehiclesTile");
 
             for (byte i = 0; i < vehicles.length; i++) {
                 vehicles[i] = new Vehicle();

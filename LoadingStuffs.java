@@ -13,9 +13,6 @@ public class LoadingStuffs {
     private static LoadingStuffs instance   = null;
     private int chargeStatus                = 0;
 
-    //vehicles tiles
-    private BufferedImage vehiclesTile      = null;
-
     //Stuffs Map
     private Map<String, Object> stuffs      = new HashMap<String, Object>();
 
@@ -41,6 +38,9 @@ public class LoadingStuffs {
 
             image = ImageIO.read(new File("images\\splash.png"));
             stuffs.put("splashImage", image);
+
+            image = ImageIO.read(new File("images\\vehicules.png"));
+            stuffs.put("vehiclesTile", image);
 
         } catch (java.io.IOException e) {
             e.printStackTrace();
