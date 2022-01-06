@@ -13,9 +13,6 @@ public class LoadingStuffs {
     private static LoadingStuffs instance   = null;
     private int chargeStatus                = 0;
 
-    //gameover tiles
-    private BufferedImage gameover          = null;
-
     //scenario tiles
     private BufferedImage sidewalk          = null;
 
@@ -44,6 +41,9 @@ public class LoadingStuffs {
 
             image = ImageIO.read(new File("images\\gameover.png"));
             stuffs.put("gameover", image);
+
+            image = ImageIO.read(new File("images\\sidewalk.png"));
+            stuffs.put("sidewalk", image);
 
         } catch (java.io.IOException e) {
             e.printStackTrace();

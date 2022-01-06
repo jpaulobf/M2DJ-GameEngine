@@ -74,12 +74,8 @@ public class Scenario {
     private void drawBackgroundInBuffer() {
         if (this.bgd2 == null) {
 
-            try {
-                this.sidewalk = ImageIO.read(new File("images\\sidewalk.png"));
-            } catch (java.io.IOException e) {
-                e.printStackTrace();
-                System.exit(-1);
-            }
+            //Get the already loaded image from loader
+            this.sidewalk       = (BufferedImage)LoadingStuffs.getInstance().getStuff("sidewalk");
 
             //create a backbuffer image for doublebuffer
             byte lines          = (byte)(this.windowHeight / tileY);
