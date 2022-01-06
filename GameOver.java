@@ -37,13 +37,7 @@ public class GameOver {
      */
     private void drawGameOverInBuffer() {
         if (this.bgd2 == null) {
-
-            try {
-                this.gameover = ImageIO.read(new File("images\\gameover.png"));
-            } catch (java.io.IOException e) {
-                e.printStackTrace();
-                System.exit(-1);
-            }
+            this.gameover = (BufferedImage)LoadingStuffs.getInstance().getStuff("gameover");
 
             //create a backbuffer image for doublebuffer
             this.bgBufferImage  = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().createCompatibleVolatileImage(this.windowWidth, this.windowHeight);
