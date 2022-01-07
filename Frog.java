@@ -1,8 +1,9 @@
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import Interfaces.Lanes;
 import java.util.HashMap;
 import java.util.Map;
+
+import interfaces.Lanes;
 
 /*
     WTCD: This class represents the frog sprite

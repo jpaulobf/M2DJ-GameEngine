@@ -1,10 +1,11 @@
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import Interfaces.Directions;
-import Interfaces.Lanes;
-import Interfaces.Sprite;
-import Interfaces.Stages;
-import Interfaces.SpriteCollection;
+
+import interfaces.Directions;
+import interfaces.Lanes;
+import interfaces.Sprite;
+import interfaces.SpriteCollection;
+import interfaces.Stages;
 
 /**
  * Class representing a collection of vehicle

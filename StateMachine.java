@@ -1,4 +1,4 @@
-import Interfaces.Game;
+import interfaces.Game;
 
 public class StateMachine {
     
