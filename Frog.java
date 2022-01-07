@@ -1,8 +1,6 @@
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 import Interfaces.Lanes;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
