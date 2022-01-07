@@ -1,5 +1,8 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import util.Logger;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -12,7 +15,6 @@ import java.io.IOException;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import javax.imageio.ImageIO;
 import java.awt.image.VolatileImage;
 import java.awt.image.BufferedImage;
 import java.awt.event.KeyEvent;
@@ -72,6 +74,8 @@ public class SplashScreen extends JFrame implements Runnable {
         // ->>>  for the window
         //////////////////////////////////////////////////////////////////////
         LoadingStuffs.getInstance();
+
+        Logger.DEBUG("Mensagem 1", this);
 
         //load or provide the default configuration file
         new ConfigurationFile().verifyTheConfigurationFile();

@@ -1,14 +1,14 @@
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 import Interfaces.Directions;
 import Interfaces.Lanes;
 import Interfaces.Sprite;
 import Interfaces.Stages;
 import Interfaces.SpriteCollection;
 
-import java.io.File;
-
+/**
+ * Class representing a collection of vehicle
+ */
 public class Vehicles implements SpriteCollection {
  
         //The tile image, and its elements (positions)
