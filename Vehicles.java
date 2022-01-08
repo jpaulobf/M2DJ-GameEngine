@@ -81,7 +81,7 @@ public class Vehicles extends SpriteCollection {
                     vehicles[index].positionX    = (short)(Stages.stg1[i][j][2]/1000);
                     //incrementa o index ao final
                     vehicles[index].width        = (byte)vehiclesW[vehicles[index].type];
-                    vehicles[index++].positionY  = (short)Lanes.lanes[i];
+                    vehicles[index++].positionY  = (short)Lanes.streetLanes[i];
                 }
             }
         }

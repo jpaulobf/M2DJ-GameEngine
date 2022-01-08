@@ -18,6 +18,8 @@ public class Scenario {
     private Graphics2D bgd2             = null;
     private Vehicles vehicles           = null;
     private BufferedImage sidewalk      = null;
+    private BufferedImage grass         = null;
+    private BufferedImage subgrass      = null;
 
     //how many tiles in x and in y
     protected final byte tilesInX       = 21;
@@ -26,8 +28,8 @@ public class Scenario {
     //each tile propertie
     private final byte tileX            = 64;
     private final byte tileY            = 64;
-    private final byte halfTileX        = (byte)(tileX / 2);
-    private final byte halfTileY        = (byte)(tileY / 2);
+    protected final byte halfTileX      = (byte)(tileX / 2);
+    protected final byte halfTileY      = (byte)(tileY / 2);
 
     //getters
     public Vehicles getVehicles() {
@@ -74,6 +76,8 @@ public class Scenario {
 
             //Get the already loaded image from loader
             this.sidewalk       = (BufferedImage)LoadingStuffs.getInstance().getStuff("sidewalk");
+            this.grass          = (BufferedImage)LoadingStuffs.getInstance().getStuff("grass");
+            this.subgrass       = (BufferedImage)LoadingStuffs.getInstance().getStuff("subgrass");
 
             //create a backbuffer image for doublebuffer
             byte lines          = (byte)(this.windowHeight / tileY);
@@ -85,44 +89,70 @@ public class Scenario {
             this.bgd2.clearRect(0, 0, this.windowWidth, this.windowHeight);
             
             //paint each lane
-            this.bgd2.setColor(new Color(0, 100, 0));
+            this.bgd2.setColor(new Color(0, 0, 100));
             this.bgd2.fillRect(0, 0, this.windowWidth, this.tileY);
+            this.bgd2.drawImage(this.grass, 0, 0, 72, this.grass.getHeight(),     //dest w1, h1, w2, h2
+                                            107, 0, 179, this.grass.getHeight(),  //source w1, h1, w2, h2
+                                            null);
+
+            this.bgd2.drawImage(this.grass, (0 + 96 + 72), 0, (this.grass.getWidth() + 96 + 72), this.grass.getHeight(),     //dest w1, h1, w2, h2
+                                            1, 0, this.grass.getWidth() - 2, this.grass.getHeight(),                         //source w1, h1, w2, h2
+                                            null);
+            
+            this.bgd2.drawImage(this.grass, (0 + 96 + 348), 0, (this.grass.getWidth() + 96 + 348), this.grass.getHeight(),   //dest w1, h1, w2, h2
+                                            1, 0, this.grass.getWidth() - 2, this.grass.getHeight(),                         //source w1, h1, w2, h2
+                                            null);
+
+            this.bgd2.drawImage(this.grass, (0 + 96 + 624), 0, (this.grass.getWidth() + 96 + 624), this.grass.getHeight(),   //dest w1, h1, w2, h2
+                                            1, 0, this.grass.getWidth() - 2, this.grass.getHeight(),                         //source w1, h1, w2, h2
+                                            null);
+
+            this.bgd2.drawImage(this.grass, (0 + 96 + 900), 0, (this.grass.getWidth() + 96 + 900), this.grass.getHeight(),   //dest w1, h1, w2, h2
+                                            1, 0, this.grass.getWidth() - 2, this.grass.getHeight(),                         //source w1, h1, w2, h2
+                                            null);
+            
+            this.bgd2.drawImage(this.grass, (0 + 96 + 1176), 0, (this.grass.getWidth() + 96 + 1176), this.grass.getHeight(),   //dest w1, h1, w2, h2
+                                            1, 0, this.grass.getWidth() - 2, this.grass.getHeight(),                         //source w1, h1, w2, h2
+                                            null);
+            
             this.bgd2.setColor(new Color(0, 0, 100));
             this.bgd2.fillRect(0, tileY, this.windowWidth, this.tileY);
             this.bgd2.fillRect(0, tileY * 2, this.windowWidth, this.tileY);
             this.bgd2.fillRect(0, tileY * 3, this.windowWidth, this.tileY);
             this.bgd2.fillRect(0, tileY * 4, this.windowWidth, this.tileY);
             this.bgd2.fillRect(0, tileY * 5, this.windowWidth, this.tileY);
+
             //middle lane
             this.bgd2.setColor(new Color(0, 0, 100));
             this.bgd2.fillRect(0, tileY * 6, this.windowWidth, this.tileY - 5);
+            
             //final lane (goal)
             this.bgd2.setColor(new Color(0, 0, 0));
             this.bgd2.fillRect(0, tileY * 12, this.windowWidth, this.tileY);
 
             //paint each frogger dock
-            int bgoffset = (int)(this.tileX * 0.75);
             this.bgd2.setColor(new Color(20, 20, 20));
             //first dock
-            this.bgd2.fillRect(this.halfTileX * 0  + bgoffset, 0, this.halfTileX, this.tileY);
-            this.bgd2.fillRect(this.halfTileX * 1  + bgoffset, 0, this.halfTileX, this.tileY);
-            this.bgd2.fillRect(this.halfTileX * 2  + bgoffset, 0, this.halfTileX, this.tileY);
+
+            this.bgd2.drawImage(this.subgrass, 72, 0, this.subgrass.getWidth() + 72, this.subgrass.getHeight(),     //dest w1, h1, w2, h2
+                                               0, 0, this.subgrass.getWidth(), this.subgrass.getHeight(),  //source w1, h1, w2, h2
+                                               null);
             //second dock
-            this.bgd2.fillRect(this.halfTileX * 9  + bgoffset, 0, this.halfTileX, this.tileY);
-            this.bgd2.fillRect(this.halfTileX * 10 + bgoffset, 0, this.halfTileX, this.tileY);
-            this.bgd2.fillRect(this.halfTileX * 11 + bgoffset, 0, this.halfTileX, this.tileY);
-            //third dock 
-            this.bgd2.fillRect(this.halfTileX * 18 + bgoffset, 0, this.halfTileX, this.tileY);
-            this.bgd2.fillRect(this.halfTileX * 19 + bgoffset, 0, this.halfTileX, this.tileY);
-            this.bgd2.fillRect(this.halfTileX * 20 + bgoffset, 0, this.halfTileX, this.tileY);
+            this.bgd2.drawImage(this.subgrass, 348, 0, this.subgrass.getWidth() + 348, this.subgrass.getHeight(),     //dest w1, h1, w2, h2
+                                               0, 0, this.subgrass.getWidth(), this.subgrass.getHeight(),  //source w1, h1, w2, h2
+                                               null);
+            //third dock
+            this.bgd2.drawImage(this.subgrass, 624, 0, this.subgrass.getWidth() + 624, this.subgrass.getHeight(),     //dest w1, h1, w2, h2
+                                               0, 0, this.subgrass.getWidth(), this.subgrass.getHeight(),  //source w1, h1, w2, h2
+                                               null);
             //fourth dock
-            this.bgd2.fillRect(this.halfTileX * 27 + bgoffset, 0, this.halfTileX, this.tileY);
-            this.bgd2.fillRect(this.halfTileX * 28 + bgoffset, 0, this.halfTileX, this.tileY);
-            this.bgd2.fillRect(this.halfTileX * 29 + bgoffset, 0, this.halfTileX, this.tileY);
+            this.bgd2.drawImage(this.subgrass, 900, 0, this.subgrass.getWidth() + 900, this.subgrass.getHeight(),     //dest w1, h1, w2, h2
+                                               0, 0, this.subgrass.getWidth(), this.subgrass.getHeight(),  //source w1, h1, w2, h2
+                                               null);
             //fifth dock
-            this.bgd2.fillRect(this.halfTileX * 36 + bgoffset, 0, this.halfTileX, this.tileY);
-            this.bgd2.fillRect(this.halfTileX * 37 + bgoffset, 0, this.halfTileX, this.tileY);
-            this.bgd2.fillRect(this.halfTileX * 38 + bgoffset, 0, this.halfTileX, this.tileY);
+            this.bgd2.drawImage(this.subgrass, 1176, 0, this.subgrass.getWidth() + 1176, this.subgrass.getHeight(),     //dest w1, h1, w2, h2
+                                               0, 0, this.subgrass.getWidth(), this.subgrass.getHeight(),  //source w1, h1, w2, h2
+                                               null);
 
             //draw lane lines
             for (byte i = 8; i < lines - 1; i++) {

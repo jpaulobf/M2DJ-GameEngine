@@ -260,7 +260,7 @@ public class Frog extends SpriteImpl {
         int coliding = -1;
         if (!this.isDead) {
             //this line test the colisions only with the cars, in the lanes.
-            if (this.positionY > Lanes.lanes[0]) {
+            if (this.positionY > Lanes.streetLanes[0]) {
                 coliding = this.scenario.getVehicles().testColision(this);
             }
             if (coliding != -1) {
