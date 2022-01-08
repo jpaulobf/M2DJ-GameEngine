@@ -10,7 +10,7 @@ import interfaces.Stages;
 /**
  * Class representing a collection of vehicle
  */
-public class Vehicles implements SpriteCollection {
+public class Vehicles extends SpriteCollection {
  
         //The tile image, and its elements (positions)
         protected int windowWidth               = 0;
@@ -98,25 +98,9 @@ public class Vehicles implements SpriteCollection {
             }
         }
 
-        /**
-         * Test if some of the vehicles are coliding
-         * Return a number # of the coliding vehicle or #-1 if don't
-         * @param sprite
-         */
         @Override
-        public int testColision(Sprite sprite) {
-            //gate check
-            if (sprite == null) return -1;
-            
-            //important: it's not necessary to test if the vehicle array is null, because it was initialized in the constructor
-            for (int cnt = 0; cnt < this.vehicles.length; cnt++) {
-                if (this.vehicles[cnt].isColiding(sprite)) {
-                    return (cnt);
-                }
-            }
-
-            //if the code reach here, no colision
-            return (-1);
+        protected Sprite[] getSpriteCollection() {
+            return (this.vehicles);
         }
     }
     
