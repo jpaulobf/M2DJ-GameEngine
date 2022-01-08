@@ -42,6 +42,12 @@ public class LoadingStuffs {
             image = ImageIO.read(new File("images\\vehicules.png"));
             stuffs.put("vehiclesTile", image);
 
+            image = ImageIO.read(new File("images\\grass.png"));
+            stuffs.put("grass", image);
+
+            image = ImageIO.read(new File("images\\subgrass.png"));
+            stuffs.put("subgrass", image);
+
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
