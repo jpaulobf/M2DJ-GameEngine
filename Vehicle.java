@@ -6,7 +6,6 @@ public class Vehicle extends SpriteImpl {
     //The tile image, and its elements (positions)
     protected int type                          = 0;
     protected int index                         = 0;
-    protected Graphics2D g2d                    = null;
 
     //vehicles tiles
     private BufferedImage vehiclesTile          = null;
@@ -28,15 +27,12 @@ public class Vehicle extends SpriteImpl {
         this.vehiclesTile   = (BufferedImage)LoadingStuffs.getInstance().getStuff("vehiclesTile");
     }
     
-    //public void draw(long frametime) {}
-    public void update(long frametime) {}
-
     /**
      * Draw the vehicules in the estipulated lane:
      * veicules types { 0 - car1 | 1 - car2 | 2 - car3 | 3 - tractor | 4 - truck }
      * lanes { 0 - 4 }
-    */ 
-    //protected void draw(int [][]vehiclesImgX, int []vehiclesW) {
+    */
+    @Override
     public void draw(long frametime) {
         //draw the selected image
         direction = (direction == LEFT)?0:direction;
@@ -44,4 +40,7 @@ public class Vehicle extends SpriteImpl {
                                               vehiclesImgX[this.type][this.direction], 0, vehiclesImgX[this.type][this.direction] + vehiclesW[this.type], this.height, //source w1, h1, w2, h2
                                               null);
     }
+
+    @Override
+    public void update(long frametime) {}
 }

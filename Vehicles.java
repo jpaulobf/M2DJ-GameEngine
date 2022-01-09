@@ -1,5 +1,4 @@
 import java.awt.Graphics2D;
-
 import interfaces.Directions;
 import interfaces.Lanes;
 import interfaces.Sprite;
@@ -12,12 +11,12 @@ import interfaces.Stages;
 public class Vehicles extends SpriteCollection {
  
     //The tile image, and its elements (positions)
-    protected int windowWidth               = 0;
-    protected int windowHeight              = 0;
-    protected Graphics2D g2d                = null;
+    protected int windowWidth       = 0;
+    protected int windowHeight      = 0;
+    protected Graphics2D g2d        = null;
 
     //define the vehicules array
-    private Vehicle [] vehicles              =  new Vehicle[12];
+    private Vehicle [] vehicles     =  new Vehicle[12];
 
     /**
      * Load the tile image
@@ -36,6 +35,7 @@ public class Vehicles extends SpriteCollection {
     /**
      * Updates the elements on the screen
      */
+    @Override
     public void update(long frametime) {
         double step     = 0d;
         double calcPos  = 0d;
@@ -79,6 +79,7 @@ public class Vehicles extends SpriteCollection {
     /**
      * Draw the graphical vehicles elements
      */
+    @Override
     public void draw(long frametime) {
         int index = 0;
         for (byte i = 0; i < Stages.stg1.length; i++) {

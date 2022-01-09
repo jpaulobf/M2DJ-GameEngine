@@ -20,4 +20,9 @@ public abstract class SpriteCollection {
         //if the code reach here, no colision
         return (-1);
     }
+
+    public abstract void update(long frametime);
+
+    public abstract void draw(long frametime);
+
 }
