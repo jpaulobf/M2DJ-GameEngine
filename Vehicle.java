@@ -4,18 +4,31 @@ import java.awt.image.BufferedImage;
 public class Vehicle extends SpriteImpl {
         
     //The tile image, and its elements (positions)
-    protected int type                      = 0;
-    protected int index                     = 0;
+    protected int type                          = 0;
+    protected int index                         = 0;
+    protected Graphics2D g2d                    = null;
+
+    //vehicles tiles
+    private BufferedImage vehiclesTile          = null;
+
+    //for the vehicles tiles
+    public static final int vehiclesImgX[][]    = { {0,54}, {155,107}, {204,249}, {337,294}, {461,382} };
+    public static final int vehiclesW[]         = { 45, 45, 43, 41, 76 };
+    public static final int largerVehicule      = 76_000;
 
     /**
      * Load the tile image
      */
-    public Vehicle() {
+    public Vehicle(Graphics2D g2d) {
         //recupera o G2D
         this.height     = 38;
+        this.g2d        = g2d;
+
+        //Get the already loaded image from loader
+        this.vehiclesTile   = (BufferedImage)LoadingStuffs.getInstance().getStuff("vehiclesTile");
     }
     
-    public void draw(long frametime) {}
+    //public void draw(long frametime) {}
     public void update(long frametime) {}
 
     /**
@@ -23,11 +36,12 @@ public class Vehicle extends SpriteImpl {
      * veicules types { 0 - car1 | 1 - car2 | 2 - car3 | 3 - tractor | 4 - truck }
      * lanes { 0 - 4 }
     */ 
-    protected void draw(BufferedImage vehiclesTile, int [][]vehiclesImgX, int []vehiclesW, Graphics2D g2d) {
+    //protected void draw(int [][]vehiclesImgX, int []vehiclesW) {
+    public void draw(long frametime) {
         //draw the selected image
         direction = (direction == LEFT)?0:direction;
-        g2d.drawImage(vehiclesTile, this.positionX, this.positionY, this.positionX + vehiclesW[this.type], this.positionY + this.height, //dest w1, h1, w2, h2
-                                         vehiclesImgX[this.type][this.direction], 0, vehiclesImgX[this.type][this.direction] + vehiclesW[this.type], this.height, //source w1, h1, w2, h2
-                                         null);
+        this.g2d.drawImage(this.vehiclesTile, this.positionX, this.positionY, this.positionX + vehiclesW[this.type], this.positionY + this.height, //dest w1, h1, w2, h2
+                                              vehiclesImgX[this.type][this.direction], 0, vehiclesImgX[this.type][this.direction] + vehiclesW[this.type], this.height, //source w1, h1, w2, h2
+                                              null);
     }
 }

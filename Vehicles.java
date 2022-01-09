@@ -1,5 +1,4 @@
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 
 import interfaces.Directions;
 import interfaces.Lanes;
@@ -16,14 +15,6 @@ public class Vehicles extends SpriteCollection {
     protected int windowWidth               = 0;
     protected int windowHeight              = 0;
     protected Graphics2D g2d                = null;
-    
-    //for the vehicles tiles
-    private final int vehiclesImgX[][]      = { {0,54}, {155,107}, {204,249}, {337,294}, {461,382} };
-    private final int vehiclesW[]           = { 45, 45, 43, 41, 76 };
-    private final int largerVehicule        = 76_000;
-
-    //vehicles tiles
-    private BufferedImage vehiclesTile      = null;
 
     //define the vehicules array
     private Vehicle [] vehicles              =  new Vehicle[12];
@@ -37,11 +28,8 @@ public class Vehicles extends SpriteCollection {
         this.windowWidth    = windowWidth;
         this.windowHeight   = windowHeight;
 
-        //Get the already loaded image from loader
-        this.vehiclesTile   = (BufferedImage)LoadingStuffs.getInstance().getStuff("vehiclesTile");
-
         for (byte i = 0; i < vehicles.length; i++) {
-            vehicles[i] = new Vehicle();
+            vehicles[i] = new Vehicle(this.g2d);
         }
     }
         
@@ -58,17 +46,19 @@ public class Vehicles extends SpriteCollection {
 
         for (int i = 0; i < Stages.stg1.length; i++) {
             for (int j = 0; j < Stages.stg1[i].length; j++) {
+
                 direction   = (byte)Stages.stg1[i][j][1];
                 position    = Stages.stg1[i][j][2];
                 velocity    = (short)Stages.stg1[i][j][3];
                 step        = (double)velocity / (double)(1_000_000D / (double)frametime);
                 calcPos     = position + (step * direction);
+
                 if (direction == Directions.RIGHT) {
-                    if (calcPos > (this.windowWidth * 1000) + largerVehicule) {
-                        calcPos = 0 - largerVehicule;
+                    if (calcPos > (this.windowWidth * 1000) + Vehicle.largerVehicule) {
+                        calcPos = 0 - Vehicle.largerVehicule;
                     }
                 } else {
-                    if (calcPos < -largerVehicule) {
+                    if (calcPos < -Vehicle.largerVehicule) {
                         calcPos = (this.windowWidth * 1000);
                     }
                 }
@@ -77,10 +67,10 @@ public class Vehicles extends SpriteCollection {
 
                 //recupera e atualiza cada veículo
                 vehicles[index].type         = (byte)Stages.stg1[i][j][0];
-                vehicles[index].direction    = (byte)Stages.stg1[i][j][1];
-                vehicles[index].positionX    = (short)(Stages.stg1[i][j][2]/1000);
+                vehicles[index].direction    = direction;
+                vehicles[index].positionX    = (short)(position/1000);
                 //incrementa o index ao final
-                vehicles[index].width        = (byte)vehiclesW[vehicles[index].type];
+                vehicles[index].width        = (byte)Vehicle.vehiclesW[vehicles[index].type];
                 vehicles[index++].positionY  = (short)Lanes.streetLanes[i];
             }
         }
@@ -93,7 +83,7 @@ public class Vehicles extends SpriteCollection {
         int index = 0;
         for (byte i = 0; i < Stages.stg1.length; i++) {
             for (byte j = 0; j < Stages.stg1[i].length; j++) {
-                vehicles[index++].draw(this.vehiclesTile, vehiclesImgX, vehiclesW, this.g2d);
+                this.vehicles[index++].draw(frametime);
             }
         }
     }
@@ -103,4 +93,3 @@ public class Vehicles extends SpriteCollection {
         return (this.vehicles);
     }
 }
-    
