@@ -1,5 +1,4 @@
 import java.awt.Graphics2D;
-import interfaces.Directions;
 import interfaces.Lanes;
 import interfaces.Sprite;
 import interfaces.SpriteCollection;
@@ -53,7 +52,7 @@ public class Vehicles extends SpriteCollection {
                 step        = (double)velocity / (double)(1_000_000D / (double)frametime);
                 calcPos     = position + (step * direction);
 
-                if (direction == Directions.RIGHT) {
+                if (direction == RIGHT) {
                     if (calcPos > (this.windowWidth * 1000) + Vehicle.largerVehicule) {
                         calcPos = 0 - Vehicle.largerVehicule;
                     }
