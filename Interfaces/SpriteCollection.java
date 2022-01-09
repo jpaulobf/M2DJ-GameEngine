@@ -1,19 +1,19 @@
 package interfaces;
 
 public abstract class SpriteCollection {
-
-    protected abstract Sprite[] getSpriteCollection();
-
+    /**
+     * Method to test colision of an sprite with the entire collection
+     * @param sprite
+     * @return
+     */
     public int testColision(Sprite sprite) {
         //gate check
         if (sprite == null) return -1;
-
-        Sprite[] sprites = this.getSpriteCollection();
-        
-        //important: it's not necessary to test if the vehicle array is null, because it was initialized in the constructor
-        for (int cnt = 0; cnt < sprites.length; cnt++) {
-            if (sprites[cnt].isColiding(sprite)) {
-                return (cnt);
+        if (this.getSpriteCollection() != null) {
+            for (int cnt = 0; cnt < this.getSpriteCollection().length; cnt++) {
+                if (this.getSpriteCollection()[cnt].isColiding(sprite)) {
+                    return (cnt);
+                }
             }
         }
 
@@ -21,8 +21,21 @@ public abstract class SpriteCollection {
         return (-1);
     }
 
+    /**
+     * Abstract method to recover the sprite collection
+     * @return
+     */
+    protected abstract Sprite[] getSpriteCollection();
+
+    /**
+     * Abstract update method
+     * @param frametime
+     */
     public abstract void update(long frametime);
 
+    /**
+     * Abstract draw method
+     * @param frametime
+     */
     public abstract void draw(long frametime);
-
 }
