@@ -3,6 +3,7 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import util.Logger;
 
 /**
  * This class is responsible for load the game stuffs
@@ -26,33 +27,43 @@ public class LoadingStuffs {
             
             image = ImageIO.read(new File("images\\animals2.png"));
             stuffs.put("animalTiles", image);
+            Logger.INFO("read animal tiles", this);
 
             image = ImageIO.read(new File("images\\froggerdead.png"));
             stuffs.put("froggerDeadTiles", image);
+            Logger.INFO("read frogger dead animation tiles", this);
 
             image = ImageIO.read(new File("images\\gameover.png"));
             stuffs.put("gameover", image);
+            Logger.INFO("read g.o. tiles", this);
 
             image = ImageIO.read(new File("images\\sidewalk.png"));
             stuffs.put("sidewalk", image);
+            Logger.INFO("read sidewalk tiles", this);
 
             image = ImageIO.read(new File("images\\splash.png"));
             stuffs.put("splashImage", image);
+            Logger.INFO("read s.s. tiles", this);
 
             image = ImageIO.read(new File("images\\vehicules.png"));
             stuffs.put("vehiclesTile", image);
+            Logger.INFO("read vehicles tiles", this);
 
             image = ImageIO.read(new File("images\\grass.png"));
             stuffs.put("grass", image);
+            Logger.INFO("read grass tiles", this);
 
             image = ImageIO.read(new File("images\\subgrass.png"));
             stuffs.put("subgrass", image);
+            Logger.INFO("read subgrass tiles", this);
+
+            image = ImageIO.read(new File("images\\trunks.png"));
+            stuffs.put("trunksTiles", image);
+            Logger.INFO("read trunks tiles", this);
 
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     /**
