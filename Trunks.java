@@ -40,33 +40,34 @@ public class Trunks extends SpriteCollection {
         short velocity  = 0;
         byte index      = 0;
 
-        for (int i = 0; i < Stages.stg1.length; i++) {
-            for (int j = 0; j < Stages.stg1[i].length; j++) {
+        for (int i = 0; i < Stages.STAGE1_TRUNKS.length; i++) {
+            for (int j = 0; j < Stages.STAGE1_TRUNKS[i].length; j++) {
+                if (Stages.STAGE1_TRUNKS[i][j].length > 0) {
+                    direction   = (byte)Stages.STAGE1_TRUNKS[i][j][1];
+                    position    = Stages.STAGE1_TRUNKS[i][j][2];
+                    velocity    = (short)Stages.STAGE1_TRUNKS[i][j][3];
+                    step        = (double)velocity / (double)(1_000_000D / (double)frametime);
+                    calcPos     = position + (step * direction);
 
-                direction   = (byte)Stages.stg1[i][j][1];
-                position    = Stages.stg1[i][j][2];
-                velocity    = (short)Stages.stg1[i][j][3];
-                step        = (double)velocity / (double)(1_000_000D / (double)frametime);
-                calcPos     = position + (step * direction);
+                    if (direction == RIGHT) {
+                        if (calcPos > (this.windowWidth * 1000) + Vehicle.largerVehicule) {
+                            calcPos = 0 - Vehicle.largerVehicule;
+                        }
+                    } else {
+                        if (calcPos < -Vehicle.largerVehicule) {
+                            calcPos = (this.windowWidth * 1000);
+                        }
+                    }
+                    //atualiza a posição do objeto na array
+                    Stages.STAGE1_TRUNKS[i][j][2]        = (int)Math.round(calcPos);
 
-                if (direction == RIGHT) {
-                    if (calcPos > (this.windowWidth * 1000) + Vehicle.largerVehicule) {
-                        calcPos = 0 - Vehicle.largerVehicule;
-                    }
-                } else {
-                    if (calcPos < -Vehicle.largerVehicule) {
-                        calcPos = (this.windowWidth * 1000);
-                    }
+                    //recupera e atualiza cada veículo
+                    trunks[index].type          = (byte)Stages.STAGE1_TRUNKS[i][j][0];
+                    trunks[index].direction     = direction;
+                    trunks[index].positionX     = (short)(position/1000);
+                    //trunks[index].width         = (byte)Vehicle.vehiclesW[vehicles[index].type];
+                    trunks[index++].positionY   = (short)Lanes.riverLanes[i]; //incrementa o index ao final
                 }
-                //atualiza a posição do objeto na array
-                Stages.stg1[i][j][2]        = (int)Math.round(calcPos);
-
-                //recupera e atualiza cada veículo
-                trunks[index].type          = (byte)Stages.stg1[i][j][0];
-                trunks[index].direction     = direction;
-                trunks[index].positionX     = (short)(position/1000);
-                //trunks[index].width         = (byte)Vehicle.vehiclesW[vehicles[index].type];
-                trunks[index++].positionY   = (short)Lanes.streetLanes[i]; //incrementa o index ao final
             }
         }
     }
@@ -77,9 +78,11 @@ public class Trunks extends SpriteCollection {
     @Override
     public void draw(long frametime) {
         int index = 0;
-        for (byte i = 0; i < Stages.stg1.length; i++) {
-            for (byte j = 0; j < Stages.stg1[i].length; j++) {
-                trunks[index++].draw(frametime);
+        for (byte i = 0; i < Stages.STAGE1_TRUNKS.length; i++) {
+            for (byte j = 0; j < Stages.STAGE1_TRUNKS[i].length; j++) {
+                if (Stages.STAGE1_TRUNKS[i][j].length > 0) {
+                    trunks[index++].draw(frametime);
+                }
             }
         }
     }
