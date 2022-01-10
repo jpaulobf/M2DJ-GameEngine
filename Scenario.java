@@ -17,6 +17,7 @@ public class Scenario {
     private VolatileImage bgBufferImage = null;
     private Graphics2D bgd2             = null;
     private Vehicles vehicles           = null;
+    private Trunks trunks               = null;
     private BufferedImage sidewalk      = null;
     private BufferedImage grass         = null;
     private BufferedImage subgrass      = null;
@@ -56,6 +57,7 @@ public class Scenario {
         this.halfTileY      = (byte)(tileY / 2);*/
 
         this.vehicles       = new Vehicles(g2d, windowWidth, windowHeight);
+        this.trunks         = new Trunks(g2d, windowWidth, windowHeight);
         this.drawBackgroundInBuffer();
     }
 
@@ -192,6 +194,7 @@ public class Scenario {
     public void update(long frametime) {
         //update the vehicles
         this.vehicles.update(frametime);
+        this.trunks.update(frametime);
     }
 
     /**
@@ -204,5 +207,6 @@ public class Scenario {
         
         //draw the vehicles
         this.vehicles.draw(frametime);
+        this.trunks.draw(frametime);
     }
 }
