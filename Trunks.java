@@ -40,6 +40,8 @@ public class Trunks extends SpriteCollection {
         short velocity  = 0;
         byte index      = 0;
 
+        //TODO: TAKE CARE OF OFF-SCREEN TRUNKS... DONT KNOW HOW YET...
+
         for (int i = 0; i < Stages.STAGE1_TRUNKS.length; i++) {
             for (int j = 0; j < Stages.STAGE1_TRUNKS[i].length; j++) {
                 if (Stages.STAGE1_TRUNKS[i][j].length > 0) {
@@ -78,6 +80,9 @@ public class Trunks extends SpriteCollection {
     @Override
     public void draw(long frametime) {
         int index = 0;
+
+        //TODO: TAKE CARE OF OFF-SCREEN TRUNKS... DONT KNOW HOW YET...
+
         for (byte i = 0; i < Stages.STAGE1_TRUNKS.length; i++) {
             for (byte j = 0; j < Stages.STAGE1_TRUNKS[i].length; j++) {
                 if (Stages.STAGE1_TRUNKS[i][j].length > 0) {
