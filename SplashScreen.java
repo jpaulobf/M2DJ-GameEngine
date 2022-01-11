@@ -16,14 +16,8 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.image.VolatileImage;
-import java.awt.image.BufferedImage;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
-//import java.awt.geom.Rectangle2D;
-//import java.awt.FontMetrics;
-//import java.awt.BasicStroke;
-//import java.awt.Font;
-//import java.awt.RenderingHints;
 
 /*
     Project:    Modern 2D Java Game Engine
@@ -51,7 +45,7 @@ public class SplashScreen extends JFrame implements Runnable {
     //the first 'canvas' & the backbuffer (for simple doublebuffer strategy)
     private JPanel canvas                       = null;
     private VolatileImage bufferImage           = null;
-    private BufferedImage splashImage           = null;
+    private VolatileImage splashImage           = null;
 
     //some support and the graphical device itself
     private GraphicsEnvironment ge              = null;
@@ -117,7 +111,7 @@ public class SplashScreen extends JFrame implements Runnable {
         this.g2d            = (Graphics2D)bufferImage.getGraphics();
         
         //Get the already loaded image from loader
-        this.splashImage    = (BufferedImage)LoadingStuffs.getInstance().getStuff("splashImage");
+        this.splashImage    = (VolatileImage)LoadingStuffs.getInstance().getStuff("splashImage");
 
         //////////////////////////////////////////////////////////////////////
         // ->>>  now, for the canvas
