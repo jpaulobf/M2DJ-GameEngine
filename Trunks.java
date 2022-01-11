@@ -25,6 +25,7 @@ public class Trunks extends SpriteCollection {
         for (byte i = 0; i < trunks.length; i++) {
             trunks[i] = new TreeTrunk(this.g2d);
         }
+
     }
 
     /**
@@ -64,7 +65,7 @@ public class Trunks extends SpriteCollection {
                     Stages.STAGE1_TRUNKS[i][j][2]        = (int)Math.round(calcPos);
 
                     //recupera e atualiza cada veículo
-                    trunks[index].type          = (byte)Stages.STAGE1_TRUNKS[i][j][0];
+                    //trunks[index].type          = (byte)Stages.STAGE1_TRUNKS[i][j][0];
                     trunks[index].direction     = direction;
                     trunks[index].positionX     = (short)(position/1000);
                     //trunks[index].width         = (byte)Vehicle.vehiclesW[vehicles[index].type];
