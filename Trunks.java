@@ -33,7 +33,6 @@ public class Trunks extends SpriteCollection {
      */
     @Override
     public void update(long frametime) {
-        /*
         double step     = 0d;
         double calcPos  = 0d;
         byte direction  = 0;
@@ -73,7 +72,6 @@ public class Trunks extends SpriteCollection {
                 }
             }
         }
-        */
     }
 
     /**
@@ -81,7 +79,6 @@ public class Trunks extends SpriteCollection {
      */
     @Override
     public void draw(long frametime) {
-        /*
         int index = 0;
 
         //TODO: TAKE CARE OF OFF-SCREEN TRUNKS... DONT KNOW HOW YET...
@@ -92,7 +89,7 @@ public class Trunks extends SpriteCollection {
                     trunks[index++].draw(frametime);
                 }
             }
-        }*/
+        }
     }
 
     @Override
