@@ -32,10 +32,10 @@ public class Frogger extends JFrame implements Game {
     private int positionY                       = 0;
 
     //width and height of the window
-    private int windowWidth                   = 1240;
-    private int windowHeight                  = 700;
-    //private int windowWidth                     = 1344;
-    //private int windowHeight                    = 832;
+    //private int windowWidth                   = 1240;
+    //private int windowHeight                  = 700;
+    private int windowWidth                     = 1344;
+    private int windowHeight                    = 832;
 
     //desktop properties
     private int resolutionH                     = 0;
@@ -63,7 +63,7 @@ public class Frogger extends JFrame implements Game {
     private Frog frog                           = null;
     private GameOver gameOver                   = null;
     private volatile boolean canContinue        = true;
-    private boolean fullscreen                  = true;
+    private boolean fullscreen                  = false;
     private boolean isFullScreenAvailable       = false;
     private long framecounter                   = 0;
 

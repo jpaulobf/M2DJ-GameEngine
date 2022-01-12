@@ -1,8 +1,5 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-import util.Logger;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -15,6 +12,7 @@ import java.io.IOException;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
@@ -45,7 +43,7 @@ public class SplashScreen extends JFrame implements Runnable {
     //the first 'canvas' & the backbuffer (for simple doublebuffer strategy)
     private JPanel canvas                       = null;
     private VolatileImage bufferImage           = null;
-    private VolatileImage splashImage           = null;
+    private BufferedImage splashImage           = null;
 
     //some support and the graphical device itself
     private GraphicsEnvironment ge              = null;
@@ -68,8 +66,6 @@ public class SplashScreen extends JFrame implements Runnable {
         // ->>>  for the window
         //////////////////////////////////////////////////////////////////////
         LoadingStuffs.getInstance();
-
-        Logger.DEBUG("Mensagem 1", this);
 
         //load or provide the default configuration file
         new ConfigurationFile().verifyTheConfigurationFile();
@@ -111,7 +107,7 @@ public class SplashScreen extends JFrame implements Runnable {
         this.g2d            = (Graphics2D)bufferImage.getGraphics();
         
         //Get the already loaded image from loader
-        this.splashImage    = (VolatileImage)LoadingStuffs.getInstance().getStuff("splashImage");
+        this.splashImage    = (BufferedImage)LoadingStuffs.getInstance().getStuff("splashImage");
 
         //////////////////////////////////////////////////////////////////////
         // ->>>  now, for the canvas
@@ -191,7 +187,7 @@ public class SplashScreen extends JFrame implements Runnable {
     public static void main(String[] args) throws Exception {
         //enable openGL
         System.setProperty("sun.java2d.opengl", "True");
-        System.setProperty("sun.java2d.d3d", "False");
+        //System.setProperty("sun.java2d.d3d", "False");
 
         //start the thread
         Thread thread = new Thread(new SplashScreen(), "engine");

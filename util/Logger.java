@@ -6,7 +6,7 @@ public class Logger {
     public static final int WARNING     = 1;
     public static final int DEBUG       = 2;
     public static final int ERROR       = 3;
-    public static int LOGGER_OUT_LEVEL  = ERROR;
+    public static int LOGGER_OUT_LEVEL  = INFO;
 
     public void setLoggerOutLevel(int level) {
         LOGGER_OUT_LEVEL = level;

@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.VolatileImage;
+import java.awt.image.BufferedImage;
 import java.awt.GraphicsEnvironment;
 
 /*
@@ -13,7 +14,7 @@ public class GameOver {
     private int windowWidth             = 0;
     private int windowHeight            = 0;
     private VolatileImage bgBufferImage = null;
-    private VolatileImage gameover      = null;
+    private BufferedImage gameover      = null;
 
     /**
      * Constructor
@@ -34,7 +35,7 @@ public class GameOver {
      */
     private void drawGameOverInBuffer() {
         if (this.bgd2 == null) {
-            this.gameover = (VolatileImage)LoadingStuffs.getInstance().getStuff("gameover");
+            this.gameover = (BufferedImage)LoadingStuffs.getInstance().getStuff("gameover");
 
             //create a backbuffer image for doublebuffer
             this.bgBufferImage  = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().createCompatibleVolatileImage(this.windowWidth, this.windowHeight);

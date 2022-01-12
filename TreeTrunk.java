@@ -1,8 +1,7 @@
 import java.awt.Graphics2D;
-import java.awt.image.VolatileImage;
+import java.awt.image.BufferedImage;
 import java.awt.GraphicsEnvironment;
 import java.awt.Transparency;
-import java.awt.AlphaComposite;
 
 /**
  * Tree trunk (individual) class
@@ -10,11 +9,11 @@ import java.awt.AlphaComposite;
 public class TreeTrunk  extends SpriteImpl {
 
     //define the g2d and the trunks-images
-    private VolatileImage trunksTiles   = null;
-    private VolatileImage trunk         = null;
-    private VolatileImage trunkSmall    = null;
-    private VolatileImage trunkMedium   = null;
-    private VolatileImage trunkLarge    = null;
+    private BufferedImage trunksTiles   = null;
+    private BufferedImage trunk         = null;
+    private BufferedImage trunkSmall    = null;
+    private BufferedImage trunkMedium   = null;
+    private BufferedImage trunkLarge    = null;
     private Graphics2D bgd2             = null;
     private int trunkHeight             = 32;
     private int trunkLeftSideX          = 1;
@@ -36,10 +35,10 @@ public class TreeTrunk  extends SpriteImpl {
     public TreeTrunk(Graphics2D g2d) {
         this.g2d = g2d;
         //Get the already loaded image from loader
-        this.trunksTiles    = (VolatileImage)LoadingStuffs.getInstance().getStuff("trunksTiles");
-        this.trunkSmall     = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().createCompatibleVolatileImage(smallWidth, trunkHeight, Transparency.BITMASK);
-        this.trunkMedium    = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().createCompatibleVolatileImage(mediumWidth, trunkHeight, Transparency.BITMASK);
-        this.trunkLarge     = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().createCompatibleVolatileImage(largeWidth, trunkHeight, Transparency.BITMASK);
+        this.trunksTiles    = (BufferedImage)LoadingStuffs.getInstance().getStuff("trunksTiles");
+        this.trunkSmall     = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().createCompatibleImage(smallWidth, trunkHeight, Transparency.BITMASK);
+        this.trunkMedium    = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().createCompatibleImage(mediumWidth, trunkHeight, Transparency.BITMASK);
+        this.trunkLarge     = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().createCompatibleImage(largeWidth, trunkHeight, Transparency.BITMASK);
 
         //create the trunks images...
         this.createImageTrunk();
@@ -76,10 +75,6 @@ public class TreeTrunk  extends SpriteImpl {
 
         //first, construct the small trunk
         this.bgd2 = (Graphics2D)trunkSmall.getGraphics();
-        this.bgd2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OUT));
-        this.bgd2.setColor(new java.awt.Color(255,255,255,0));
-        this.bgd2.fillRect(0, 0, this.trunkSmall.getWidth(), this.trunkSmall.getHeight());
-        this.bgd2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
 
         //first part 
         this.bgd2.drawImage(this.trunksTiles, 0, 0, trunkLeftSideW, trunkHeight, //dest w1, h1, w2, h2

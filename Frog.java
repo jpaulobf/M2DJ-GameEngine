@@ -1,5 +1,5 @@
 import java.awt.Graphics2D;
-import java.awt.image.VolatileImage;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,8 +20,8 @@ public class Frog extends SpriteImpl {
     //render variables
     private byte tileX                      = 0;
     private byte tileY                      = 0;
-    private VolatileImage animalTiles       = null;
-    private VolatileImage froggerDeadTiles  = null;
+    private BufferedImage animalTiles       = null;
+    private BufferedImage froggerDeadTiles  = null;
     private Map<Integer, Byte> keyMap       = null;
 
     //animation parameters
@@ -61,8 +61,8 @@ public class Frog extends SpriteImpl {
         this.frogReset();
 
         //load the tiles and sprites
-        this.animalTiles        = (VolatileImage)LoadingStuffs.getInstance().getStuff("animalTiles");
-        this.froggerDeadTiles   = (VolatileImage)LoadingStuffs.getInstance().getStuff("froggerDeadTiles");
+        this.animalTiles        = (BufferedImage)LoadingStuffs.getInstance().getStuff("animalTiles");
+        this.froggerDeadTiles   = (BufferedImage)LoadingStuffs.getInstance().getStuff("froggerDeadTiles");
         
         /*try {
             this.animalTiles = ImageIO.read(new File("images\\animals2.png"));

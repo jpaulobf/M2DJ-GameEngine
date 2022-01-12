@@ -1,10 +1,10 @@
 import java.awt.Graphics2D;
-import java.awt.image.VolatileImage;
+import java.awt.image.BufferedImage;
 
 public class Vehicle extends SpriteImpl {
         
     //vehicles tiles
-    private VolatileImage vehiclesTile          = null;
+    private BufferedImage vehiclesTile          = null;
 
     //for the vehicles tiles
     public static final int vehiclesImgX[][]    = { {0,54}, {155,107}, {204,249}, {337,294}, {461,382} };
@@ -20,7 +20,7 @@ public class Vehicle extends SpriteImpl {
         this.g2d        = g2d;
 
         //Get the already loaded image from loader
-        this.vehiclesTile   = (VolatileImage)LoadingStuffs.getInstance().getStuff("vehiclesTile");
+        this.vehiclesTile   = (BufferedImage)LoadingStuffs.getInstance().getStuff("vehiclesTile");
     }
     
     /**

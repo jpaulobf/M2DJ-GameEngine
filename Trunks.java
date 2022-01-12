@@ -80,7 +80,6 @@ public class Trunks extends SpriteCollection {
     @Override
     public void draw(long frametime) {
         int index = 0;
-
         //TODO: TAKE CARE OF OFF-SCREEN TRUNKS... DONT KNOW HOW YET...
 
         for (byte i = 0; i < Stages.STAGE1_TRUNKS.length; i++) {

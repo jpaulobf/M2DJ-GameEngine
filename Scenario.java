@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
 import java.awt.image.VolatileImage;
+import java.awt.image.BufferedImage;
 import java.awt.GraphicsEnvironment;
 
 /*
@@ -17,9 +18,9 @@ public class Scenario {
     private Graphics2D bgd2             = null;
     private Vehicles vehicles           = null;
     private Trunks trunks               = null;
-    private VolatileImage sidewalk      = null;
-    private VolatileImage grass         = null;
-    private VolatileImage subgrass      = null;
+    private BufferedImage sidewalk      = null;
+    private BufferedImage grass         = null;
+    private BufferedImage subgrass      = null;
 
     //how many tiles in x and in y
     protected final byte tilesInX       = 21;
@@ -76,9 +77,9 @@ public class Scenario {
         if (this.bgd2 == null) {
 
             //Get the already loaded image from loader
-            this.sidewalk       = (VolatileImage)LoadingStuffs.getInstance().getStuff("sidewalk");
-            this.grass          = (VolatileImage)LoadingStuffs.getInstance().getStuff("grass");
-            this.subgrass       = (VolatileImage)LoadingStuffs.getInstance().getStuff("subgrass");
+            this.sidewalk       = (BufferedImage)LoadingStuffs.getInstance().getStuff("sidewalk");
+            this.grass          = (BufferedImage)LoadingStuffs.getInstance().getStuff("grass");
+            this.subgrass       = (BufferedImage)LoadingStuffs.getInstance().getStuff("subgrass");
 
             //create a backbuffer image for doublebuffer
             byte lines          = (byte)(this.windowHeight / tileY);
