@@ -190,7 +190,8 @@ public class SplashScreen extends JFrame implements Runnable {
     */
     public static void main(String[] args) throws Exception {
         //enable openGL
-        //System.setProperty("sun.java2d.opengl", "True");
+        System.setProperty("sun.java2d.opengl", "True");
+        System.setProperty("sun.java2d.d3d", "False");
 
         //start the thread
         Thread thread = new Thread(new SplashScreen(), "engine");
