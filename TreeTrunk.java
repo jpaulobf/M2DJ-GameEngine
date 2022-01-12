@@ -43,7 +43,7 @@ public class TreeTrunk  extends SpriteImpl {
         //create the trunks images...
         this.createImageTrunk();
 
-        this.type = 0;
+        this.type = 1;
     }
 
     @Override
@@ -94,6 +94,34 @@ public class TreeTrunk  extends SpriteImpl {
                                                trunkRightSideX, 0, trunkRightSideW + trunkRightSideX, trunkHeight, //source w1, h1, w2, h2
                                                null);
 
-        //TODO: CREATE THE SECOND IMAGE...
+        //second, construct the medium trunk
+        this.bgd2 = (Graphics2D)trunkMedium.getGraphics();
+
+        //first part 
+        this.bgd2.drawImage(this.trunksTiles, 0, 0, trunkLeftSideW, trunkHeight, //dest w1, h1, w2, h2
+                                              trunkLeftSideX, 0, trunkLeftSideW, trunkHeight, //source w1, h1, w2, h2
+                                              null);
+        //second part
+        this.bgd2.drawImage(this.trunksTiles, trunkLeftSideW, 0, (trunkLeftSideW + trunkFirstPartW), trunkHeight, //dest w1, h1, w2, h2
+                                              trunkFirstPartX, 0, trunkFirstPartW + trunkFirstPartX, trunkHeight, //source w1, h1, w2, h2
+                                              null);
+        //third part
+        this.bgd2.drawImage(this.trunksTiles, (trunkLeftSideW + trunkFirstPartW), 0, (trunkLeftSideW + trunkFirstPartW + trunkSecondPartW), trunkHeight, //dest w1, h1, w2, h2
+                                               trunkSecondPartX, 0, trunkSecondPartW + trunkSecondPartX, trunkHeight, //source w1, h1, w2, h2
+                                               null);
+
+        //forth part
+        this.bgd2.drawImage(this.trunksTiles, (trunkLeftSideW + trunkFirstPartW + trunkSecondPartW), 0, (trunkLeftSideW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW), trunkHeight, //dest w1, h1, w2, h2
+                                              trunkFirstPartX, 0, trunkFirstPartW + trunkFirstPartX, trunkHeight, //source w1, h1, w2, h2
+                                              null);
+        //fifth part
+        this.bgd2.drawImage(this.trunksTiles, (trunkLeftSideW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW), 0, (trunkLeftSideW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW), trunkHeight, //dest w1, h1, w2, h2
+                                               trunkSecondPartX, 0, trunkSecondPartW + trunkSecondPartX, trunkHeight, //source w1, h1, w2, h2
+                                               null);
+
+        //forth part
+        this.bgd2.drawImage(this.trunksTiles, (trunkLeftSideW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW), 0, (trunkLeftSideW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW + trunkRightSideW), trunkHeight, //dest w1, h1, w2, h2
+                                               trunkRightSideX, 0, trunkRightSideW + trunkRightSideX, trunkHeight, //source w1, h1, w2, h2
+                                               null);
     }
 }
