@@ -47,10 +47,8 @@ public class TreeTrunk  extends SpriteImpl {
     }
 
     @Override
-    public void draw(long frametime) {
+    public void update(long frametime) {
         //draw the selected image
-        direction = (direction == LEFT)?0:direction;
-        //this.g2d.drawImage(this.trunksTiles, this.positionX, this.positionY, this.positionX + 0, this.positionY + this.height, //dest w1, h1, w2, h2
         switch(this.type) {
             case 0:
                 this.trunk = this.trunkSmall;
@@ -62,17 +60,19 @@ public class TreeTrunk  extends SpriteImpl {
                 this.trunk = this.trunkLarge;
                 break;
         }
+    }
 
+    @Override
+    public void draw(long frametime) {
         this.g2d.drawImage(this.trunk, 0, 0, this.trunk.getWidth(), this.trunk.getHeight(), //dest w1, h1, w2, h2
                                        0, 0, this.trunk.getWidth(), this.trunk.getHeight(), //source w1, h1, w2, h2
                                        null);
     }
 
-    @Override
-    public void update(long frametime) {}
-
+    /**
+     * Create the 3 images for the diferent trunks
+     */
     private void createImageTrunk() {
-
         //first, construct the small trunk
         this.bgd2 = (Graphics2D)trunkSmall.getGraphics();
 

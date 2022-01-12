@@ -33,33 +33,23 @@ public class Trunks extends SpriteCollection {
      */
     @Override
     public void update(long frametime) {
-        double step     = 0d;
-        double calcPos  = 0d;
-        byte direction  = 0;
-        double position = 0;
-        short velocity  = 0;
-        byte index      = 0;
-
         //TODO: TAKE CARE OF OFF-SCREEN TRUNKS... DONT KNOW HOW YET...
-
+        byte index = 0;
         for (int i = 0; i < Stages.STAGE1_TRUNKS.length; i++) {
             for (int j = 0; j < Stages.STAGE1_TRUNKS[i].length; j++) {
                 if (Stages.STAGE1_TRUNKS[i][j].length > 0) {
-                    direction   = (byte)Stages.STAGE1_TRUNKS[i][j][1];
-                    position    = Stages.STAGE1_TRUNKS[i][j][2];
-                    velocity    = (short)Stages.STAGE1_TRUNKS[i][j][3];
-                    step        = (double)velocity / (double)(1_000_000D / (double)frametime);
-                    calcPos     = position + (step * direction);
+                    
+                    byte direction      = (byte)Stages.STAGE1_TRUNKS[i][j][1];
+                    double position     = Stages.STAGE1_TRUNKS[i][j][2];
+                    short velocity      = (short)Stages.STAGE1_TRUNKS[i][j][3];
+                    double step         = (double)velocity / (double)(1_000_000D / (double)frametime);
+                    double calcPos      = position + (step * direction);
 
-                    if (direction == RIGHT) {
-                        if (calcPos > (this.windowWidth * 1000) + Vehicle.largerVehicule) {
-                            calcPos = 0 - Vehicle.largerVehicule;
-                        }
-                    } else {
-                        if (calcPos < -Vehicle.largerVehicule) {
-                            calcPos = (this.windowWidth * 1000);
-                        }
-                    }
+                    /*
+                    if (calcPos > (this.windowWidth * 1000) + Vehicle.largerVehicule) {
+                        calcPos = 0 - Vehicle.largerVehicule;
+                    }*/
+
                     //atualiza a posição do objeto na array
                     Stages.STAGE1_TRUNKS[i][j][2]        = (int)Math.round(calcPos);
 
@@ -68,7 +58,8 @@ public class Trunks extends SpriteCollection {
                     trunks[index].direction     = direction;
                     trunks[index].positionX     = (short)(position/1000);
                     //trunks[index].width         = (byte)Vehicle.vehiclesW[vehicles[index].type];
-                    trunks[index++].positionY   = (short)Lanes.riverLanes[i]; //incrementa o index ao final
+                    trunks[index].positionY   = (short)Lanes.riverLanes[i]; //incrementa o index ao final
+                    trunks[index++].update(frametime);
                 }
             }
         }
