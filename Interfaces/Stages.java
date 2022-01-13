@@ -6,8 +6,8 @@ public interface Stages extends Directions {
     public static final short [][] CARS_VELOCITIES_STG1     = {{100}, {180}, {50}, {330}, {300}};
     public static final int [][] CARS_POSITION_X_STG1       = {{300_000, 650_000, 1000_000}, {100_000, 400_000, 700_000}, {100_000, 500_000, 900_000}, {100_000}, {100_000, 750_000}};
 
-    public static final short [][] TRUNKS_VELOCITIES_STG1   = {{}, {50}, {100}, {}, {80}};
-    public static final int [][] TRUNKS_POSITION_X_STG1     = {{}, {120, 300, 550}, {100, 500}, {}, {0_000, 300_000, 600_000}};
+    public static final short [][] TRUNKS_VELOCITIES_STG1   = {{}, {60}, {120}, {}, {90}};
+    public static final int [][] TRUNKS_POSITION_X_STG1     = {{}, {50_000, 350_000, 650_000}, {100_000, 800_000}, {}, {0_000, 400_000, 800_000}};
 
     //for each lane, each car parameter
     //type, direction, start-position-x, velocity
