@@ -43,12 +43,12 @@ public class Vehicles extends SpriteCollection {
         short velocity  = 0;
         byte index      = 0;
 
-        for (int i = 0; i < Stages.STAGE1_CARS.length; i++) {
-            for (int j = 0; j < Stages.STAGE1_CARS[i].length; j++) {
+        for (int i = 0; i < Stages.S1_CARS.length; i++) {
+            for (int j = 0; j < Stages.S1_CARS[i].length; j++) {
 
-                direction   = (byte)Stages.STAGE1_CARS[i][j][1];
-                position    = Stages.STAGE1_CARS[i][j][2];
-                velocity    = (short)Stages.STAGE1_CARS[i][j][3];
+                direction   = (byte)Stages.S1_CARS[i][j][1];
+                position    = Stages.S1_CARS[i][j][2];
+                velocity    = (short)Stages.S1_CARS[i][j][3];
                 step        = (double)velocity / (double)(1_000_000D / (double)frametime);
                 calcPos     = position + (step * direction);
 
@@ -62,10 +62,10 @@ public class Vehicles extends SpriteCollection {
                     }
                 }
                 //atualiza a posição do objeto na array
-                Stages.STAGE1_CARS[i][j][2]        = (int)Math.round(calcPos);
+                Stages.S1_CARS[i][j][2]        = (int)Math.round(calcPos);
 
                 //recupera e atualiza cada veículo
-                vehicles[index].type         = (byte)Stages.STAGE1_CARS[i][j][0];
+                vehicles[index].type         = (byte)Stages.S1_CARS[i][j][0];
                 vehicles[index].direction    = direction;
                 vehicles[index].positionX    = (short)(position/1000);
                 //incrementa o index ao final
@@ -81,8 +81,8 @@ public class Vehicles extends SpriteCollection {
     @Override
     public void draw(long frametime) {
         int index = 0;
-        for (byte i = 0; i < Stages.STAGE1_CARS.length; i++) {
-            for (byte j = 0; j < Stages.STAGE1_CARS[i].length; j++) {
+        for (byte i = 0; i < Stages.S1_CARS.length; i++) {
+            for (byte j = 0; j < Stages.S1_CARS[i].length; j++) {
                 this.vehicles[index++].draw(frametime);
             }
         }
