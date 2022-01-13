@@ -17,12 +17,16 @@ public abstract class SpriteImpl implements Sprite, Directions {
     protected volatile short positionY      = 0;
     protected volatile double inBetweenX    = 0;
     protected volatile double inBetweenY    = 0;
-    protected byte width                    = 0;
+    protected short width                   = 0;
     protected byte height                   = 0;
     protected byte offsetTop                = 0;
     protected byte offsetLeft               = 0;
     protected Rectangle2D rectangle         = null;
     protected Graphics2D g2d                = null;
+
+    public short getWidth() {
+        return (this.width);
+    }
 
     /**
      * Abstract methods
