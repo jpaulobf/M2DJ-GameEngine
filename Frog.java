@@ -41,6 +41,7 @@ public class Frog extends SpriteImpl {
     private volatile short positionInTileY  = 0;
     private volatile double distanceX       = 0;
     private volatile double distanceY       = 0;
+    private volatile byte spriteYCenter     = 0;
 
     /**
      * Frog constructor
@@ -102,6 +103,7 @@ public class Frog extends SpriteImpl {
      * @param direction
      */
     public synchronized void execute(byte direction) {
+
         if (direction == RIGHT) {
             if (this.positionInTileX < 20) {
                 this.positionInTileX++;
@@ -134,7 +136,7 @@ public class Frog extends SpriteImpl {
 
         if (this.isDead) {
             short dx1 = (short)(this.positionX - ((this.drawImgW - this.width) / 2));
-            short dy1 = (short)(this.positionY - ((this.drawImgH - this.height) / 2));
+            short dy1 = (short)(this.positionY - ((this.drawImgH - this.height) / 2) + spriteYCenter);
             short dx2 = (short)(dx1 + this.drawImgW);
             short dy2 = (short)(dy1 + this.drawImgH);
 
@@ -143,7 +145,7 @@ public class Frog extends SpriteImpl {
                                                       null);
         } else {
             short dx1 = (short)(this.inBetweenX);
-            short dy1 = (short)(this.inBetweenY);
+            short dy1 = (short)(this.inBetweenY + spriteYCenter);
             short dx2 = (short)(dx1 + this.width);
             short dy2 = (short)(dy1 + this.height);
             this.g2d.drawImage(this.animalTiles, dx1, dy1, dx2, dy2, //dest w1, h1, w2, h2
@@ -168,8 +170,9 @@ public class Frog extends SpriteImpl {
                 case UP:
                     //calc the new Y
                     this.inBetweenY    -= step;
-
+                    
                     //update images position static-values
+                    this.spriteYCenter  = 0;
                     this.drawImgX       = 131;
                     this.drawImgW       = 32;
                     this.width          = 32;
@@ -192,6 +195,7 @@ public class Frog extends SpriteImpl {
                     this.inBetweenY += step;
                     
                     //update images position static-values
+                    this.spriteYCenter  = 0;
                     this.drawImgX       = 164;
                     this.drawImgW       = 32;
                     this.width          = 32;
@@ -214,6 +218,7 @@ public class Frog extends SpriteImpl {
                     this.inBetweenX    -= step;
 
                     //update images position static-values
+                    this.spriteYCenter  = -3;
                     this.drawImgX       = 197;
                     this.drawImgH       = 32;
                     this.height         = 32;
@@ -236,6 +241,7 @@ public class Frog extends SpriteImpl {
                     this.inBetweenX += step;
 
                     //update images position dynamic-values
+                    this.spriteYCenter  = -3;
                     this.drawImgH       = 32;
                     this.height         = 32;
                     this.drawImgX       = 234;
