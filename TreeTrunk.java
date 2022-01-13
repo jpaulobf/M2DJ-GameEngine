@@ -15,17 +15,17 @@ public class TreeTrunk  extends SpriteImpl {
     private BufferedImage trunkMedium   = null;
     private BufferedImage trunkLarge    = null;
     private Graphics2D bgd2             = null;
-    private int trunkLeftSideX          = 1;
-    private int trunkRightSideX         = 40;
-    private int trunkFirstPartX         = 83;
-    private int trunkSecondPartX        = 108;
-    private int trunkLeftSideW          = 38;
-    private int trunkRightSideW         = 40;
-    private int trunkFirstPartW         = 24;
-    private int trunkSecondPartW        = 24;
-    private final int smallWidth        = trunkLeftSideW + trunkFirstPartW + trunkSecondPartW + trunkRightSideW;
-    private final int mediumWidth       = trunkLeftSideW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW + trunkRightSideW;
-    private final int largeWidth        = trunkLeftSideW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW + trunkRightSideW;
+    private final byte trunkLeftSideX   = 1;
+    private final byte trunkRightSideX  = 40;
+    private final byte trunkFirstPartX  = 83;
+    private final byte trunkSecondPartX = 108;
+    private final byte trunkLeftSideW   = 38;
+    private final byte trunkRightSideW  = 40;
+    private final byte trunkFirstPartW  = 24;
+    private final byte trunkSecondPartW = 24;
+    private final short smallWidth      = trunkLeftSideW + trunkFirstPartW + trunkSecondPartW + trunkRightSideW;
+    private final short mediumWidth     = trunkLeftSideW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW + trunkRightSideW;
+    private final short largeWidth      = trunkLeftSideW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW + trunkRightSideW;
 
     /**
      * constructor
@@ -50,12 +50,15 @@ public class TreeTrunk  extends SpriteImpl {
         switch(this.type) {
             case 0:
                 this.trunk = this.trunkSmall;
+                this.width = this.smallWidth;
                 break;
             case 1:
                 this.trunk = this.trunkMedium;
+                this.width = this.mediumWidth;
                 break;
             case 2:
                 this.trunk = this.trunkLarge;
+                this.width = this.largeWidth;
                 break;
         }
     }
