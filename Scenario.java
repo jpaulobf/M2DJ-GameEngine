@@ -37,6 +37,10 @@ public class Scenario {
         return (this.vehicles);
     }
 
+    public Trunks getTrunks() {
+        return (this.trunks);
+    }
+
     /**
      * Constructor
      * @param g2d
