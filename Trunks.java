@@ -132,6 +132,7 @@ public class Trunks extends SpriteCollection {
 
     @Override
     protected Sprite[] getSpriteCollection() {
-        return (this.trunks);
+        return (java.util.stream.Stream.concat(java.util.Arrays.stream(this.trunks), 
+                                               java.util.Arrays.stream(this.offsetTrunks)).toArray(Sprite[]::new));
     }
 }
