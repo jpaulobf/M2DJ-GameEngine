@@ -268,12 +268,19 @@ public class Frog extends SpriteImpl {
             //this line test the colisions only with the cars, in the lanes.
             if (this.positionY > Lanes.streetLanes[0]) {
                 coliding = this.scenario.getVehicles().testColision(this);
+                if (coliding != -1) {
+                    this.canMove    = false;
+                    this.isDead     = true;
+                    this.animating  = false;
+                }
+            } else if (this.positionY > Lanes.riverLanes[0]) {
+                coliding = this.scenario.getTrunks().testColision(this);
+                if (coliding != -1) {
+                    //this.inBetweenX += 0.01;
+                    System.out.println("aaaaaaaaaaa");
+                }
             }
-            if (coliding != -1) {
-                this.canMove    = false;
-                this.isDead     = true;
-                this.animating  = false;
-            }
+            
             this.animationCounter = 0;
         } else {
             this.animationCounter += frametime;
