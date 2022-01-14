@@ -135,7 +135,7 @@ public class Frog extends SpriteImpl {
     public void draw(long frametime) {     
 
         if (this.isDead) {
-            short dx1 = (short)(this.positionX - ((this.drawImgW - this.width) / 2));
+            short dx1 = (short)(this.positionX);// - ((this.drawImgW - this.width) / 2));
             short dy1 = (short)(this.positionY - ((this.drawImgH - this.height) / 2) + spriteYCenter);
             short dx2 = (short)(dx1 + this.drawImgW);
             short dy2 = (short)(dy1 + this.drawImgH);
