@@ -307,7 +307,7 @@ public class Frog extends SpriteImpl {
                     this.isDead     = true;
                     this.animating  = false;
                 }
-            } else if (this.positionY > Lanes.riverLanes[0]) {
+            } else if (this.positionY >= Lanes.riverLanes[0]) {
                 coliding = this.scenario.getTrunks().testColision(this);
                 if (coliding != -1) {
                     this.positionX += (this.scenario.getTrunks().getTrunkMovementStep(coliding) / 1_000);
