@@ -183,7 +183,7 @@ public class Frog extends SpriteImpl {
      * Calc the PositionInTile (X and Y) while the frog is moving without control (in the river flow)
      */
     private void updateFrogPositionInTile() {
-        //TODO:
+        this.positionInTileX = (short)(Math.floor(this.positionX / (double)this.tileX));
     }
 
     /**
@@ -310,9 +310,8 @@ public class Frog extends SpriteImpl {
             } else if (this.positionY > Lanes.riverLanes[0]) {
                 coliding = this.scenario.getTrunks().testColision(this);
                 if (coliding != -1) {
-                    //  TODO:
-                    //this.inBetweenX += 0.01;
-                    System.out.println("aaaaaaaaaaa");
+                    this.positionX += (this.scenario.getTrunks().getTrunkMovementStep(coliding) / 1_000);
+                    this.updateFrogPositionInTile();
                 }
             }
             this.animationCounter = 0;
