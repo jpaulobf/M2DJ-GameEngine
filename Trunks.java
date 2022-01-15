@@ -15,11 +15,11 @@ public class Trunks extends SpriteCollection {
     protected Graphics2D g2d            = null;
 
     //define the trunks array
-    private TreeTrunk[] trunks          =  new TreeTrunk[8];
-    private TreeTrunk[] offsetTrunks    =  new TreeTrunk[3];
-    private double[] offsetPosX         =  new double[3];
+    private TreeTrunk[] trunks          = new TreeTrunk[8];
+    private TreeTrunk[] offsetTrunks    = new TreeTrunk[3];
+    private double[] offsetPosX         = new double[3];
     private final short far             = -10_000;
-    private int windowWidth1000         = 0;
+    private int windowWidth1000         =  0;
 
     /**
      * Load the tile image
@@ -42,6 +42,15 @@ public class Trunks extends SpriteCollection {
     }
 
     /**
+     * Get the last trunk step
+     * @param trunk
+     * @return
+     */
+    public double getTrunkMovementStep(int trunk) {
+        return (trunks[trunk].currentStep);
+    }
+
+    /**
      * Updates the elements on the screen
      */
     @Override
@@ -54,15 +63,15 @@ public class Trunks extends SpriteCollection {
             for (int j = 0; j < Stages.S1_TRUNKS[i].length; j++) {
 
                 //read & set the trunk parameters
-                trunks[index].type  = (byte)Stages.S1_TRUNKS[i][j][0];
-                short width         = trunks[index].getWidth();
-                byte direction      = (byte)Stages.S1_TRUNKS[i][j][1];
-                double position     = Stages.S1_TRUNKS[i][j][2];
-                short velocity      = (short)Stages.S1_TRUNKS[i][j][3];
-                double step         = (double)velocity / (double)(1_000_000D / (double)frametime);
-                double stepDir      = step * direction;
-                double calcPos      = position + stepDir;
-
+                trunks[index].type          = (byte)Stages.S1_TRUNKS[i][j][0];
+                short width                 = trunks[index].getWidth();
+                byte direction              = (byte)Stages.S1_TRUNKS[i][j][1];
+                double position             = Stages.S1_TRUNKS[i][j][2];
+                short velocity              = (short)Stages.S1_TRUNKS[i][j][3];
+                double step                 = (double)velocity / (double)(1_000_000D / (double)frametime);
+                double stepDir              = step * direction;
+                double calcPos              = position + stepDir;
+                trunks[index].currentStep   = stepDir;
                 //update the trunk
                 trunks[index].update(frametime);
 
