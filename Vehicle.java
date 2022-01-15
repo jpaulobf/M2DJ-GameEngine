@@ -32,7 +32,7 @@ public class Vehicle extends SpriteImpl {
     public void draw(long frametime) {
         //draw the selected image
         direction = (direction == LEFT)?0:direction;
-        this.g2d.drawImage(this.vehiclesTile, this.positionX, this.positionY, this.positionX + vehiclesW[this.type], this.positionY + this.height, //dest w1, h1, w2, h2
+        this.g2d.drawImage(this.vehiclesTile, (int)this.positionX, (int)this.positionY, (int)(this.positionX + vehiclesW[this.type]), (int)(this.positionY + this.height), //dest w1, h1, w2, h2
                                               vehiclesImgX[this.type][this.direction], 0, vehiclesImgX[this.type][this.direction] + vehiclesW[this.type], this.height, //source w1, h1, w2, h2
                                               null);
     }

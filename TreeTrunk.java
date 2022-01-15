@@ -65,7 +65,7 @@ public class TreeTrunk  extends SpriteImpl {
 
     @Override
     public void draw(long frametime) {
-        this.g2d.drawImage(this.trunk, this.positionX, this.positionY, this.positionX + this.trunk.getWidth(), this.positionY + this.height, //dest w1, h1, w2, h2
+        this.g2d.drawImage(this.trunk, (int)this.positionX, (int)this.positionY, (int)(this.positionX + this.trunk.getWidth()), (int)(this.positionY + this.height), //dest w1, h1, w2, h2
                                        0, 0, this.trunk.getWidth(), this.trunk.getHeight(), //source w1, h1, w2, h2
                                        null);
     }
