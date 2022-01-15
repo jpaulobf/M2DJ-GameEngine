@@ -1,6 +1,7 @@
 package interfaces;
 
 public abstract class SpriteCollection implements Directions {
+
     /**
      * Method to test colision of an sprite with the entire collection
      * @param sprite
