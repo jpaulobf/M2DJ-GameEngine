@@ -35,13 +35,12 @@ public class Frog extends SpriteImpl {
     //draw image parameters
     private volatile short drawImgX         = 0;
     private volatile short drawImgY         = 0;
-    private volatile byte drawImgW          = 0;
-    private volatile byte drawImgH          = 0;
+    private volatile short drawImgW         = 0;
+    private volatile short drawImgH         = 0;
     private volatile short positionInTileX  = 0;
     private volatile short positionInTileY  = 0;
     private volatile double distanceX       = 0;
     private volatile double distanceY       = 0;
-    private volatile byte spriteYCenter     = 0;
 
     /**
      * Frog constructor
@@ -65,18 +64,112 @@ public class Frog extends SpriteImpl {
         this.animalTiles        = (BufferedImage)LoadingStuffs.getInstance().getStuff("animalTiles");
         this.froggerDeadTiles   = (BufferedImage)LoadingStuffs.getInstance().getStuff("froggerDeadTiles");
         
-        /*try {
-            this.animalTiles = ImageIO.read(new File("images\\animals2.png"));
-            this.froggerDeadTiles = ImageIO.read(new File("images\\froggerdead.png"));
-        } catch (java.io.IOException e) {
-            e.printStackTrace();
-        }*/
-
+        //filter key
         this.keyMap = new HashMap<Integer, Byte>();
         keyMap.put(39, RIGHT);
         keyMap.put(37, LEFT);
         keyMap.put(38, UP);
         keyMap.put(40, DOWN);
+    }
+
+    /**
+     * Initiate the frog status
+     */
+    public void frogReset() {
+        //initial tile status
+        this.height             = 25;
+        this.width              = 32;
+
+        this.positionInTileX    = INITIAL_T_POS_X;
+        this.positionInTileY    = INITIAL_T_POS_Y;
+        this.direction          = UP;
+
+        //calc the distance between the entire tile and the sprite
+        this.offsetLeft         = (byte)((this.tileX - this.width) / 2);
+        this.offsetTop          = (byte)((this.tileY - this.height) / 2);
+
+        //calc the pixel position of the sprite while animating       
+        this.positionX          = (short)((this.positionInTileX * this.tileX) + this.offsetLeft);
+        this.positionY          = (short)((this.positionInTileY * this.tileY) + this.offsetTop);
+
+        //calc the pixel position of the sprite
+        this.destPositionX      = (short)this.positionX;
+        this.destPositionY      = (short)this.positionY;
+
+        //initial frog status
+        //draw image represent the position X, Y, W, H in the tile.
+        this.drawImgX           = 131;
+        this.drawImgY           = 3;
+        this.drawImgW           = 32;
+        this.drawImgH           = 25;
+
+        //in the begining frog can move
+        this.canMove            = true;
+    }
+
+    /**
+     * Control the frog lives
+     */
+    public void resetLives() {
+        this.lives = 3;
+    }
+
+    /**
+     * 
+     * @param keycode
+     */
+    public synchronized void move(int keycode) {
+        //just if the frog can move
+        if (this.canMove) {
+        
+            //filter the pressed keys
+            if (keyMap.get(keycode) != null) {
+                execute(keyMap.get(keycode));
+            }
+        }
+    }
+    
+    /**
+     * Perform the moviment of the frog
+     * @param direction
+     */
+    public synchronized void execute(byte direction) {
+        
+        if (direction == RIGHT) {
+            if (this.positionInTileX < 20) {
+                this.positionInTileX++;
+                this.height         = 32;
+                this.width          = 25;
+            }
+        } else if (direction == LEFT) {
+            if (this.positionInTileX > 0) {
+                this.positionInTileX--;
+                this.height         = 32;
+                this.width          = 25;
+            }
+        } else if (direction == UP) {
+            if (this.positionInTileY > 0) {
+                this.positionInTileY--;
+                this.height     = 25;
+                this.width      = 32;
+            }
+        } else if (direction == DOWN) {
+            if (this.positionInTileY < 12) {
+                this.positionInTileY++;
+                this.height     = 25;
+                this.width      = 32;
+            }
+        }
+
+        this.direction      = direction;
+        this.offsetLeft     = (byte)((this.tileX - this.width) / 2);
+        this.offsetTop      = (byte)((this.tileY - this.height) / 2);
+        this.destPositionX  = (short)((this.positionInTileX * this.tileX) + this.offsetLeft);
+        this.destPositionY  = (short)((this.positionInTileY * this.tileY) + this.offsetTop);
+        this.distanceX      = Math.abs((double)(this.destPositionX - this.positionX));
+        this.distanceY      = Math.abs((double)(this.destPositionY - this.positionY));
+        this.canMove        = false;
+        this.animating      = true;
     }
 
     /**
@@ -87,182 +180,123 @@ public class Frog extends SpriteImpl {
     }
 
     /**
-     * 
-     * @param keycode
+     * Calc the PositionInTile (X and Y) while the frog is moving without control (in the river flow)
      */
-    public synchronized void move(int keycode) {
-        if (this.canMove) {
-            if (keyMap.get(keycode) != null) {
-                execute(keyMap.get(keycode));
-            }
-        }
+    private void updateFrogPositionInTile() {
+        //TODO:
     }
 
     /**
-     * Perform the moviment of the frog
-     * @param direction
+     * Update the frog status
      */
-    public synchronized void execute(byte direction) {
-
-        if (direction == RIGHT) {
-            if (this.positionInTileX < 20) {
-                this.positionInTileX++;
-            }
-        } else if (direction == LEFT) {
-            if (this.positionInTileX > 0) {
-                this.positionInTileX--;
-            }
-        } else if (direction == UP) {
-            if (this.positionInTileY > 0) {
-                this.positionInTileY--;
-            }
-        } else if (direction == DOWN) {
-            if (this.positionInTileY < 12) {
-                this.positionInTileY++;
-            }
-        }
-
-        this.positionX  = (short)((this.positionInTileX * this.tileX) + this.offsetLeft);
-        this.positionY  = (short)((this.positionInTileY * this.tileY) + this.offsetTop);
-        this.direction  = direction;
-        this.distanceX = Math.abs((double)(this.inBetweenX - this.positionX));
-        this.distanceY = Math.abs((double)(this.inBetweenY - this.positionY));
-        this.canMove    = false;
-        this.animating  = true;
-    }
-
     @Override
-    public void draw(long frametime) {     
-
-        if (this.isDead) {
-            short dx1 = (short)(this.positionX);// - ((this.drawImgW - this.width) / 2));
-            short dy1 = (short)(this.positionY - ((this.drawImgH - this.height) / 2) + spriteYCenter);
-            short dx2 = (short)(dx1 + this.drawImgW);
-            short dy2 = (short)(dy1 + this.drawImgH);
-
-            this.g2d.drawImage(this.froggerDeadTiles, dx1, dy1, dx2, dy2, //dest w1, h1, w2, h2
-                                                      drawImgX, drawImgY, drawImgX + drawImgW, drawImgY + drawImgH, //source w1, h1, w2, h2
-                                                      null);
-        } else {
-            short dx1 = (short)(this.inBetweenX);
-            short dy1 = (short)(this.inBetweenY + spriteYCenter);
-            short dx2 = (short)(dx1 + this.width);
-            short dy2 = (short)(dy1 + this.height);
-            this.g2d.drawImage(this.animalTiles, dx1, dy1, dx2, dy2, //dest w1, h1, w2, h2
-                                                 drawImgX, drawImgY, drawImgX + drawImgW, drawImgY + drawImgH, //source w1, h1, w2, h2
-                                                 null);
-        }
-    }
-
-    @Override
-    /**
-     * Update the frog
-     */
     public void update(long frametime) {
-        //just if the frog is animating
+        
+        //while the frog is animating (moving inbetween)
         if (this.animating) {
 
             //calc frog step for each cicle
             double step = frogVelocity / (1_000_000_000D / (double)frametime);
 
-            //switch the directin
             switch(this.direction) {
-                case UP:
-                    //calc the new Y
-                    this.inBetweenY    -= step;
+                case UP: //animate foward position
+                    
+                //calc the new Y adding the new step distance
+                    this.positionY     -= step;
                     
                     //update images position static-values
-                    this.spriteYCenter  = 0;
+                    this.width          = 32;
+                    this.height         = 36;
+                    this.drawImgW       = this.width;
+                    this.drawImgH       = this.height;
                     this.drawImgX       = 131;
-                    this.drawImgW       = 32;
-                    this.width          = 32;
-                    this.drawImgH       = 36;
-                    this.height         = 36;
-                    this.drawImgY       = ((double)(this.inBetweenY - this.positionY) <= (0.25 * distanceY))?(short)68:(short)31;
-                    
+                    this.drawImgY       = ((double)(this.positionY - this.destPositionY) <= (0.35 * this.distanceY))?(short)68:(short)31;
+
                     //compare to verify if frog reach the target position
-                    if ((short)(this.inBetweenY - step) <= this.positionY) {                      
-                        this.inBetweenY = this.positionY;
+                    if (this.positionY <= this.destPositionY) {                      
+                        this.positionY  = this.destPositionY;
+                        this.positionX  = this.destPositionX;
                         this.animating  = false;
                         this.canMove    = true;
-                        this.drawImgY   = 3;
-                        this.drawImgH   = 25;
                         this.height     = 25;
+                        this.drawImgY   = 3;
+                        this.drawImgH   = this.height;
                     }
                     break;
-                case DOWN:
+                case DOWN: //animate backward position
                     //calc the new Y
-                    this.inBetweenY += step;
+                    this.positionY     += step;
                     
                     //update images position static-values
-                    this.spriteYCenter  = 0;
-                    this.drawImgX       = 164;
-                    this.drawImgW       = 32;
                     this.width          = 32;
-                    this.drawImgH       = 36;
                     this.height         = 36;
-                    this.drawImgY       = ((double)(this.positionY - this.inBetweenY) <= (0.25 * distanceY))?(short)68:(short)31;
+                    this.drawImgW       = this.width;
+                    this.drawImgH       = this.height;
+                    this.drawImgX       = 164;
+                    this.drawImgY       = ((double)(this.destPositionY - this.positionY) <= (0.35 * this.distanceY))?(short)68:(short)31;
 
                     //compare to verify if frog reach the target position
-                    if ((short)(this.inBetweenY + step) >= this.positionY) {
-                        this.inBetweenY = this.positionY;
+                    if (this.positionY >= this.destPositionY) {
+                        this.positionY  = this.destPositionY;
+                        this.positionX  = this.destPositionX;
                         this.animating  = false;
                         this.canMove    = true;
-                        this.drawImgY   = 3;
-                        this.drawImgH   = 25;
                         this.height     = 25;
+                        this.drawImgY   = 3;
+                        this.drawImgH   = this.height;
                     }
                     break;
-                case LEFT:
+                case LEFT: //animate going left position
                     //calc the new X
-                    this.inBetweenX    -= step;
+                    this.positionX     -= step;
 
                     //update images position static-values
-                    this.spriteYCenter  = -3;
-                    this.drawImgX       = 197;
-                    this.drawImgH       = 32;
                     this.height         = 32;
-                    this.drawImgW       = 36;
                     this.width          = 36;
-                    this.drawImgY       = ((double)(this.inBetweenX - this.positionX) <= (0.25 * distanceX))?(short)70:(short)33;
+                    this.drawImgH       = this.height;
+                    this.drawImgW       = this.width;
+                    this.drawImgX       = 197;
+                    this.drawImgY       = ((double)(this.positionX - this.destPositionX) <= (0.35 * this.distanceX))?(short)70:(short)33;
 
                     //compare to verify if frog reach the target position
-                    if ((short)(this.inBetweenX - step) <= this.positionX) {
-                        this.inBetweenX = this.positionX;
+                    if (this.positionX <= this.destPositionX) {
+                        this.positionX  = this.destPositionX;
+                        this.positionY  = this.destPositionY;
                         this.animating  = false;
                         this.canMove    = true;
-                        this.drawImgY   = 0;
-                        this.drawImgW   = 25;
                         this.width      = 25;
+                        this.drawImgY   = 0;
+                        this.drawImgW   = this.width;
                     }
                     break;
-                case RIGHT:
+                case RIGHT: //animate going right position
                     //calc the new X
-                    this.inBetweenX += step;
+                    this.positionX     += step;
 
                     //update images position dynamic-values
-                    this.spriteYCenter  = -3;
-                    this.drawImgH       = 32;
                     this.height         = 32;
-                    this.drawImgX       = 234;
-                    this.drawImgW       = 36;
                     this.width          = 36;
-                    this.drawImgY       = ((double)(this.positionX - this.inBetweenX) <= (0.25 * distanceX))?(short)70:(short)33;
-
+                    this.drawImgH       = this.height;
+                    this.drawImgW       = this.width;
+                    this.drawImgX       = 234;
+                    this.drawImgY       = ((double)(this.destPositionX - this.positionX) <= (0.35 * this.distanceX))?(short)70:(short)33;
+                    
                     //compare to verify if frog reach the target position
-                    if ((short)(this.inBetweenX + step) >= this.positionX) {
-                        this.inBetweenX = this.positionX;
+                    if (this.positionX >= this.destPositionX) {
+                        this.positionX  = this.destPositionX;
+                        this.positionY  = this.destPositionY;
                         this.animating  = false;
                         this.canMove    = true;
+                        this.width      = 25;
                         this.drawImgX   = 245;
                         this.drawImgY   = 0;
-                        this.drawImgW   = 25;
-                        this.width      = 25;
+                        this.drawImgW   = this.width;
                     }
                     break;
             }
         }
 
+        //colision detection or dead animation
         int coliding = -1;
         if (!this.isDead) {
             //this line test the colisions only with the cars, in the lanes.
@@ -276,74 +310,78 @@ public class Frog extends SpriteImpl {
             } else if (this.positionY > Lanes.riverLanes[0]) {
                 coliding = this.scenario.getTrunks().testColision(this);
                 if (coliding != -1) {
+                    //  TODO:
                     //this.inBetweenX += 0.01;
                     System.out.println("aaaaaaaaaaa");
                 }
             }
-            
             this.animationCounter = 0;
-        } else {
+        } else { 
+            //The frog is dead... Define the dead animation parameters...
             this.animationCounter += frametime;
-            if (this.animationCounter < 250_000_000) {
-                this.drawImgX   = 1;
-                this.drawImgY   = 5;
-                this.drawImgW   = 45;
-                this.drawImgH   = 48;
-            } else if (this.animationCounter < 500_000_000) {
-                this.drawImgX   = 72;
-                this.drawImgY   = 2;
-                this.drawImgW   = 54;
-                this.drawImgH   = 56;
-            } else if (this.animationCounter < 750_000_000) {
-                this.drawImgX   = 148;
-                this.drawImgY   = 0;
-                this.drawImgW   = 61;
-                this.drawImgH   = 58;
-            } else if (this.animationCounter < 1_000_000_000) {
-                this.drawImgX   = 228;
-                this.drawImgY   = 0;
-                this.drawImgW   = 56;
-                this.drawImgH   = 58;
-            } else {
-                this.animationCounter = 0;
-                this.isDead = false;
-                this.lives--; //TODO: CONTROL THE LIVES
-                this.frogReset();
-            }
+            this.setDeadAnimationFrame();
         }
     }
 
-    public void resetLives() {
-        this.lives = 3;
+    /**
+     * Draw the frog in screen
+     */
+    @Override
+    public void draw(long frametime) {     
+
+        if (this.isDead) {
+            short dx1 = (short)(this.positionX - ((this.drawImgW - this.width) / 2));
+            short dy1 = (short)(this.positionY - ((this.drawImgH - this.height) / 2));
+            short dx2 = (short)(dx1 + this.drawImgW);
+            short dy2 = (short)(dy1 + this.drawImgH);
+            this.g2d.drawImage(this.froggerDeadTiles, dx1, dy1, dx2, dy2, //dest w1, h1, w2, h2
+                                                      drawImgX, drawImgY, (drawImgX + drawImgW), (drawImgY + drawImgH), //source w1, h1, w2, h2
+                                                      null);
+        } else {
+            short dx1 = (short)(this.positionX);
+            short dy1 = (short)(this.positionY);
+            short dx2 = (short)(dx1 + this.width);
+            short dy2 = (short)(dy1 + this.height);
+            this.g2d.drawImage(this.animalTiles, dx1, dy1, dx2, dy2,                                                //dest w1, h1, w2, h2
+                                                 drawImgX, drawImgY, (drawImgX + drawImgW), (drawImgY + drawImgH),  //source w1, h1, w2, h2
+                                                 null);
+        }
     }
 
-    public void frogReset() {
-        //initial tile status
-        this.height     = 25;
-        this.width      = 32;
-
-        this.positionInTileX = INITIAL_T_POS_X;
-        this.positionInTileY = INITIAL_T_POS_Y;
-        this.direction = UP;
-
-        //calc the distance between the entire tile and the sprite
-        this.offsetLeft = (byte)((this.tileX - this.width) / 2);
-        this.offsetTop  = (byte)((this.tileY - this.height) / 2);
-
-        //calc the pixel position of the sprite while animating       
-        this.inBetweenX = (short)((this.positionInTileX * this.tileX) + this.offsetLeft);
-        this.inBetweenY = (short)((this.positionInTileY * this.tileY) + this.offsetTop);
-
-        //calc the pixel position of the sprite
-        this.positionX = (short)this.inBetweenX;
-        this.positionY = (short)this.inBetweenY;
-
-        //initial frog status
-        this.drawImgX   = 131;
-        this.drawImgY   = 3;
-        this.drawImgW   = 32;
-        this.drawImgH   = 25;
-
-        this.canMove = true;
+    /**
+     * Control frog dead animation
+     */
+    private void setDeadAnimationFrame() {
+        if (this.animationCounter < 250_000_000) {
+            //get the dead frame 1
+            this.drawImgX   = 1;
+            this.drawImgY   = 5;
+            this.drawImgW   = 45;
+            this.drawImgH   = 48;
+        } else if (this.animationCounter < 500_000_000) {
+            //get the dead frame 2
+            this.drawImgX   = 72;
+            this.drawImgY   = 2;
+            this.drawImgW   = 54;
+            this.drawImgH   = 56;
+        } else if (this.animationCounter < 750_000_000) {
+            //get the dead frame 3
+            this.drawImgX   = 148;
+            this.drawImgY   = 0;
+            this.drawImgW   = 61;
+            this.drawImgH   = 58;
+        } else if (this.animationCounter < 1_000_000_000) {
+            //get the dead frame 4
+            this.drawImgX   = 228;
+            this.drawImgY   = 0;
+            this.drawImgW   = 56;
+            this.drawImgH   = 58;
+        } else {
+            //reset the animation
+            this.animationCounter = 0;
+            this.isDead     = false;
+            this.lives--;
+            this.frogReset();
+        }
     }
 }
