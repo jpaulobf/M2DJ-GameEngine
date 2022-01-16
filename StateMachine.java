@@ -1,4 +1,4 @@
-import interfaces.Game;
+import contracts.Game;
 
 public class StateMachine {
     

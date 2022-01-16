@@ -2,7 +2,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
-import interfaces.Lanes;
+
+import contracts.Lanes;
 
 /*
     WTCD: This class represents the frog sprite
@@ -293,11 +294,17 @@ public class Frog extends SpriteImpl {
                     this.isDead     = true;
                     this.animating  = false;
                 }
-            } else if (this.positionY >= Lanes.riverLanes[0]) {
+            } else if (this.positionY >= Lanes.riverLanes[0] && this.positionY < (Lanes.riverLanes[4] + this.tileY)) {
                 coliding = this.scenario.getTrunks().testColision(this);
                 if (coliding != -1) {
                     if (!this.animating) {
                         this.positionX += (this.scenario.getTrunks().getTrunkMovementStep(coliding) / 1_000);
+                    }
+                } else {
+                    if (!animating) {
+                        this.canMove    = false;
+                        this.isDead     = true;
+                        this.animating  = false;
                     }
                 }
             }

@@ -1,4 +1,4 @@
-package interfaces;
+package contracts;
 
 import java.awt.geom.Rectangle2D;
 

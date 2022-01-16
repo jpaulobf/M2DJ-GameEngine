@@ -1,8 +1,9 @@
 import java.awt.Graphics2D;
-import interfaces.Lanes;
-import interfaces.Sprite;
-import interfaces.SpriteCollection;
-import interfaces.Stages;
+
+import contracts.Lanes;
+import contracts.Sprite;
+import contracts.SpriteCollection;
+import contracts.Stages;
 
 /**
  * Class representing a collection of vehicle

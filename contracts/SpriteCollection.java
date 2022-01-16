@@ -1,4 +1,4 @@
-package interfaces;
+package contracts;
 
 public abstract class SpriteCollection implements Directions {
 

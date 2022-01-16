@@ -1,8 +1,9 @@
 import java.awt.Graphics2D;
-import interfaces.Lanes;
-import interfaces.Sprite;
-import interfaces.SpriteCollection;
-import interfaces.Stages;
+
+import contracts.Lanes;
+import contracts.Sprite;
+import contracts.SpriteCollection;
+import contracts.Stages;
 
 /**
  * Class representing the collection of trunks in each stage.
@@ -110,7 +111,30 @@ public class Trunks extends SpriteCollection {
                         offsetTrunks[indexLines].positionX = far;
                     }
                 } else {
-                    //TODO:
+                    if ((calcPos < 0) && calcPos > (-width * 1_000)) {
+
+                        //define the necessary offset sprite parameters
+                        offsetTrunks[indexLines].type       = trunks[index].type;
+                        offsetTrunks[indexLines].direction  = direction;
+
+                        //test if the position is "far" (first time), in this case, utilises the width of the trunk (reverse)
+                        //otherwise, sum the current position to the next distance step
+                        if (offsetTrunks[indexLines].positionX == far) {
+                            offsetPosX[indexLines] = (this.windowWidth) * 1_000;
+                        } else {
+                            offsetPosX[indexLines] = (offsetPosX[indexLines] + stepDir);
+                        }
+
+                        //set the offset trunk parameters
+                        offsetTrunks[indexLines].positionX   = (short)(offsetPosX[indexLines]/1_000);
+                        offsetTrunks[indexLines].positionY   = (short)Lanes.riverLanes[i];
+                        offsetTrunks[indexLines].currentStep = stepDir;
+                        offsetTrunks[indexLines].update(frametime);
+
+                    } else if (calcPos < (-width * 1_000)) {
+                        calcPos = ((this.windowWidth - width) * 1_000);
+                        offsetTrunks[indexLines].positionX = far;
+                    }
                 }
 
                 //store the new X position in the array
