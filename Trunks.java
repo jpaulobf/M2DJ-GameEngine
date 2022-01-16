@@ -1,9 +1,9 @@
 import java.awt.Graphics2D;
 
-import contracts.Lanes;
-import contracts.Sprite;
-import contracts.SpriteCollection;
-import contracts.Stages;
+import interfaces.Lanes;
+import interfaces.Sprite;
+import interfaces.SpriteCollection;
+import interfaces.Stages;
 
 /**
  * Class representing the collection of trunks in each stage.
@@ -69,15 +69,17 @@ public class Trunks extends SpriteCollection {
             for (int j = 1; j < Stages.S1_TRUNKS[i].length; j++, index++) {
 
                 //read & set the trunk parameters
-                trunks[index].type          = (byte)Stages.S1_TRUNKS[i][j][0];
-                short width                 = trunks[index].getWidth();
-                byte direction              = (byte)Stages.S1_TRUNKS[i][0][0];
-                double position             = Stages.S1_TRUNKS[i][j][1];
-                short velocity              = (short)Stages.S1_TRUNKS[i][j][2];
-                double step                 = (double)velocity / (double)(1_000_000D / (double)frametime);
-                double stepDir              = step * direction;
-                double calcPos              = position + stepDir;
-                trunks[index].currentStep   = stepDir;
+                trunks[index].type              = (byte)Stages.S1_TRUNKS[i][j][0];
+                short width                     = trunks[index].getWidth();
+                int width1000                   = width * 1_000;
+                int windowWidthLessWidth1000    = ((this.windowWidth - width) * 1_000);
+                byte direction                  = (byte)Stages.S1_TRUNKS[i][0][0];
+                double position                 = Stages.S1_TRUNKS[i][j][1];
+                short velocity                  = (short)Stages.S1_TRUNKS[i][j][2];
+                double step                     = (double)velocity / (double)(1_000_000D / (double)frametime);
+                double stepDir                  = step * direction;
+                double calcPos                  = position + stepDir;
+                trunks[index].currentStep       = stepDir;
 
                 //update the trunk
                 trunks[index].update(frametime);
@@ -85,55 +87,56 @@ public class Trunks extends SpriteCollection {
                 if (direction == RIGHT) {
                     //if the trunk touch the left side of the screen 
                     //we need to create another offset trunk to represent the loop
-                    if (calcPos > ((this.windowWidth - width) * 1_000) && (calcPos < windowWidth1000)) {
+                    if (calcPos > (windowWidthLessWidth1000) && (calcPos < this.windowWidth1000)) {
                         //define the necessary offset sprite parameters
-                        offsetTrunks[indexLines].type       = trunks[index].type;
-                        offsetTrunks[indexLines].direction  = direction;
+                        this.offsetTrunks[indexLines].type       = this.trunks[index].type;
+                        this.offsetTrunks[indexLines].direction  = direction;
                         
                         //test if the position is "far" (first time), in this case, utilises the width of the trunk (reverse)
                         //otherwise, sum the current position to the next distance step
-                        if (offsetTrunks[indexLines].positionX == far) {
-                            offsetPosX[indexLines] = (-width) * 1_000;
+                        if (this.offsetTrunks[indexLines].positionX == this.far) {
+                            this.offsetPosX[indexLines] = -width1000;
                         } else {
-                            offsetPosX[indexLines] = (offsetPosX[indexLines] + stepDir);
+                            this.offsetPosX[indexLines] = (this.offsetPosX[indexLines] + stepDir);
                         }
 
                         //set the offset trunk parameters
-                        offsetTrunks[indexLines].positionX   = (short)(offsetPosX[indexLines]/1_000);
-                        offsetTrunks[indexLines].positionY   = (short)Lanes.riverLanes[i];
-                        offsetTrunks[indexLines].currentStep = stepDir;
-                        offsetTrunks[indexLines].update(frametime);
+                        this.offsetTrunks[indexLines].positionX   = (short)(this.offsetPosX[indexLines]/1_000);
+                        this.offsetTrunks[indexLines].positionY   = (short)Lanes.riverLanes[i];
+                        this.offsetTrunks[indexLines].currentStep = stepDir;
+                        this.offsetTrunks[indexLines].update(frametime);
 
                     //when the trunk surpass the entire screen
                     //hide the offset trunk (back it to "far"), and set the main trunk back to the begining (calcPos = 0)
-                    } else if (calcPos > windowWidth1000) {
+                    } else if (calcPos > this.windowWidth1000) {
                         calcPos = 0;
-                        offsetTrunks[indexLines].positionX = far;
+                    } else if (calcPos > 0 && calcPos < 5_000) {
+                        this.offsetTrunks[indexLines].positionX = this.far;
                     }
                 } else {
-                    if ((calcPos < 0) && calcPos > (-width * 1_000)) {
-
+                    if ((calcPos < 0) && calcPos > (-width1000)) {
                         //define the necessary offset sprite parameters
-                        offsetTrunks[indexLines].type       = trunks[index].type;
-                        offsetTrunks[indexLines].direction  = direction;
+                        this.offsetTrunks[indexLines].type       = this.trunks[index].type;
+                        this.offsetTrunks[indexLines].direction  = direction;
 
                         //test if the position is "far" (first time), in this case, utilises the width of the trunk (reverse)
                         //otherwise, sum the current position to the next distance step
-                        if (offsetTrunks[indexLines].positionX == far) {
-                            offsetPosX[indexLines] = (this.windowWidth) * 1_000;
+                        if (this.offsetTrunks[indexLines].positionX == this.far) {
+                            this.offsetPosX[indexLines] = this.windowWidth1000;
                         } else {
-                            offsetPosX[indexLines] = (offsetPosX[indexLines] + stepDir);
+                           this.offsetPosX[indexLines] = (this.offsetPosX[indexLines] + stepDir);
                         }
 
                         //set the offset trunk parameters
-                        offsetTrunks[indexLines].positionX   = (short)(offsetPosX[indexLines]/1_000);
-                        offsetTrunks[indexLines].positionY   = (short)Lanes.riverLanes[i];
-                        offsetTrunks[indexLines].currentStep = stepDir;
-                        offsetTrunks[indexLines].update(frametime);
+                        this.offsetTrunks[indexLines].positionX   = (short)(this.offsetPosX[indexLines]/1_000);
+                        this.offsetTrunks[indexLines].positionY   = (short)Lanes.riverLanes[i];
+                        this.offsetTrunks[indexLines].currentStep = stepDir;
+                        this.offsetTrunks[indexLines].update(frametime);
 
-                    } else if (calcPos < (-width * 1_000)) {
-                        calcPos = ((this.windowWidth - width) * 1_000);
-                        offsetTrunks[indexLines].positionX = far;
+                    } else if (calcPos < (-width1000)) {
+                        calcPos = windowWidthLessWidth1000;
+                    } else if (calcPos < windowWidthLessWidth1000 && calcPos > windowWidthLessWidth1000 - 5_000) {
+                        this.offsetTrunks[indexLines].positionX = this.far;
                     }
                 }
 
@@ -141,9 +144,9 @@ public class Trunks extends SpriteCollection {
                 Stages.S1_TRUNKS[i][j][1]   = (int)Math.round(calcPos);
 
                 //set the trunk parameters
-                trunks[index].direction         = direction;
-                trunks[index].positionX         = (short)(position/1_000);
-                trunks[index].positionY       = (short)Lanes.riverLanes[i]; //incrementa o index ao final
+                this.trunks[index].direction    = direction;
+                this.trunks[index].positionX    = (short)(position/1_000);
+                this.trunks[index].positionY    = (short)Lanes.riverLanes[i]; //incrementa o index ao final
             }
 
             if (Stages.S1_TRUNKS[i].length > 0) {
