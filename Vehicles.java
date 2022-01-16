@@ -44,11 +44,11 @@ public class Vehicles extends SpriteCollection {
         byte index      = 0;
 
         for (int i = 0; i < Stages.S1_CARS.length; i++) {
-            for (int j = 0; j < Stages.S1_CARS[i].length; j++) {
+            for (int j = 1; j < Stages.S1_CARS[i].length; j++) {
 
-                direction   = (byte)Stages.S1_CARS[i][j][1];
-                position    = Stages.S1_CARS[i][j][2];
-                velocity    = (short)Stages.S1_CARS[i][j][3];
+                direction   = (byte)Stages.S1_CARS[i][0][0];
+                position    = Stages.S1_CARS[i][j][1];
+                velocity    = (short)Stages.S1_CARS[i][j][2];
                 step        = (double)velocity / (double)(1_000_000D / (double)frametime);
                 calcPos     = position + (step * direction);
 
@@ -62,7 +62,7 @@ public class Vehicles extends SpriteCollection {
                     }
                 }
                 //atualiza a posição do objeto na array
-                Stages.S1_CARS[i][j][2]        = (int)Math.round(calcPos);
+                Stages.S1_CARS[i][j][1]        = (int)Math.round(calcPos);
 
                 //recupera e atualiza cada veículo
                 vehicles[index].type         = (byte)Stages.S1_CARS[i][j][0];
@@ -82,8 +82,8 @@ public class Vehicles extends SpriteCollection {
     public void draw(long frametime) {
         int index = 0;
         for (byte i = 0; i < Stages.S1_CARS.length; i++) {
-            for (byte j = 0; j < Stages.S1_CARS[i].length; j++) {
-                this.vehicles[index++].draw(frametime);
+            for (byte j = 1; j < Stages.S1_CARS[i].length; j++, index++) {
+                this.vehicles[index].draw(frametime);
             }
         }
     }
