@@ -2,7 +2,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
-
 import interfaces.Lanes;
 
 /*
@@ -41,6 +40,9 @@ public class Frog extends SpriteImpl {
     private volatile short positionInTileY  = 0;
     private volatile double distanceX       = 0;
     private volatile double distanceY       = 0;
+    private volatile byte jumpX             = 0;
+    private volatile byte jumpY             = 0;
+    private volatile byte lastMovement      = -100;
 
     /**
      * Frog constructor
@@ -115,75 +117,59 @@ public class Frog extends SpriteImpl {
     }
 
     /**
-     * 
+     * Move the frog
      * @param keycode
      */
     public synchronized void move(int keycode) {
         //just if the frog can move
         if (this.canMove) {
-        
+
             //filter the pressed keys
             if (keyMap.get(keycode) != null) {
-                execute(keyMap.get(keycode));
+                byte direction          = keyMap.get(keycode);
+                this.jumpY              = 0;
+                this.jumpX              = 0;
+                byte offsetYCorrection  = 3; //in pixels ((32 - 25) / 2)
+                
+                if (direction == RIGHT) {
+                    this.jumpX = this.tileX;
+                    if (this.lastMovement == UP || this.lastMovement == DOWN) {
+                        this.positionY -= offsetYCorrection;
+                    }
+                } else if (direction == LEFT) {
+                    this.jumpX = (byte)-this.tileX;
+                    if (this.lastMovement == UP || this.lastMovement == DOWN) {
+                        this.positionY -= offsetYCorrection;
+                    }
+                } else if (direction == UP) {
+                    this.jumpY = (byte)-this.tileY;
+                    if (this.lastMovement == LEFT || this.lastMovement == RIGHT) {
+                        this.positionY += offsetYCorrection;
+                    }
+                } else if (direction == DOWN) {
+                    this.jumpY = this.tileY;
+                    if (this.lastMovement == LEFT || this.lastMovement == RIGHT) {
+                        this.positionY += offsetYCorrection;
+                    }
+                }
+
+                this.direction      = direction;
+                this.destPositionX  = (short)(this.positionX + this.jumpX);
+                this.destPositionY  = (short)(this.positionY + this.jumpY);
+                this.distanceX      = Math.abs((double)(this.destPositionX - this.positionX));
+                this.distanceY      = Math.abs((double)(this.destPositionY - this.positionY));
+                this.canMove        = false;
+                this.animating      = true;
+                this.lastMovement   = direction;
             }
         }
     }
     
     /**
-     * Perform the moviment of the frog
-     * @param direction
-     */
-    public synchronized void execute(byte direction) {
-        
-        if (direction == RIGHT) {
-            if (this.positionInTileX < 20) {
-                this.positionInTileX++;
-                this.height         = 32;
-                this.width          = 25;
-            }
-        } else if (direction == LEFT) {
-            if (this.positionInTileX > 0) {
-                this.positionInTileX--;
-                this.height         = 32;
-                this.width          = 25;
-            }
-        } else if (direction == UP) {
-            if (this.positionInTileY > 0) {
-                this.positionInTileY--;
-                this.height     = 25;
-                this.width      = 32;
-            }
-        } else if (direction == DOWN) {
-            if (this.positionInTileY < 12) {
-                this.positionInTileY++;
-                this.height     = 25;
-                this.width      = 32;
-            }
-        }
-
-        this.direction      = direction;
-        this.offsetLeft     = (byte)((this.tileX - this.width) / 2);
-        this.offsetTop      = (byte)((this.tileY - this.height) / 2);
-        this.destPositionX  = (short)((this.positionInTileX * this.tileX) + this.offsetLeft);
-        this.destPositionY  = (short)((this.positionInTileY * this.tileY) + this.offsetTop);
-        this.distanceX      = Math.abs((double)(this.destPositionX - this.positionX));
-        this.distanceY      = Math.abs((double)(this.destPositionY - this.positionY));
-        this.canMove        = false;
-        this.animating      = true;
-    }
-
-    /**
      * Get the remained lives from the frog 
     */
     public byte getLives() {
         return lives;
-    }
-
-    /**
-     * Calc the PositionInTile (X and Y) while the frog is moving without control (in the river flow)
-     */
-    private void updateFrogPositionInTile() {
-        this.positionInTileX = (short)(Math.floor(this.positionX / (double)this.tileX));
     }
 
     /**
@@ -310,8 +296,9 @@ public class Frog extends SpriteImpl {
             } else if (this.positionY >= Lanes.riverLanes[0]) {
                 coliding = this.scenario.getTrunks().testColision(this);
                 if (coliding != -1) {
-                    this.positionX += (this.scenario.getTrunks().getTrunkMovementStep(coliding) / 1_000);
-                    this.updateFrogPositionInTile();
+                    if (!this.animating) {
+                        this.positionX += (this.scenario.getTrunks().getTrunkMovementStep(coliding) / 1_000);
+                    }
                 }
             }
             this.animationCounter = 0;
