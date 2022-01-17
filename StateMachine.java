@@ -1,5 +1,8 @@
-import contracts.Game;
+import interfaces.Game;
 
+/**
+ * StateMachine class - control the state of the game
+ */
 public class StateMachine {
     
     public final static int LOADING     = 0;

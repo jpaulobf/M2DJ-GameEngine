@@ -3,7 +3,7 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
-import contracts.Lanes;
+import interfaces.Lanes;
 
 /*
     WTCD: This class represents the frog sprite
@@ -284,21 +284,21 @@ public class Frog extends SpriteImpl {
         }
 
         //colision detection or dead animation
-        int coliding = -1;
+        int colliding = -1;
         if (!this.isDead) {
             //this line test the colisions only with the cars, in the lanes.
             if (this.positionY > Lanes.streetLanes[0]) {
-                coliding = this.scenario.getVehicles().testColision(this);
-                if (coliding != -1) {
+                colliding = this.scenario.getVehicles().testColision(this);
+                if (colliding != -1) {
                     this.canMove    = false;
                     this.isDead     = true;
                     this.animating  = false;
                 }
             } else if (this.positionY >= Lanes.riverLanes[0] && this.positionY < (Lanes.riverLanes[4] + this.tileY)) {
-                coliding = this.scenario.getTrunks().testColision(this);
-                if (coliding != -1) {
+                colliding = this.scenario.getTrunks().testColision(this);
+                if (colliding != -1) {
                     if (!this.animating) {
-                        this.positionX += (this.scenario.getTrunks().getTrunkMovementStep(coliding) / 1_000);
+                        this.positionX += (this.scenario.getTrunks().getTrunkMovementStep(colliding) / 1_000);
                     }
                 } else {
                     if (!animating) {

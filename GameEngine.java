@@ -1,4 +1,4 @@
-import contracts.Game;
+import interfaces.Game;
 
 /*
     Project:    Modern 2D Java Game Engine

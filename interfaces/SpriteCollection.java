@@ -1,4 +1,4 @@
-package contracts;
+package interfaces;
 
 public abstract class SpriteCollection implements Directions {
 
@@ -12,7 +12,7 @@ public abstract class SpriteCollection implements Directions {
         if (sprite == null) return -1;
         if (this.getSpriteCollection() != null) {
             for (int cnt = 0; cnt < this.getSpriteCollection().length; cnt++) {
-                if (this.getSpriteCollection()[cnt].isColiding(sprite)) {
+                if (this.getSpriteCollection()[cnt].isColliding(sprite)) {
                     return (cnt);
                 }
             }

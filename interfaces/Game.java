@@ -1,5 +1,8 @@
-package contracts;
+package interfaces;
 
+/**
+ * Game interface (update & draw methods)
+ */
 public interface Game {
     /**
      * Update the game logic / receives the frametime

@@ -1,5 +1,8 @@
-package contracts;
+package interfaces;
 
+/**
+ * Lanes definition
+ */
 public interface Lanes {
  
     public static final int riverLanes[] = { 80, 144, 208, 272, 336 };

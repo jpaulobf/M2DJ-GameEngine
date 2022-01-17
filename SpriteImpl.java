@@ -1,8 +1,8 @@
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
-import contracts.Directions;
-import contracts.Sprite;
+import interfaces.Directions;
+import interfaces.Sprite;
 
 /*
     WTCD: This abstract class store the common characteristics and methods of a sprite
@@ -48,7 +48,7 @@ public abstract class SpriteImpl implements Sprite, Directions {
      * @param sprite
      * @return
      */
-    public boolean isColiding(Sprite sprite) {
+    public boolean isColliding(Sprite sprite) {
         return (calcMyRect().intersects(sprite.calcMyRect()));
     }
 }
