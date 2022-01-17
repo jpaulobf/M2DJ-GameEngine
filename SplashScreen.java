@@ -172,7 +172,7 @@ public class SplashScreen extends JFrame implements Runnable {
     @Override
     public void run() {
         try {
-            Thread.sleep(1);
+            Thread.sleep(1_000);
             this.setVisible(false);
             //start the thread
             Thread thread = new Thread(new GameEngine(0, new Frogger()), "engine");
