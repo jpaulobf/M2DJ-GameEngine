@@ -315,6 +315,8 @@ public class Frog extends SpriteImpl {
                         this.animating  = false;
                     }
                 }
+            } else if (this.positionY >= Lanes.docksLanes[0] && this.positionY < (Lanes.riverLanes[0])) {
+                System.out.println("final...");
             }
             this.animationCounter = 0;
         } else { 
