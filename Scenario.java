@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.image.VolatileImage;
 import java.awt.image.BufferedImage;
 import java.awt.GraphicsEnvironment;
+import java.awt.Transparency;
 
 /*
     WTCD: This class represents the Scenario and traps of the Game
@@ -21,6 +22,7 @@ public class Scenario {
     private BufferedImage sidewalk      = null;
     private BufferedImage grass         = null;
     private BufferedImage subgrass      = null;
+    private BufferedImage frogHome      = null;
 
     //how many tiles in x and in y
     protected final byte tilesInX       = 21;
@@ -31,6 +33,10 @@ public class Scenario {
     private final byte tileY            = 64;
     protected final byte halfTileX      = (byte)(tileX / 2);
     protected final byte halfTileY      = (byte)(tileY / 2);
+
+    //docks
+    private boolean [] isInDock         = new boolean[5];
+
 
     //getters
     public Vehicles getVehicles() {
@@ -63,6 +69,19 @@ public class Scenario {
         this.vehicles       = new Vehicles(g2d, windowWidth, windowHeight);
         this.trunks         = new Trunks(g2d, windowWidth, windowHeight);
         this.drawBackgroundInBuffer();
+
+        //initialize the dockers
+        for (int i = 0; i < this.isInDock.length; i++) {
+            isInDock[i] = true;
+        }
+
+        int imagePosX = 1;
+        int imagePosY = 34;
+
+        BufferedImage animals = (BufferedImage)LoadingStuffs.getInstance().getStuff("animalTiles");
+        this.frogHome = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().createCompatibleImage(43, 45, Transparency.BITMASK);
+        this.frogHome.getGraphics().drawImage(animals, 0, 0, this.frogHome.getWidth(), this.frogHome.getHeight(), 
+                                                       imagePosX, imagePosY, imagePosX + this.frogHome.getWidth(), imagePosY + this.frogHome.getHeight(), null);
     }
 
     /**
@@ -84,6 +103,7 @@ public class Scenario {
             this.sidewalk       = (BufferedImage)LoadingStuffs.getInstance().getStuff("sidewalk");
             this.grass          = (BufferedImage)LoadingStuffs.getInstance().getStuff("grass");
             this.subgrass       = (BufferedImage)LoadingStuffs.getInstance().getStuff("subgrass");
+            this.frogHome       = (BufferedImage)LoadingStuffs.getInstance().getStuff("frogHome");
 
             //create a backbuffer image for doublebuffer
             byte lines          = (byte)(this.windowHeight / tileY);
@@ -209,6 +229,13 @@ public class Scenario {
         //After construct the bg once, copy it to the graphic device
         this.g2d.drawImage(this.bgBufferImage, 0, 0, null);
         
+        for (int cnt = 0; cnt < isInDock.length; cnt++) {
+            if (isInDock[cnt]) {
+                this.g2d.drawImage(this.frogHome, 99 + (cnt * 276), 16, 99 + (cnt * 276) + this.frogHome.getWidth(), this.frogHome.getHeight() + 16, 
+                                                  0, 0, this.frogHome.getWidth(), this.frogHome.getHeight(), null);
+            }
+        }
+
         //draw the vehicles
         this.vehicles.draw(frametime);
         this.trunks.draw(frametime);
