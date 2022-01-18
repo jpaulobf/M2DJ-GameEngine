@@ -159,9 +159,17 @@ public class Frog extends SpriteImpl {
                 this.destPositionY  = (short)(this.positionY + this.jumpY);
                 this.distanceX      = Math.abs((double)(this.destPositionX - this.positionX));
                 this.distanceY      = Math.abs((double)(this.destPositionY - this.positionY));
-                this.canMove        = false;
-                this.animating      = true;
-                this.lastMovement   = direction;
+
+                if (this.destPositionX < 0 || (this.destPositionX + this.width) > this.scenario.getWindowWidth() || 
+                    this.destPositionY < 0 || this.destPositionY > this.scenario.getWindowHeight() ) {
+                    this.animating      = false;
+                    this.canMove        = false;
+                    this.isDead         = true;
+                } else {
+                    this.canMove        = false;
+                    this.animating      = true;
+                    this.lastMovement   = direction;
+                }
             }
         }
     }

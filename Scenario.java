@@ -88,9 +88,11 @@ public class Scenario {
      * Getters
      * @return
      */
-    public byte getTileX()      {return this.tileX;}
-    public byte getTileY()      {return this.tileY;}
-    public byte getHalfTileY()  {return this.halfTileY;}
+    public byte getTileX()          {   return this.tileX;          }
+    public byte getTileY()          {   return this.tileY;          }
+    public byte getHalfTileY()      {   return this.halfTileY;      }
+    public int getWindowWidth()     {   return this.windowWidth;    }
+    public int getWindowHeight()    {   return this.windowHeight;   }
 
     /**
      * This private method construct the BG just once.
