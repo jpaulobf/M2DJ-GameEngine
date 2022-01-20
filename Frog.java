@@ -2,7 +2,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
-
 import interfaces.Lanes;
 
 /*
@@ -315,8 +314,22 @@ public class Frog extends SpriteImpl {
                         this.animating  = false;
                     }
                 }
-            } else if (this.positionY >= Lanes.docksLanes[0] && this.positionY < (Lanes.riverLanes[0])) {
-                System.out.println("final...");
+            } else if (this.positionY >= Lanes.docksLanes[0] && this.positionY < Lanes.docksLanes[1]) {
+                colliding = this.scenario.getDockers().testColision(this);
+                if (!this.scenario.getDockers().getIsInDock()[colliding]) {
+                    if (colliding != -1) {
+                        this.scenario.getDockers().setIsInDock(colliding);
+                        this.frogReset();
+                    } else {
+                        this.canMove    = false;
+                        this.isDead     = true;
+                        this.animating  = false;
+                    }
+                } else {
+                    this.canMove    = false;
+                    this.isDead     = true;
+                    this.animating  = false;
+                }
             }
             this.animationCounter = 0;
         } else { 
