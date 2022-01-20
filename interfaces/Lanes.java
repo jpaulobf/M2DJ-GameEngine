@@ -5,7 +5,7 @@ package interfaces;
  */
 public interface Lanes {
  
-    public static final int docksLanes[] = { 14 };
+    public static final int docksLanes[] = { 14, 64 };
 
     public static final int riverLanes[] = { 80, 144, 208, 272, 336 };
     //for the lane background
