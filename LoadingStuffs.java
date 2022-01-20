@@ -66,6 +66,10 @@ public class LoadingStuffs {
             stuffs.put("trunksTiles", image);
             //stuffs.put("trunksTiles", createVImage(ImageIO.read(new File("images\\trunks.png"))));
 
+            image = ImageIO.read(new File("images\\pixel.png"));
+            stuffs.put("pixel", image);
+            //stuffs.put("trunksTiles", createVImage(ImageIO.read(new File("images\\pixel.png"))));
+
             Logger.INFO("read all images...", this);
 
         } catch (java.io.IOException e) {
