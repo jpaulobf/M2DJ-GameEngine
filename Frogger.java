@@ -296,18 +296,4 @@ public class Frogger extends JFrame implements Game {
         } catch(InterruptedException ex){}
         this.bufferStrategy = super.getBufferStrategy();
     }
-
-    /*
-        Description: main method
-    */
-    /*
-    public static void main(String[] args) throws Exception {
-        //enable openGL
-        System.setProperty("sun.java2d.opengl", "True");
-
-        //start the thread
-        Thread thread = new Thread(new GameEngine(0, new Frogger()), "engine");
-        thread.setPriority(Thread.MAX_PRIORITY);
-        thread.start();
-    }*/
 }
