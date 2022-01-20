@@ -19,6 +19,7 @@ public class Scenario {
     private Graphics2D bgd2             = null;
     private Vehicles vehicles           = null;
     private Trunks trunks               = null;
+    private Dockers dockers             = null;
     private BufferedImage sidewalk      = null;
     private BufferedImage grass         = null;
     private BufferedImage subgrass      = null;
@@ -68,6 +69,7 @@ public class Scenario {
 
         this.vehicles       = new Vehicles(g2d, windowWidth, windowHeight);
         this.trunks         = new Trunks(g2d, windowWidth, windowHeight);
+        this.dockers        = new Dockers(g2d);
         this.drawBackgroundInBuffer();
 
         //initialize the dockers
@@ -241,5 +243,6 @@ public class Scenario {
         //draw the vehicles
         this.vehicles.draw(frametime);
         this.trunks.draw(frametime);
+        this.dockers.draw(frametime);
     }
 }
