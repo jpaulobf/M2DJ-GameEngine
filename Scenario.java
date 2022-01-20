@@ -35,10 +35,6 @@ public class Scenario {
     protected final byte halfTileX      = (byte)(tileX / 2);
     protected final byte halfTileY      = (byte)(tileY / 2);
 
-    //docks
-    private boolean [] isInDock         = new boolean[5];
-
-
     //getters
     public Vehicles getVehicles() {
         return (this.vehicles);
@@ -46,6 +42,10 @@ public class Scenario {
 
     public Trunks getTrunks() {
         return (this.trunks);
+    }
+
+    public Dockers getDockers() {
+        return (this.dockers);
     }
 
     /**
@@ -71,11 +71,6 @@ public class Scenario {
         this.trunks         = new Trunks(g2d, windowWidth, windowHeight);
         this.dockers        = new Dockers(g2d);
         this.drawBackgroundInBuffer();
-
-        //initialize the dockers
-        for (int i = 0; i < this.isInDock.length; i++) {
-            isInDock[i] = true;
-        }
 
         int imagePosX = 1;
         int imagePosY = 34;
@@ -233,8 +228,8 @@ public class Scenario {
         //After construct the bg once, copy it to the graphic device
         this.g2d.drawImage(this.bgBufferImage, 0, 0, null);
         
-        for (int cnt = 0; cnt < isInDock.length; cnt++) {
-            if (isInDock[cnt]) {
+        for (int cnt = 0; cnt < dockers.getIsInDock().length; cnt++) {
+            if (dockers.getIsInDock()[cnt]) {
                 this.g2d.drawImage(this.frogHome, 99 + (cnt * 276), 16, 99 + (cnt * 276) + this.frogHome.getWidth(), this.frogHome.getHeight() + 16, 
                                                   0, 0, this.frogHome.getWidth(), this.frogHome.getHeight(), null);
             }
