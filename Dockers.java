@@ -16,9 +16,9 @@ public class Dockers extends SpriteCollection {
      */
     public Dockers(Graphics2D g2d) {
         this.g2d              = g2d;
-        double [] positionX   = {72, 348, 624, 900, 1176};
+        double [] positionX   = {102, 378, 654, 930, 1206};
         double [] positionY   = {14, 14, 14, 14, 14};
-        short  [] width       = {66, 66, 66, 66, 66};
+        short  [] width       = {36, 36, 36, 36, 36};
         byte   [] height      = {50, 50, 50, 50, 50};
 
         for (int i = 0; i < dockers.length; i++) {
