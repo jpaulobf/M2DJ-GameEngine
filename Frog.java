@@ -316,10 +316,10 @@ public class Frog extends SpriteImpl {
                 }
             } else if (this.positionY >= Lanes.docksLanes[0] && this.positionY < Lanes.docksLanes[1]) {
                 colliding = this.scenario.getDockers().testColision(this);
-                if (!this.scenario.getDockers().getIsInDock()[colliding]) {
-                    if (colliding != -1) {
+                if (colliding != -1) {
+                    if (!this.scenario.getDockers().getIsInDock()[colliding]) {
                         this.scenario.getDockers().setIsInDock(colliding);
-                        this.frogReset();
+                        this.frogReset();    
                     } else {
                         this.canMove    = false;
                         this.isDead     = true;
