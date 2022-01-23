@@ -16,7 +16,7 @@ public class Vehicles extends SpriteCollection {
     protected Graphics2D g2d        = null;
 
     //define the vehicules array
-    private Vehicle [] vehicles     =  new Vehicle[12];
+    private Vehicle [] vehicles     =  new Vehicle[Stages.CURRENT_STAGE_CARS[Stages.CURRENT_STAGE]];
 
     /**
      * Load the tile image
@@ -45,13 +45,16 @@ public class Vehicles extends SpriteCollection {
         byte index      = 0;
 
         for (int i = 0; i < Stages.S1_CARS.length; i++) {
-            for (int j = 1; j < Stages.S1_CARS[i].length; j++) {
+            
+            direction            = (byte)Stages.S1_CARS[i][0][0];
+            velocity             = (short)Stages.S1_CARS[i][1][0];
 
-                direction   = (byte)Stages.S1_CARS[i][0][0];
-                position    = Stages.S1_CARS[i][j][1];
-                velocity    = (short)Stages.S1_CARS[i][j][2];
-                step        = (double)velocity / (double)(1_000_000D / (double)frametime);
-                calcPos     = position + (step * direction);
+            for (int j = 0; j < Stages.S1_CARS[i][3].length; j++) {
+
+                position             = Stages.S1_CARS[i][3][j];
+                step                 = (double)velocity / (double)(1_000_000D / (double)frametime);
+                calcPos              = position + (step * direction);
+                vehicles[index].type = (byte)Stages.S1_CARS[i][2][0];
 
                 if (direction == RIGHT) {
                     if (calcPos > (this.windowWidth * 1000) + Vehicle.largerVehicule) {
@@ -63,10 +66,9 @@ public class Vehicles extends SpriteCollection {
                     }
                 }
                 //atualiza a posição do objeto na array
-                Stages.S1_CARS[i][j][1]        = (int)Math.round(calcPos);
+                Stages.S1_CARS[i][3][j]      = (int)Math.round(calcPos);
 
                 //recupera e atualiza cada veículo
-                vehicles[index].type         = (byte)Stages.S1_CARS[i][j][0];
                 vehicles[index].direction    = direction;
                 vehicles[index].positionX    = (short)(position/1000);
                 //incrementa o index ao final
@@ -83,7 +85,7 @@ public class Vehicles extends SpriteCollection {
     public void draw(long frametime) {
         int index = 0;
         for (byte i = 0; i < Stages.S1_CARS.length; i++) {
-            for (byte j = 1; j < Stages.S1_CARS[i].length; j++, index++) {
+            for (byte j = 0; j < Stages.S1_CARS[i][3].length; j++, index++) {
                 this.vehicles[index].draw(frametime);
             }
         }
