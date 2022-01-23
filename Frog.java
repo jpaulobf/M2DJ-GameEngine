@@ -10,10 +10,10 @@ import interfaces.Lanes;
 public class Frog extends SpriteImpl {
     
     //game variable
-    private byte lives                      = 3;
+    private volatile byte lives             = 3;
     private final byte INITIAL_T_POS_X      = 10;
     private final byte INITIAL_T_POS_Y      = 12;
-    private boolean isDead                  = false;
+    private volatile boolean isDead         = false;
     private Scenario scenario               = null;
 
     //render variables
@@ -26,8 +26,8 @@ public class Frog extends SpriteImpl {
     //animation parameters
     private volatile boolean canMove        = true;
     private volatile boolean animating      = false;
-    private short distance                  = 300; //in pixel
-    private short persecond                 = 1;
+    private volatile short distance         = 300; //in pixel
+    private volatile short persecond        = 1;
     private final double frogVelocity       = (double)((double)distance / (double)persecond);
     private int animationCounter            = 0;
 
@@ -42,7 +42,7 @@ public class Frog extends SpriteImpl {
     private volatile double distanceY       = 0;
     private volatile byte jumpX             = 0;
     private volatile byte jumpY             = 0;
-    private volatile byte lastMovement      = -100;
+    private volatile byte lastMovement      = UP;
 
     /**
      * Frog constructor
@@ -107,6 +107,7 @@ public class Frog extends SpriteImpl {
 
         //in the begining frog can move
         this.canMove            = true;
+        this.lastMovement       = UP;
     }
 
     /**
