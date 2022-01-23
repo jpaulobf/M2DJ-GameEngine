@@ -1,5 +1,4 @@
 import java.awt.Graphics2D;
-
 import interfaces.Lanes;
 import interfaces.Sprite;
 import interfaces.SpriteCollection;

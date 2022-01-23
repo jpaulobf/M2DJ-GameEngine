@@ -23,6 +23,15 @@ public abstract class SpriteCollection implements Directions {
     }
 
     /**
+     * Get the last element calculated step
+     * @param element
+     * @return
+     */
+    public double getCalculatedStep(int element) {
+        return (getSpriteCollection()[element].getCalculatedStep());
+    }
+
+    /**
      * Abstract method to recover the sprite collection
      * @return
      */

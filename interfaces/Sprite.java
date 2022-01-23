@@ -10,4 +10,5 @@ public interface Sprite {
     public void draw(long frametime);
     public void update(long frametime);
     public boolean isColliding(Sprite sprite);
+    public double getCalculatedStep();
 }

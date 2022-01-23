@@ -1,6 +1,5 @@
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-
 import interfaces.Directions;
 import interfaces.Sprite;
 
@@ -10,25 +9,36 @@ import interfaces.Sprite;
 public abstract class SpriteImpl implements Sprite, Directions {
 
     //variable member values 
-    protected volatile byte type            = 0;
-    protected volatile byte direction       = LEFT;
-    protected volatile byte velocity        = 0;
-    protected volatile double positionX     = 0;
-    protected volatile double positionY     = 0;
-    protected volatile double destPositionX = 0;
-    protected volatile double destPositionY = 0;
-    protected volatile double currentStep   = 0D;
-    protected volatile short width          = 0;
-    protected volatile byte height          = 0;
-    protected volatile byte offsetTop       = 0;
-    protected volatile byte offsetLeft      = 0;
-    protected Rectangle2D rectangle         = null;
-    protected Graphics2D g2d                = null;
-
+    protected volatile byte type                = 0;
+    protected volatile byte direction           = LEFT;
+    protected volatile byte velocity            = 0;
+    protected volatile double positionX         = 0;
+    protected volatile double positionY         = 0;
+    protected volatile double destPositionX     = 0;
+    protected volatile double destPositionY     = 0;
+    protected volatile double calculatedStep    = 0D;
+    protected volatile short width              = 0;
+    protected volatile byte height              = 0;
+    protected volatile byte offsetTop           = 0;
+    protected volatile byte offsetLeft          = 0;
+    protected Rectangle2D rectangle             = null;
+    protected Graphics2D g2d                    = null;
+    
+    /**
+     * Accessor Method
+     * @return
+     */
     public short getWidth() {
         return (this.width);
     }
 
+    /**
+     * Accessor Method
+     */
+    public double getCalculatedStep() {
+        return (this.calculatedStep);
+    }
+    
     /**
      * Abstract methods
      */

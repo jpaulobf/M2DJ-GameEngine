@@ -42,20 +42,6 @@ public class Trunks extends SpriteCollection {
     }
 
     /**
-     * Get the last trunk step
-     * @param trunk
-     * @return
-     */
-    public double getTrunkMovementStep(int trunk) {
-        if (trunk > (trunks.length-1)) {
-            return (offsetTrunks[trunk-trunks.length].currentStep);
-        } else {
-            return (trunks[trunk].currentStep);
-        }
-        
-    }
-
-    /**
      * Updates the elements on the screen
      */
     @Override
@@ -80,7 +66,7 @@ public class Trunks extends SpriteCollection {
                 int width1000                   = width * 1_000;
                 int windowWidthLessWidth1000    = ((this.windowWidth - width) * 1_000);
                 double calcPos                  = position + stepDir;
-                trunks[index].currentStep       = stepDir;
+                trunks[index].calculatedStep       = stepDir;
                 trunks[index].type              = (byte)Stages.S1_TRUNKS[i][2][0];
 
                 //update the trunk
@@ -105,7 +91,7 @@ public class Trunks extends SpriteCollection {
                         //set the offset trunk parameters
                         this.offsetTrunks[indexLines].positionX   = (short)(this.offsetPosX[indexLines]/1_000);
                         this.offsetTrunks[indexLines].positionY   = (short)Lanes.riverLanes[i];
-                        this.offsetTrunks[indexLines].currentStep = stepDir;
+                        this.offsetTrunks[indexLines].calculatedStep = stepDir;
                         this.offsetTrunks[indexLines].update(frametime);
 
                     //when the trunk surpass the entire screen
@@ -132,7 +118,7 @@ public class Trunks extends SpriteCollection {
                         //set the offset trunk parameters
                         this.offsetTrunks[indexLines].positionX   = (short)(this.offsetPosX[indexLines]/1_000);
                         this.offsetTrunks[indexLines].positionY   = (short)Lanes.riverLanes[i];
-                        this.offsetTrunks[indexLines].currentStep = stepDir;
+                        this.offsetTrunks[indexLines].calculatedStep = stepDir;
                         this.offsetTrunks[indexLines].update(frametime);
 
                     } else if (calcPos < (-width1000)) {
