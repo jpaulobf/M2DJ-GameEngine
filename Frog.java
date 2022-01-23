@@ -290,6 +290,12 @@ public class Frog extends SpriteImpl {
             }
         }
 
+        if ((this.positionX + this.width) > this.scenario.getWindowWidth() || this.positionX < 0) {
+            this.canMove    = false;
+            this.isDead     = true;
+            this.animating  = false;
+        }
+
         //colision detection or dead animation
         int colliding = -1;
         if (!this.isDead) {
