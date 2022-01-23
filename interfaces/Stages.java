@@ -19,19 +19,21 @@ public interface Stages extends Directions {
     //for each lane, each car parameter
     //first array is direction of the line, then, for each car:
     //type, start-position-x, velocity
-    public static int [][][] S1_CARS        =  { { {LEFT},  {4, S1_CARS_POSITION_X[4][0], S1_CARS_VELOCITIES[4][0]}, {4, S1_CARS_POSITION_X[4][1], S1_CARS_VELOCITIES[4][0]}},
-                                                 { {RIGHT}, {3, S1_CARS_POSITION_X[3][0], S1_CARS_VELOCITIES[3][0]}  },
-                                                 { {LEFT},  {2, S1_CARS_POSITION_X[2][0], S1_CARS_VELOCITIES[2][0]}, {2, S1_CARS_POSITION_X[2][1], S1_CARS_VELOCITIES[2][0]}, {2, S1_CARS_POSITION_X[2][2], S1_CARS_VELOCITIES[2][0]} }, 
-                                                 { {RIGHT}, {1, S1_CARS_POSITION_X[1][0], S1_CARS_VELOCITIES[1][0]}, {1, S1_CARS_POSITION_X[1][1], S1_CARS_VELOCITIES[1][0]}, {1, S1_CARS_POSITION_X[1][2], S1_CARS_VELOCITIES[1][0]} },
-                                                 { {LEFT},  {0, S1_CARS_POSITION_X[0][0], S1_CARS_VELOCITIES[0][0]}, {0, S1_CARS_POSITION_X[0][1], S1_CARS_VELOCITIES[0][0]}, {0, S1_CARS_POSITION_X[0][2], S1_CARS_VELOCITIES[0][0]} } 
+    public static int [][][] S1_CARS        =  { { {LEFT},  {S1_CARS_VELOCITIES[4][0]}, {4}, {S1_CARS_POSITION_X[4][0], S1_CARS_POSITION_X[4][1]}},
+                                                 { {RIGHT}, {S1_CARS_VELOCITIES[3][0]}, {3}, {S1_CARS_POSITION_X[3][0]}},
+                                                 { {LEFT},  {S1_CARS_VELOCITIES[2][0]}, {2}, {S1_CARS_POSITION_X[2][0], S1_CARS_POSITION_X[2][1], S1_CARS_POSITION_X[2][2]} }, 
+                                                 { {RIGHT}, {S1_CARS_VELOCITIES[1][0]}, {1}, {S1_CARS_POSITION_X[1][0], S1_CARS_POSITION_X[1][1], S1_CARS_POSITION_X[1][2]} },
+                                                 { {LEFT},  {S1_CARS_VELOCITIES[0][0]}, {0}, {S1_CARS_POSITION_X[0][0], S1_CARS_POSITION_X[0][1], S1_CARS_POSITION_X[0][2]} } 
                                                };
 
 
-    public static int [][][] S1_TRUNKS      =  { { {RIGHT}, {1, S1_TRUNKS_POSITION_X[4][0], S1_TRUNKS_VELOCITIES[4][0]},  {1, S1_TRUNKS_POSITION_X[4][1], S1_TRUNKS_VELOCITIES[4][0]}, {1, S1_TRUNKS_POSITION_X[4][2], S1_TRUNKS_VELOCITIES[4][0]}},
-                                                 { {LEFT},  {1, S1_TRUNKS_POSITION_X[3][0], S1_TRUNKS_VELOCITIES[3][0]},  {1, S1_TRUNKS_POSITION_X[3][1], S1_TRUNKS_VELOCITIES[3][0]}},
-                                                 { {RIGHT}, {2, S1_TRUNKS_POSITION_X[2][0], S1_TRUNKS_VELOCITIES[2][0]},  {2, S1_TRUNKS_POSITION_X[2][1], S1_TRUNKS_VELOCITIES[2][0]}}, 
-                                                 { {RIGHT}, {0, S1_TRUNKS_POSITION_X[1][0], S1_TRUNKS_VELOCITIES[1][0]},  {0, S1_TRUNKS_POSITION_X[1][1], S1_TRUNKS_VELOCITIES[1][0]}, {0, S1_TRUNKS_POSITION_X[1][2], S1_TRUNKS_VELOCITIES[1][0]}},
-                                                 { {LEFT},  {2, S1_TRUNKS_POSITION_X[0][0], S1_TRUNKS_VELOCITIES[0][0]}} 
+    public static int [][][] S1_TRUNKS      =  { { {RIGHT}, {S1_TRUNKS_VELOCITIES[4][0]}, {1}, {S1_TRUNKS_POSITION_X[4][0], S1_TRUNKS_POSITION_X[4][1], S1_TRUNKS_POSITION_X[4][2]}},
+                                                 { {LEFT},  {S1_TRUNKS_VELOCITIES[3][0]}, {1}, {S1_TRUNKS_POSITION_X[3][0], S1_TRUNKS_POSITION_X[3][1]}},
+                                                 //{ {LEFT},  {3, S1_TRUNKS_POSITION_X[3][0], S1_TRUNKS_VELOCITIES[3][0]},  {3, S1_TRUNKS_POSITION_X[3][1], S1_TRUNKS_VELOCITIES[3][0]}, {3, S1_TRUNKS_POSITION_X[3][2], S1_TRUNKS_VELOCITIES[3][0]},  {3, S1_TRUNKS_POSITION_X[3][3], S1_TRUNKS_VELOCITIES[3][0]}},
+                                                 { {RIGHT}, {S1_TRUNKS_VELOCITIES[2][0]}, {2}, {S1_TRUNKS_POSITION_X[2][0], S1_TRUNKS_POSITION_X[2][1]}}, 
+                                                 { {RIGHT}, {S1_TRUNKS_VELOCITIES[1][0]}, {0}, {S1_TRUNKS_POSITION_X[1][0], S1_TRUNKS_POSITION_X[1][1], S1_TRUNKS_POSITION_X[1][2]}},
+                                                 { {LEFT},  {S1_TRUNKS_VELOCITIES[0][0]}, {2}, {S1_TRUNKS_POSITION_X[0][0]}} 
+                                                 //{ {LEFT},  {4, S1_TRUNKS_POSITION_X[0][0], S1_TRUNKS_VELOCITIES[0][0]},  {4, S1_TRUNKS_POSITION_X[0][1], S1_TRUNKS_VELOCITIES[0][0]}, {4, S1_TRUNKS_POSITION_X[0][2], S1_TRUNKS_VELOCITIES[0][0]}} 
                                                };
 
 }
