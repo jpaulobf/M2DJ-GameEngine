@@ -70,6 +70,10 @@ public class LoadingStuffs {
             stuffs.put("pixel", image);
             //stuffs.put("trunksTiles", createVImage(ImageIO.read(new File("images\\pixel.png"))));
 
+            image = ImageIO.read(new File("images\\turtles.png"));
+            stuffs.put("turtles", image);
+            //stuffs.put("turtles", createVImage(ImageIO.read(new File("images\\turtles.png"))));
+
             Logger.INFO("read all images...", this);
 
         } catch (java.io.IOException e) {
