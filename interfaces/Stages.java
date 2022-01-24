@@ -31,13 +31,18 @@ public interface Stages extends Directions {
 
 
     public static int [][][] S1_TRUNKS      =  { { {RIGHT}, {S1_TRUNKS_VELOCITIES[4][0]}, {1}, {S1_TRUNKS_POSITION_X[4][0], S1_TRUNKS_POSITION_X[4][1], S1_TRUNKS_POSITION_X[4][2]}},
-                                                 { {LEFT},  {S1_TRUNKS_VELOCITIES[3][0]}, {1}, {S1_TRUNKS_POSITION_X[3][0], S1_TRUNKS_POSITION_X[3][1]}},
+                                                 {},
+                                                  //{ {LEFT},  {S1_TRUNKS_VELOCITIES[3][0]}, {1}, {S1_TRUNKS_POSITION_X[3][0], S1_TRUNKS_POSITION_X[3][1]}},
                                                  { {RIGHT}, {S1_TRUNKS_VELOCITIES[2][0]}, {2}, {S1_TRUNKS_POSITION_X[2][0], S1_TRUNKS_POSITION_X[2][1]}}, 
                                                  { {RIGHT}, {S1_TRUNKS_VELOCITIES[1][0]}, {0}, {S1_TRUNKS_POSITION_X[1][0], S1_TRUNKS_POSITION_X[1][1], S1_TRUNKS_POSITION_X[1][2]}},
-                                                 { {LEFT},  {S1_TRUNKS_VELOCITIES[0][0]}, {2}, {S1_TRUNKS_POSITION_X[0][0]}} 
+                                                 {}
+                                                 //{ {LEFT},  {S1_TRUNKS_VELOCITIES[0][0]}, {2}, {S1_TRUNKS_POSITION_X[0][0]}} 
                                                };
 
-    public static int [][][] S1_TURTLES     =  { { {LEFT},  {S1_TURTLES_VELOCITIES[1][0]}, {0}, {S1_TURTLES_POSITION_X[1][0], S1_TURTLES_POSITION_X[1][1], S1_TURTLES_POSITION_X[1][2], S1_TURTLES_POSITION_X[1][3]}},
+    public static int [][][] S1_TURTLES     =  { {},
+                                                 { {LEFT},  {S1_TURTLES_VELOCITIES[1][0]}, {0}, {S1_TURTLES_POSITION_X[1][0], S1_TURTLES_POSITION_X[1][1], S1_TURTLES_POSITION_X[1][2], S1_TURTLES_POSITION_X[1][3]}},
+                                                 {}, 
+                                                 {},
                                                  { {LEFT},  {S1_TURTLES_VELOCITIES[0][0]}, {1}, {S1_TURTLES_POSITION_X[0][0], S1_TURTLES_POSITION_X[0][1], S1_TURTLES_POSITION_X[0][2]}} 
                                                };
 
