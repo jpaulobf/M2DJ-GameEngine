@@ -20,6 +20,7 @@ public class Scenario {
     private Vehicles vehicles           = null;
     private Trunks trunks               = null;
     private Dockers dockers             = null;
+    private Turtles turtles             = null;
     private BufferedImage sidewalk      = null;
     private BufferedImage grass         = null;
     private BufferedImage subgrass      = null;
@@ -69,6 +70,7 @@ public class Scenario {
 
         this.vehicles       = new Vehicles(g2d, windowWidth, windowHeight);
         this.trunks         = new Trunks(g2d, windowWidth, windowHeight);
+        this.turtles        = new Turtles(g2d, windowWidth, windowHeight);
         this.dockers        = new Dockers(g2d);
         this.drawBackgroundInBuffer();
 
@@ -218,6 +220,7 @@ public class Scenario {
         //update the vehicles
         this.vehicles.update(frametime);
         this.trunks.update(frametime);
+        this.turtles.update(frametime);
     }
 
     /**
@@ -238,6 +241,7 @@ public class Scenario {
         //draw the vehicles
         this.vehicles.draw(frametime);
         this.trunks.draw(frametime);
+        this.turtles.draw(frametime);
         this.dockers.draw(frametime);
     }
 }

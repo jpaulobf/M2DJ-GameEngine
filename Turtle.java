@@ -1,5 +1,6 @@
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import interfaces.Sprite;
 
 /**
  * Class representing the turtle sprite
@@ -36,7 +37,19 @@ public class Turtle extends SpriteImpl {
     }
 
     @Override
-    public void update(long frametime) {}
+    public void update(long frametime) {
+
+        //TODO: MAYBE EQUALS TRUNKTREE
+
+    }
+
+    /**
+     * Return if the turtle is submersed or not
+     * @return
+     */
+    public boolean isSubmersed() {
+        return (this.isSubmersed);
+    }
 
     /**
      * Accessor method
@@ -52,5 +65,19 @@ public class Turtle extends SpriteImpl {
      */
     public int getTurtleFrames() {
         return (this.turtleFrames);
+    }
+
+    /**
+     * Verify if this sprite is coliding with other
+     * @param sprite
+     * @return
+     */
+    @Override
+    public boolean isColliding(Sprite sprite) {
+        if (!this.isSubmersed) {
+            return (calcMyRect().intersects(sprite.calcMyRect()));
+        } else {
+            return (false);
+        }
     }
 }
