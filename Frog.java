@@ -312,7 +312,7 @@ public class Frog extends SpriteImpl {
                 colliding = this.scenario.getTrunks().testColision(this);
                 if (colliding != -1) {
                     if (!this.animating) {
-                        this.positionX += (this.scenario.getTrunks().getTrunkMovementStep(colliding) / 1_000);
+                        this.positionX += (this.scenario.getTrunks().getCalculatedStep(colliding) / 1_000);
                     }
                 } else {
                     if (!animating) {
