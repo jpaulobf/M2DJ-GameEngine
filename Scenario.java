@@ -45,6 +45,10 @@ public class Scenario {
         return (this.trunks);
     }
 
+    public Turtles getTurtles() {
+        return (this.turtles);
+    }
+
     public Dockers getDockers() {
         return (this.dockers);
     }
