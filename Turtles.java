@@ -46,8 +46,9 @@ public class Turtles extends SpriteCollection {
     @Override
     public void update(long frametime) {
 
-        byte index          = 0;
-        byte indexLines     = 0;
+        byte index              = 0;
+        byte indexLines         = 0;
+        byte positionYOffset    = 16;
 
         for (int i = 0; i < Stages.S1_TURTLES.length; i++) {
 
@@ -89,7 +90,7 @@ public class Turtles extends SpriteCollection {
 
                         //set the offset turtles parameters
                         this.offsetTurtles[indexLines].positionX        = (short)(this.offsetPosX[indexLines]/1_000);
-                        this.offsetTurtles[indexLines].positionY        = (short)Lanes.riverLanes[i]; 
+                        this.offsetTurtles[indexLines].positionY        = (short)Lanes.riverLanes[i] + positionYOffset; 
                         this.offsetTurtles[indexLines].calculatedStep   = stepDir;
                         this.offsetTurtles[indexLines].update(frametime);
 
@@ -105,7 +106,7 @@ public class Turtles extends SpriteCollection {
                     //set the turtles parameters
                     this.turtles[index].direction    = direction;
                     this.turtles[index].positionX    = (short)(position/1_000);
-                    this.turtles[index].positionY    = (short)Lanes.riverLanes[i]; //incrementa o index ao final
+                    this.turtles[index].positionY    = (short)Lanes.riverLanes[i] + positionYOffset; //incrementa o index ao final
                 }
 
                 if (Stages.S1_TURTLES[i].length > 0) {

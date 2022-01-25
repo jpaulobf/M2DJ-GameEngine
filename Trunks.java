@@ -47,8 +47,9 @@ public class Trunks extends SpriteCollection {
     @Override
     public void update(long frametime) {
 
-        byte index          = 0;
-        byte indexLines     = 0;
+        byte index              = 0;
+        byte indexLines         = 0;
+        byte positionYOffset    = 16;
 
         for (int i = 0; i < Stages.S1_TRUNKS.length; i++) {
 
@@ -91,7 +92,7 @@ public class Trunks extends SpriteCollection {
 
                         //set the offset trunk parameters
                         this.offsetTrunks[indexLines].positionX      = (short)(this.offsetPosX[indexLines]/1_000);
-                        this.offsetTrunks[indexLines].positionY      = (short)Lanes.riverLanes[i];
+                        this.offsetTrunks[indexLines].positionY      = (short)Lanes.riverLanes[i] + positionYOffset;
                         this.offsetTrunks[indexLines].calculatedStep = step;
                         this.offsetTrunks[indexLines].update(frametime);
 
@@ -109,7 +110,7 @@ public class Trunks extends SpriteCollection {
                     //set the trunk parameters
                     this.trunks[index].direction    = direction;
                     this.trunks[index].positionX    = (short)(position/1_000);
-                    this.trunks[index].positionY    = (short)Lanes.riverLanes[i]; //incrementa o index ao final
+                    this.trunks[index].positionY    = (short)Lanes.riverLanes[i] + positionYOffset; //incrementa o index ao final
                 }
 
                 indexLines++;
