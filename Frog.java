@@ -308,11 +308,27 @@ public class Frog extends SpriteImpl {
                     this.isDead     = true;
                     this.animating  = false;
                 }
-            } else if (this.positionY >= Lanes.riverLanes[0] && this.positionY < (Lanes.riverLanes[4] + this.tileY)) {
+            } else if ((this.positionY > Lanes.riverLanes[3] && this.positionY <= (Lanes.riverLanes[4])) ||
+                         (this.positionY > Lanes.riverLanes[2] && this.positionY <= (Lanes.riverLanes[3])) ||
+                         (this.positionY > Lanes.riverLanes[0] && this.positionY <= (Lanes.riverLanes[1]))) {
                 colliding = this.scenario.getTrunks().testColision(this);
                 if (colliding != -1) {
                     if (!this.animating) {
                         this.positionX += (this.scenario.getTrunks().getCalculatedStep(colliding) / 1_000);
+                    }
+                } else {
+                    if (!animating) {
+                        this.canMove    = false;
+                        this.isDead     = true;
+                        this.animating  = false;
+                    }
+                }
+            } else if ((this.positionY > Lanes.riverLanes[4]) && (this.positionY <= (Lanes.riverLanes[4] + this.tileY)) ||
+                       (this.positionY > Lanes.riverLanes[1]) && (this.positionY <= (Lanes.riverLanes[2]))) {
+                colliding = this.scenario.getTurtles().testColision(this);
+                if (colliding != -1) {
+                    if (!this.animating) {
+                        this.positionX += (this.scenario.getTurtles().getCalculatedStep(colliding) / 1_000);
                     }
                 } else {
                     if (!animating) {
