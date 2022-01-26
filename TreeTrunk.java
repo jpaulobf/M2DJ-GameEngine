@@ -32,8 +32,8 @@ public class TreeTrunk  extends SpriteImpl {
      * @param g2d
      */
     public TreeTrunk(Graphics2D g2d) {
-        this.g2d = g2d;
-        this.height = 32;
+        this.g2d            = g2d;
+        this.height         = 32;
         //Get the already loaded image from loader
         this.trunksTiles    = (BufferedImage)LoadingStuffs.getInstance().getStuff("trunksTiles");
         this.trunkSmall     = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().createCompatibleImage(smallWidth, this.height, Transparency.BITMASK);
