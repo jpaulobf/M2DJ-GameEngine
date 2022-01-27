@@ -27,7 +27,7 @@ public class Turtle extends SpriteImpl {
     private final short smallWidth      = turtleW + separator + turtleW;
     private final short mediumWidth     = turtleW + separator + turtleW + separator + turtleW;
     protected byte dive                 = 0;
-    private final int [] frameList      = {0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 4, 3, 0, 1, 2};
+    private final int [] frameList      = {0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 3, 4, 4, 3, 0, 1, 2};
     byte index = 0;
     
     /**
@@ -166,7 +166,7 @@ public class Turtle extends SpriteImpl {
                                                     null);
 
             //third part
-            this.bgd2.drawImage(this.turtlesTiles, (separator + turtleW + separator + turtleW), 0, (separator + turtleW + separator + turtleW + separator + turtleW), this.height, //dest w1, h1, w2, h2
+            this.bgd2.drawImage(this.turtlesTiles, (separator + turtleW + separator + turtleW), 0, (separator + turtleW + separator + turtleW + turtleW), this.height, //dest w1, h1, w2, h2
                                                     (int)(i * turtleW), 0, (int)((i * turtleW) + turtleW), this.height,
                                                     null);
         }
