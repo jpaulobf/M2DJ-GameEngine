@@ -26,6 +26,9 @@ public class Turtle extends SpriteImpl {
     private boolean isSubmersed         = false;
     private final short smallWidth      = turtleW + separator + turtleW;
     private final short mediumWidth     = turtleW + separator + turtleW + separator + turtleW;
+    protected byte dive                 = 0;
+    private final int [] frameList      = {0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 4, 3, 0, 1, 2};
+    byte index = 0;
     
     /**
      * Turtle constructor
@@ -60,11 +63,21 @@ public class Turtle extends SpriteImpl {
     public void update(long frametime) {
 
         this.framecounter += frametime;
-        if (this.framecounter > 300_000_000) {
-            this.currentFrame++;
-            this.framecounter = 0;
-            if (this.currentFrame > 2) {
-                this.currentFrame = 0;
+        if (dive == 0) {
+            if (this.framecounter > 300_000_000) {
+                this.currentFrame++;
+                this.framecounter = 0;
+                if (this.currentFrame > 2) {
+                    this.currentFrame = 0;
+                }
+            }
+        } else {
+            if (this.framecounter > 300_000_000) {
+                this.currentFrame = frameList[index++];
+                this.framecounter = 0;
+                if (index >= frameList.length) {
+                    index = 0;
+                }
             }
         }
 

@@ -62,8 +62,9 @@ public class Turtles extends SpriteCollection {
                     //read & set the turtles parameters
                     double step                     = (double)velocity / (double)(1_000_000D / (double)frametime);
                     double stepDir                  = step * direction;
-                    double position                 = Stages.S1_TURTLES[i][3][j];
+                    double position                 = Stages.S1_TURTLES[i][4][j];
                     double calcPos                  = position + stepDir;
+                    byte dive                       = (byte)Stages.S1_TURTLES[i][3][j];
                     turtles[index].calculatedStep   = stepDir;
                     turtles[index].type             = (byte)Stages.S1_TURTLES[i][2][0];
 
@@ -101,10 +102,11 @@ public class Turtles extends SpriteCollection {
                     }
 
                     //store the new X position in the array
-                    Stages.S1_TURTLES[i][3][j]      = (int)Math.round(calcPos);
+                    Stages.S1_TURTLES[i][4][j]      = (int)Math.round(calcPos);
 
                     //set the turtles parameters
                     this.turtles[index].direction    = direction;
+                    this.turtles[index].dive         = dive;
                     this.turtles[index].positionX    = (short)(position/1_000);
                     this.turtles[index].positionY    = (short)Lanes.riverLanes[i] + positionYOffset; //incrementa o index ao final
                 }
