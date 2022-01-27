@@ -38,10 +38,10 @@ public interface Stages extends Directions {
                                                };
 
     public static int [][][] S1_TURTLES     =  { {},
-                                                 { {LEFT},  {S1_TURTLES_VELOCITIES[1][0]}, {0}, {S1_TURTLES_POSITION_X[1][0], S1_TURTLES_POSITION_X[1][1], S1_TURTLES_POSITION_X[1][2], S1_TURTLES_POSITION_X[1][3]}},
+                                                 { {LEFT},  {S1_TURTLES_VELOCITIES[1][0]}, {0}, {1, 0, 0, 0}, {S1_TURTLES_POSITION_X[1][0], S1_TURTLES_POSITION_X[1][1], S1_TURTLES_POSITION_X[1][2], S1_TURTLES_POSITION_X[1][3]}},
                                                  {}, 
                                                  {},
-                                                 { {LEFT},  {S1_TURTLES_VELOCITIES[0][0]}, {1}, {S1_TURTLES_POSITION_X[0][0], S1_TURTLES_POSITION_X[0][1], S1_TURTLES_POSITION_X[0][2], S1_TURTLES_POSITION_X[0][3]}} 
+                                                 { {LEFT},  {S1_TURTLES_VELOCITIES[0][0]}, {1}, {1, 0, 1, 0}, {S1_TURTLES_POSITION_X[0][0], S1_TURTLES_POSITION_X[0][1], S1_TURTLES_POSITION_X[0][2], S1_TURTLES_POSITION_X[0][3]}} 
                                                };
 
 }
