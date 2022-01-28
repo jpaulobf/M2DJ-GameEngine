@@ -20,14 +20,14 @@ public class Turtle extends SpriteImpl {
     private final byte turtleH          = 36;
     private final byte turtleW          = 43;
     private final byte separator        = 6;
-    private final int turtleFrames      = 5;
+    private final int turtleFrames      = 6;
     private long framecounter           = 0;
     private int currentFrame            = 0;
     private boolean isSubmersed         = false;
     private final short smallWidth      = turtleW + separator + turtleW;
     private final short mediumWidth     = turtleW + separator + turtleW + separator + turtleW;
     protected byte dive                 = 0;
-    private final int [] frameList      = {0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 3, 4, 4, 3, 0, 1, 2};
+    private final int [] frameList      = {0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 3, 4, 4, 5, 5, 5, 5, 4, 4, 3, 3, 0, 1, 2};
     byte index = 0;
     
     /**
@@ -74,6 +74,7 @@ public class Turtle extends SpriteImpl {
         } else {
             if (this.framecounter > 300_000_000) {
                 this.currentFrame = frameList[index++];
+                this.isSubmersed = (this.currentFrame == 5);
                 this.framecounter = 0;
                 if (index >= frameList.length) {
                     index = 0;
