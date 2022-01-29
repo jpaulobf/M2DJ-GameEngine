@@ -67,6 +67,7 @@ public class Turtles extends SpriteCollection {
                     byte dive                       = (byte)Stages.S1_TURTLES[i][3][j];
                     turtles[index].calculatedStep   = stepDir;
                     turtles[index].type             = (byte)Stages.S1_TURTLES[i][2][0];
+                    turtles[index].velocity         = velocity;
 
                     //update the turtles
                     turtles[index].update(frametime);

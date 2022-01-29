@@ -1,3 +1,4 @@
+import interfaces.Stages;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import interfaces.Sprite;
@@ -27,7 +28,7 @@ public class Turtle extends SpriteImpl {
     private final short smallWidth      = turtleW + separator + turtleW;
     private final short mediumWidth     = turtleW + separator + turtleW + separator + turtleW;
     protected byte dive                 = 0;
-    private final int [] frameList      = {0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 3, 4, 4, 5, 5, 5, 5, 4, 4, 3, 3, 0, 1, 2};
+    private final int [][] frameList    = {{0}, {0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 3, 4, 4, 5, 5, 4, 4, 3, 3, 0, 1, 2}};
     byte index = 0;
     
     /**
@@ -72,11 +73,11 @@ public class Turtle extends SpriteImpl {
                 }
             }
         } else {
-            if (this.framecounter > 300_000_000) {
-                this.currentFrame = frameList[index++];
+            if (this.framecounter > (300_000_000 + ((100 - this.velocity) * 1_000_000))) {
+                this.currentFrame = frameList[Stages.CURRENT_STAGE][index++];
                 this.isSubmersed = (this.currentFrame == 5);
                 this.framecounter = 0;
-                if (index >= frameList.length) {
+                if (index >= frameList[Stages.CURRENT_STAGE].length) {
                     index = 0;
                 }
             }
