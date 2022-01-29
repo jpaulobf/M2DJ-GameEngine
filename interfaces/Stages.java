@@ -10,7 +10,8 @@ public interface Stages extends Directions {
     public static final int [][] S1_CARS_POSITION_X       = {{300_000, 650_000, 1000_000}, {100_000, 400_000, 700_000}, {100_000, 500_000, 900_000}, {100_000}, {100_000, 750_000}};
 
     public static final short [][] S1_TRUNKS_VELOCITIES   = {{120}, {70}, {230}, {50}, {90}};
-    public static final short [][] S1_TURTLES_VELOCITIES  = {{70}, {90}};
+    public static final short [][] S1_TURTLES_VELOCITIES  = {{100}, {50}};
+
     public static final int [][] S1_TRUNKS_POSITION_X     = {{150_000}, {50_000, 350_000, 650_000}, {100_000, 800_000}, {100_000, 700_000}, {0_000, 400_000, 800_000}};
     public static final int [][] S1_TURTLES_POSITION_X    = {{50_000, 390_000, 730_000, 1_070_000}, {0_000, 300_000, 600_000, 900_000}};
 
