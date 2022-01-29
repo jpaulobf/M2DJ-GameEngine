@@ -28,12 +28,13 @@ public class Frogger extends JFrame implements Game {
     //this window properties
     private int positionX                       = 0;
     private int positionY                       = 0;
+    private final byte HUDHeight                = 40;
 
     //width and height of the window
     //private int windowWidth                   = 1240;
     //private int windowHeight                  = 700;
     private int windowWidth                     = 1344;
-    private int windowHeight                    = 832;
+    private int windowHeight                    = 832 + HUDHeight;
 
     //desktop properties
     private int resolutionH                     = 0;
@@ -50,14 +51,15 @@ public class Frogger extends JFrame implements Game {
     private BufferStrategy bufferStrategy       = null;
     private boolean showFPS                     = true;
     //width and height of window for base metrics of the game
-    private int wwm                             = 1344;
-    private int whm                             = 832;
+    private final int wwm                       = 1344;
+    private final int whm                       = 832 + HUDHeight;
 
     //the game statemachine goes here
     private StateMachine gameState              = null;
 
     //the game variables go here...
     private Scenario scenario                   = null;
+    private HUD hud                             = null;
     private Frog frog                           = null;
     private GameOver gameOver                   = null;
     private volatile boolean canContinue        = true;
@@ -138,6 +140,7 @@ public class Frogger extends JFrame implements Game {
         //////////////////////////////////////////////////////////////////////
         scenario    = new Scenario(g2d, this.wwm, this.whm);
         frog        = new Frog(g2d, scenario);
+        hud         = new HUD(g2d, scenario, frog);
         gameOver    = new GameOver(g2d, this.wwm, this.whm);
         gameState   = new StateMachine(this);
 
@@ -178,6 +181,7 @@ public class Frogger extends JFrame implements Game {
         if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
             scenario.update(frametime);
             frog.update(frametime);
+            hud.update(frametime);
             //after possible colision, check lives.
             if (frog.getLives() == 0) {
                 this.gameState.setCurrentState(StateMachine.GAME_OVER);
@@ -188,6 +192,7 @@ public class Frogger extends JFrame implements Game {
                 this.framecounter = 0;
                 frog.frogReset();
                 frog.resetLives();
+                hud.reset();
                 this.gameState.setCurrentState(StateMachine.IN_GAME);
             } else {
                 this.gameState.setCurrentState(StateMachine.GAME_OVER);
@@ -272,6 +277,7 @@ public class Frogger extends JFrame implements Game {
         //    frog.setG2d(g2d);
         //}
         if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
+            hud.draw(frametime);
             scenario.draw(frametime);
             frog.draw(frametime);
         } else if (this.gameState.getCurrentState() == StateMachine.GAME_OVER) {
