@@ -1,3 +1,4 @@
+import util.Audio;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import interfaces.Game;
@@ -66,6 +67,7 @@ public class Frogger extends JFrame implements Game {
     private boolean fullscreen                  = false;
     private boolean isFullScreenAvailable       = false;
     private long framecounter                   = 0;
+    private volatile Audio theme                = null;
 
     /*
         WTMD: some responsabilites here:
@@ -140,9 +142,10 @@ public class Frogger extends JFrame implements Game {
         //////////////////////////////////////////////////////////////////////
         scenario    = new Scenario(g2d, this.wwm, this.whm);
         frog        = new Frog(g2d, scenario);
-        hud         = new HUD(g2d, scenario, frog);
+        hud         = new HUD(g2d, HUDHeight, scenario, frog);
         gameOver    = new GameOver(g2d, this.wwm, this.whm);
         gameState   = new StateMachine(this);
+        theme       = (Audio)LoadingStuffs.getInstance().getStuff("theme");
 
         this.addKeyListener(new KeyAdapter() {
             @Override
@@ -178,7 +181,9 @@ public class Frogger extends JFrame implements Game {
         //////////////////////////////////////////////////////////////////////
         // ->>>  update the game elements
         //////////////////////////////////////////////////////////////////////
-        if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
+        if (this.gameState.getCurrentState() == StateMachine.STARTING) {
+            theme.play(-1);
+        } else if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
             scenario.update(frametime);
             frog.update(frametime);
             hud.update(frametime);
@@ -207,42 +212,45 @@ public class Frogger extends JFrame implements Game {
      * @param frametime
      */
     public synchronized void draw(long frametime) {
+        if (this.gameState.getCurrentState() != StateMachine.STARTING) {
+            //update the window size variables if the user resize it.
+            this.windowHeight   = this.getHeight();
+            this.windowWidth    = this.getWidth();
 
-        //update the window size variables if the user resize it.
-        this.windowHeight   = this.getHeight();
-        this.windowWidth    = this.getWidth();
+            if (fullscreen && isFullScreenAvailable) {
+                //set the buffer strategy
+                this.g2d = (Graphics2D)this.bufferStrategy.getDrawGraphics();
 
-        if (fullscreen && isFullScreenAvailable) {
-            //set the buffer strategy
-            this.g2d = (Graphics2D)this.bufferStrategy.getDrawGraphics();
-
-            //render the game elements
-            this.renderGameElements(frametime);
-
-            //At least, copy the backbuffer to the backbuffer
-            this.g2d.drawImage(this.bufferImage, 0, 0, this.windowWidth, this.windowHeight, 
-                                                 0, 0, this.wwm, this.whm, this);
-
-            this.renderFPSLayer(frametime, this.g2d);
-
-            //show the buffer content
-            this.g2d.dispose();
-            if (!this.bufferStrategy.contentsLost()) {
-                this.bufferStrategy.show();
-            }
-        } else {
-            //verify if the Graphics element isn't lost
-            if (this.g2d != null) {
-            
                 //render the game elements
                 this.renderGameElements(frametime);
-    
-                this.renderFPSLayer(frametime, (Graphics2D)this.bufferImage.getGraphics());
 
-                //At least, copy the backbuffer to the canvas screen
-                this.canvas.getGraphics().drawImage(this.bufferImage, 0, 0, this.windowWidth, this.windowHeight, 
-                                                                      0, 0, this.wwm, this.whm, this);
+                //At least, copy the backbuffer to the backbuffer
+                this.g2d.drawImage(this.bufferImage, 0, 0, this.windowWidth, this.windowHeight, 
+                                                     0, 0, this.wwm, this.whm, this);
+
+                this.renderFPSLayer(frametime, this.g2d);
+
+                //show the buffer content
+                this.g2d.dispose();
+                if (!this.bufferStrategy.contentsLost()) {
+                    this.bufferStrategy.show();
+                }
+            } else {
+                //verify if the Graphics element isn't lost
+                if (this.g2d != null) {
+                
+                    //render the game elements
+                    this.renderGameElements(frametime);
+        
+                    this.renderFPSLayer(frametime, (Graphics2D)this.bufferImage.getGraphics());
+
+                    //At least, copy the backbuffer to the canvas screen
+                    this.canvas.getGraphics().drawImage(this.bufferImage, 0, 0, this.windowWidth, this.windowHeight, 
+                                                                        0, 0, this.wwm, this.whm, this);
+                }
             }
+        } else {
+            this.gameState.setCurrentState(StateMachine.IN_GAME);
         }
     }
 

@@ -1,3 +1,4 @@
+import util.Audio;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
@@ -15,6 +16,9 @@ public class Frog extends SpriteImpl {
     private final byte INITIAL_T_POS_Y      = 12;
     private volatile boolean isDead         = false;
     private Scenario scenario               = null;
+    private volatile Audio jumpAudio        = null;
+    private volatile Audio plunkAudio       = null;
+    private volatile Audio squashAudio      = null;
 
     //render variables
     private byte tileX                      = 0;
@@ -72,6 +76,11 @@ public class Frog extends SpriteImpl {
         keyMap.put(37, LEFT);
         keyMap.put(38, UP);
         keyMap.put(40, DOWN);
+
+        //load jump audio
+        this.jumpAudio      = (Audio)LoadingStuffs.getInstance().getStuff("jumpAudio");
+        this.plunkAudio     = (Audio)LoadingStuffs.getInstance().getStuff("plunkAudio");
+        this.squashAudio    = (Audio)LoadingStuffs.getInstance().getStuff("squashAudio");
     }
 
     /**
@@ -123,10 +132,10 @@ public class Frog extends SpriteImpl {
      */
     public synchronized void move(int keycode) {
         //just if the frog can move
-        if (this.canMove) {
+        if (keyMap.get(keycode) != null) {
 
             //filter the pressed keys
-            if (keyMap.get(keycode) != null) {
+            if (this.canMove) {
                 byte direction          = keyMap.get(keycode);
                 this.jumpY              = 0;
                 this.jumpX              = 0;
@@ -169,6 +178,10 @@ public class Frog extends SpriteImpl {
                     this.canMove        = false;
                     this.animating      = true;
                     this.lastMovement   = direction;
+                }
+
+                if (this.jumpAudio != null) {
+                    this.jumpAudio.play();    
                 }
             }
         }
@@ -295,6 +308,7 @@ public class Frog extends SpriteImpl {
             this.canMove    = false;
             this.isDead     = true;
             this.animating  = false;
+            this.squashAudio.play();
         }
 
         //colision detection or dead animation
@@ -307,8 +321,9 @@ public class Frog extends SpriteImpl {
                     this.canMove    = false;
                     this.isDead     = true;
                     this.animating  = false;
+                    this.squashAudio.play();
                 }
-            } else if ((this.positionY > Lanes.riverLanes[3] && this.positionY <= (Lanes.riverLanes[4])) ||
+            } else if ((this.positionY   > Lanes.riverLanes[3] && this.positionY <= (Lanes.riverLanes[4])) ||
                          (this.positionY > Lanes.riverLanes[2] && this.positionY <= (Lanes.riverLanes[3])) ||
                          (this.positionY > Lanes.riverLanes[0] && this.positionY <= (Lanes.riverLanes[1]))) {
                 colliding = this.scenario.getTrunks().testColision(this);
@@ -321,6 +336,7 @@ public class Frog extends SpriteImpl {
                         this.canMove    = false;
                         this.isDead     = true;
                         this.animating  = false;
+                        this.plunkAudio.play();
                     }
                 }
             } else if ((this.positionY > Lanes.riverLanes[4]) && (this.positionY <= (Lanes.riverLanes[4] + this.tileY)) ||
@@ -335,6 +351,7 @@ public class Frog extends SpriteImpl {
                         this.canMove    = false;
                         this.isDead     = true;
                         this.animating  = false;
+                        this.plunkAudio.play();
                     }
                 }
             } else if (this.positionY >= Lanes.docksLanes[0] && this.positionY < Lanes.docksLanes[1]) {
@@ -347,11 +364,13 @@ public class Frog extends SpriteImpl {
                         this.canMove    = false;
                         this.isDead     = true;
                         this.animating  = false;
+                        this.squashAudio.play();
                     }
                 } else {
                     this.canMove    = false;
                     this.isDead     = true;
                     this.animating  = false;
+                    this.squashAudio.play();
                 }
             }
             this.animationCounter = 0;
