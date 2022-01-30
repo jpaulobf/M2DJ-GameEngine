@@ -1,3 +1,4 @@
+import util.Audio;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.util.HashMap;
@@ -75,6 +76,27 @@ public class LoadingStuffs {
             //stuffs.put("turtles", createVImage(ImageIO.read(new File("images\\turtles.png"))));
 
             Logger.INFO("read all images...", this);
+
+
+            Audio audio = new Audio("audio/jump.wav", 0);
+            if (audio != null && audio.isReady()) {
+                stuffs.put("jumpAudio", audio);
+            }
+
+            audio = new Audio("audio/plunk.wav", 0);
+            if (audio != null && audio.isReady()) {
+                stuffs.put("plunkAudio", audio);
+            }
+
+            audio = new Audio("audio/squash.wav", 0);
+            if (audio != null && audio.isReady()) {
+                stuffs.put("squashAudio", audio);
+            }
+
+            audio = new Audio("audio/theme2.wav", 0);
+            if (audio != null && audio.isReady()) {
+                stuffs.put("theme", audio);
+            }
 
         } catch (java.io.IOException e) {
             e.printStackTrace();
