@@ -16,7 +16,7 @@ public class HUD {
     private int windowHeight            = 0;
     private int lives                   = 0;
     
-    public HUD(Graphics2D g2d, Scenario scenario, Frog frog) {
+    public HUD(Graphics2D g2d, int HUDHeight, Scenario scenario, Frog frog) {
         this.g2d            = g2d;
         this.scenarioRef    = scenario;
         this.frogRef        = frog;
