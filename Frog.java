@@ -11,7 +11,7 @@ import interfaces.Lanes;
 public class Frog extends SpriteImpl {
     
     //game variable
-    private volatile byte lives             = 3;
+    private volatile byte lives             = 5;
     private final byte INITIAL_T_POS_X      = 10;
     private final byte INITIAL_T_POS_Y      = 12;
     private volatile boolean isDead         = false;
