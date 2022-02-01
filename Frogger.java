@@ -35,7 +35,7 @@ public class Frogger extends JFrame implements Game {
     //private int windowWidth                   = 1240;
     //private int windowHeight                  = 700;
     private int windowWidth                     = 1344;
-    private int windowHeight                    = 832 + HUDHeight;
+    private int windowHeight                    = 832;
 
     //desktop properties
     private int resolutionH                     = 0;
@@ -53,7 +53,7 @@ public class Frogger extends JFrame implements Game {
     private boolean showFPS                     = true;
     //width and height of window for base metrics of the game
     private final int wwm                       = 1344;
-    private final int whm                       = 832 + HUDHeight;
+    private final int whm                       = 832;
 
     //the game statemachine goes here
     private StateMachine gameState              = null;
@@ -77,7 +77,7 @@ public class Frogger extends JFrame implements Game {
         //////////////////////////////////////////////////////////////////////
         //set some properties for this window
         //////////////////////////////////////////////////////////////////////
-        Dimension basic = new Dimension(this.windowWidth, this.windowHeight);
+        Dimension basic = new Dimension(this.windowWidth, (this.windowHeight + this.HUDHeight));
         this.setPreferredSize(basic);
         this.setMinimumSize(basic);
         this.setUndecorated(true);
@@ -94,7 +94,7 @@ public class Frogger extends JFrame implements Game {
 
         //center the current window regards the desktop resolution
         this.positionX = (int)((size.getWidth() / 2) - (this.windowWidth / 2));
-        this.positionY = (int)((size.getHeight() / 2) - (this.windowHeight / 2));
+        this.positionY = (int)((size.getHeight() / 2) - (this.windowHeight + this.HUDHeight / 2));
         this.setLocation(this.positionX, this.positionY);
 
         //create the backbuffer from the size of screen resolution to avoid any resize process penalty
@@ -114,7 +114,7 @@ public class Frogger extends JFrame implements Game {
         //////////////////////////////////////////////////////////////////////
         //initialize the canvas
         this.canvas = new JPanel(null);
-        this.canvas.setSize(windowWidth, windowHeight);
+        this.canvas.setSize(basic.width, basic.height);
         this.canvas.setBackground(Color.BLACK);
         this.canvas.setOpaque(true);
         
@@ -214,7 +214,7 @@ public class Frogger extends JFrame implements Game {
     public synchronized void draw(long frametime) {
         if (this.gameState.getCurrentState() != StateMachine.STARTING) {
             //update the window size variables if the user resize it.
-            this.windowHeight   = this.getHeight();
+            this.windowHeight   = this.getHeight() - this.HUDHeight;
             this.windowWidth    = this.getWidth();
 
             if (fullscreen && isFullScreenAvailable) {
@@ -246,7 +246,7 @@ public class Frogger extends JFrame implements Game {
 
                     //At least, copy the backbuffer to the canvas screen
                     this.canvas.getGraphics().drawImage(this.bufferImage, 0, 0, this.windowWidth, this.windowHeight, 
-                                                                        0, 0, this.wwm, this.whm, this);
+                                                                          0, 0, this.wwm, this.whm, this);
                 }
             }
         } else {
