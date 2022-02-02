@@ -159,9 +159,11 @@ public class Frogger extends JFrame implements Game {
         this.addKeyListener(new KeyAdapter() {
             @Override
             public synchronized void keyPressed(KeyEvent e) {
-                if (canContinue) {
-                    canContinue = false;
-                    frog.move(e.getKeyCode());
+                if (gameState.getCurrentState() == StateMachine.IN_GAME) {
+                    if (canContinue) {
+                        canContinue = false;
+                        frog.move(e.getKeyCode());
+                    }
                 }
             }
             @Override
@@ -290,6 +292,8 @@ public class Frogger extends JFrame implements Game {
         //clear the stage
         this.g2d.setBackground(Color.BLACK);
         this.g2d.clearRect(0, 0, this.resolutionW, this.resolutionH);
+        this.hudg2d.setBackground(Color.BLACK);
+        this.hudg2d.clearRect(0, 0, this.resolutionW, this.HUDHeight);
    
         //////////////////////////////////////////////////////////////////////
         // ->>>  draw the game elements
