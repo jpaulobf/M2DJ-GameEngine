@@ -50,6 +50,11 @@ public class Frogger extends JFrame implements Game {
     private GraphicsDevice dsd                  = null;
     private Graphics2D g2d                      = null;
     private BufferStrategy bufferStrategy       = null;
+
+    //extra volatile image for hud
+    private Graphics2D hudg2d                   = null;
+    private VolatileImage hudImage              = null;
+
     private boolean showFPS                     = true;
     //width and height of window for base metrics of the game
     private final int wwm                       = 1344;
@@ -104,6 +109,10 @@ public class Frogger extends JFrame implements Game {
         this.g2d            = (Graphics2D)bufferImage.getGraphics();
         this.g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 
+        //image & g2d for hud
+        this.hudImage       = dsd.getDefaultConfiguration().createCompatibleVolatileImage(this.wwm, HUDHeight);
+        this.hudg2d         = (Graphics2D)hudImage.getGraphics();
+
         //verify if fullscreen is posible
         this.isFullScreenAvailable = dsd.isFullScreenSupported();
         this.setUndecorated(true);
@@ -142,7 +151,7 @@ public class Frogger extends JFrame implements Game {
         //////////////////////////////////////////////////////////////////////
         scenario    = new Scenario(g2d, this.wwm, this.whm);
         frog        = new Frog(g2d, scenario);
-        hud         = new HUD(g2d, HUDHeight, scenario, frog);
+        hud         = new HUD(hudg2d, HUDHeight, scenario, frog);
         gameOver    = new GameOver(g2d, this.wwm, this.whm);
         gameState   = new StateMachine(this);
         theme       = (Audio)LoadingStuffs.getInstance().getStuff("theme");
@@ -247,6 +256,11 @@ public class Frogger extends JFrame implements Game {
                     //At least, copy the backbuffer to the canvas screen
                     this.canvas.getGraphics().drawImage(this.bufferImage, 0, 0, this.windowWidth, this.windowHeight, 
                                                                           0, 0, this.wwm, this.whm, this);
+
+                    //Draw the HUD
+                    this.canvas.getGraphics().drawImage(this.hudImage, 0, 10 + this.windowHeight, this.windowWidth, 10 + (this.windowHeight + this.HUDHeight), //dest 
+                                                                       0, 0, this.hudImage.getWidth(), this.hudImage.getHeight(),                    //source
+                                                                       this);
                 }
             }
         } else {
@@ -285,8 +299,8 @@ public class Frogger extends JFrame implements Game {
         //    frog.setG2d(g2d);
         //}
         if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
-            hud.draw(frametime);
             scenario.draw(frametime);
+            hud.draw(frametime);
             frog.draw(frametime);
         } else if (this.gameState.getCurrentState() == StateMachine.GAME_OVER) {
             gameOver.draw(frametime);
