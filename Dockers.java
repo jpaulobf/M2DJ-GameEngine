@@ -63,4 +63,16 @@ public class Dockers extends SpriteCollection {
             this.dockers[i].draw(frametime);
         }
     }
+
+    /**
+     * Verify if all dockers are filled
+     * @return
+     */
+    public boolean getDockersComplete() {
+        boolean complete = true;
+        for (int cnt = 0; cnt < this.isInDock.length; cnt++) {
+            complete &= this.isInDock[cnt];
+        }
+        return (complete);
+    }
 }
