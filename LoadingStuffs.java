@@ -107,6 +107,11 @@ public class LoadingStuffs {
                 stuffs.put("docker", audio);
             }
 
+            audio = new Audio("audio/clear.wav", 0);
+            if (audio != null && audio.isReady()) {
+                stuffs.put("clearAudio", audio);
+            }
+
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
