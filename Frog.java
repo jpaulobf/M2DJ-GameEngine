@@ -20,6 +20,8 @@ public class Frog extends SpriteImpl {
     private volatile Audio jumpAudio        = null;
     private volatile Audio plunkAudio       = null;
     private volatile Audio squashAudio      = null;
+    private volatile Audio dockerAudio      = null;
+    private volatile Audio clearAudio       = null;
 
     //render variables
     private byte tileX                      = 0;
@@ -82,6 +84,8 @@ public class Frog extends SpriteImpl {
         this.jumpAudio      = (Audio)LoadingStuffs.getInstance().getStuff("jumpAudio");
         this.plunkAudio     = (Audio)LoadingStuffs.getInstance().getStuff("plunkAudio");
         this.squashAudio    = (Audio)LoadingStuffs.getInstance().getStuff("squashAudio");
+        this.dockerAudio    = (Audio)LoadingStuffs.getInstance().getStuff("docker");
+        this.clearAudio     = (Audio)LoadingStuffs.getInstance().getStuff("clearAudio");
     }
 
     /**
@@ -360,6 +364,12 @@ public class Frog extends SpriteImpl {
                 if (colliding != -1) {
                     if (!this.scenario.getDockers().getIsInDock()[colliding]) {
                         this.scenario.getDockers().setIsInDock(colliding);
+
+                        if (this.scenario.getDockers().getDockersComplete()) {
+                            this.clearAudio.play();
+                        } else {
+                            this.dockerAudio.play();
+                        }
                         this.frogReset();    
                     } else {
                         this.canMove    = false;
