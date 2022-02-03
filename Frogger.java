@@ -69,7 +69,7 @@ public class Frogger extends JFrame implements Game {
     private Frog frog                           = null;
     private GameOver gameOver                   = null;
     private volatile boolean canContinue        = true;
-    private boolean fullscreen                  = false;
+    private boolean fullscreen                  = true;
     private boolean isFullScreenAvailable       = false;
     private long framecounter                   = 0;
     private volatile Audio theme                = null;
@@ -238,6 +238,11 @@ public class Frogger extends JFrame implements Game {
                 //At least, copy the backbuffer to the backbuffer
                 this.g2d.drawImage(this.bufferImage, 0, 0, this.windowWidth, this.windowHeight, 
                                                      0, 0, this.wwm, this.whm, this);
+
+                //Draw the HUD
+                this.g2d.drawImage(this.hudImage, 0, 10 + this.windowHeight, this.windowWidth, 10 + (this.windowHeight + this.HUDHeight), //dest 
+                                                  0, 0, this.hudImage.getWidth(), this.hudImage.getHeight(),                    //source
+                                                  this);
 
                 this.renderFPSLayer(frametime, this.g2d);
 
