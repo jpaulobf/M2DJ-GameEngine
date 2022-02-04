@@ -175,7 +175,7 @@ public class SplashScreen extends JFrame implements Runnable {
             Thread.sleep(1_000);
             this.setVisible(false);
             //start the thread
-            Thread thread = new Thread(new GameEngine(0, new Frogger()), "engine");
+            Thread thread = new Thread(new Frogger(120), "engine");
             thread.setPriority(Thread.MAX_PRIORITY);
             thread.start();
         } catch (Exception e) {}
@@ -194,14 +194,6 @@ public class SplashScreen extends JFrame implements Runnable {
         thread.setPriority(Thread.MAX_PRIORITY);
         thread.start();
     }
-
-
-    /*
-        Description: main method
-    */
-    /*public static void main(String [] args) {
-        new Thread(new ConfigSplashScreen(), "configScreen").start();
-    }*/
 
     /*
         This subclass is still under development...
