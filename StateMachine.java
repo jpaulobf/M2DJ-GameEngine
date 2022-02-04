@@ -1,5 +1,3 @@
-import interfaces.Game;
-
 /**
  * StateMachine class - control the state of the game
  */
