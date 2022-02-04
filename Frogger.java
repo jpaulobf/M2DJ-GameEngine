@@ -1,7 +1,6 @@
-import util.Audio;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import interfaces.Game;
+import interfaces.CanvasEngine;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -12,8 +11,8 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.VolatileImage;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
-import java.awt.RenderingHints;
 import java.awt.EventQueue;
+import java.awt.RenderingHints;
 
 /*
     Project:    Modern 2D Java Game Engine
@@ -22,227 +21,160 @@ import java.awt.EventQueue;
     Date:       Octuber 2021
     WTCD:       This class, provides a stage for the game.
 */
-public class Frogger extends JFrame implements Game {
+public class Frogger implements Runnable {
 
-    private static final long serialVersionUID  = 1L;
+    /**
+     * Game Canvas
+     */
+    private class Canvas extends JFrame implements CanvasEngine {
 
-    //this window properties
-    private int positionX                       = 0;
-    private int positionY                       = 0;
-    private final byte HUDHeight                = 40;
+        private static final long serialVersionUID  = 1L;
 
-    //width and height of the window
-    //private int windowWidth                   = 1240;
-    //private int windowHeight                  = 700;
-    private int windowWidth                     = 1344;
-    private int windowHeight                    = 832;
+        //this window properties
+        private int positionX                       = 0;
+        private int positionY                       = 0;
 
-    //desktop properties
-    private int resolutionH                     = 0;
-    private int resolutionW                     = 0;
-    
-    //the first 'canvas' & the backbuffer (for simple doublebuffer strategy)
-    private JPanel canvas                       = null;
-    private VolatileImage bufferImage           = null;
-
-    //some support and the graphical device itself
-    private GraphicsEnvironment ge              = null;
-    private GraphicsDevice dsd                  = null;
-    private Graphics2D g2d                      = null;
-    private BufferStrategy bufferStrategy       = null;
-
-    //extra volatile image for hud
-    private Graphics2D hudg2d                   = null;
-    private VolatileImage hudImage              = null;
-
-    private boolean showFPS                     = true;
-    //width and height of window for base metrics of the game
-    private final int wwm                       = 1344;
-    private final int whm                       = 832;
-
-    //the game statemachine goes here
-    private StateMachine gameState              = null;
-
-    //the game variables go here...
-    private Scenario scenario                   = null;
-    private HUD hud                             = null;
-    private Frog frog                           = null;
-    private GameOver gameOver                   = null;
-    private volatile boolean canContinue        = true;
-    private boolean fullscreen                  = true;
-    private boolean isFullScreenAvailable       = false;
-    private long framecounter                   = 0;
-    private volatile Audio theme                = null;
-
-    /*
-        WTMD: some responsabilites here:
-    */
-    public Frogger() {
-
-        //////////////////////////////////////////////////////////////////////
-        //set some properties for this window
-        //////////////////////////////////////////////////////////////////////
-        Dimension basic = new Dimension(this.windowWidth, (this.windowHeight + this.HUDHeight));
-        this.setPreferredSize(basic);
-        this.setMinimumSize(basic);
-        this.setUndecorated(true);
-
-        //default operation on close (exit in this case)
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        //recover the desktop resolution
-        Dimension size = Toolkit.getDefaultToolkit(). getScreenSize();
-
-        //and save this values
-        this.resolutionH = (int)size.getHeight();
-        this.resolutionW = (int)size.getWidth();
-
-        //center the current window regards the desktop resolution
-        this.positionX = (int)((size.getWidth() / 2) - (this.windowWidth / 2));
-        this.positionY = (int)((size.getHeight() / 2) - (this.windowHeight + this.HUDHeight / 2));
-        this.setLocation(this.positionX, this.positionY);
-
-        //create the backbuffer from the size of screen resolution to avoid any resize process penalty
-        this.ge             = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        this.dsd            = ge.getDefaultScreenDevice();
-        this.bufferImage    = dsd.getDefaultConfiguration().createCompatibleVolatileImage(this.wwm, this.whm);
-        this.g2d            = (Graphics2D)bufferImage.getGraphics();
-        this.g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
-
-        //image & g2d for hud
-        this.hudImage       = dsd.getDefaultConfiguration().createCompatibleVolatileImage(this.wwm, HUDHeight);
-        this.hudg2d         = (Graphics2D)hudImage.getGraphics();
-
-        //verify if fullscreen is posible
-        this.isFullScreenAvailable = dsd.isFullScreenSupported();
-        this.setUndecorated(true);
-        this.setResizable(false);
-
-        //////////////////////////////////////////////////////////////////////
-        // ->>>  now, for the canvas
-        //////////////////////////////////////////////////////////////////////
-        //initialize the canvas
-        this.canvas = new JPanel(null);
-        this.canvas.setSize(basic.width, basic.height);
-        this.canvas.setBackground(Color.BLACK);
-        this.canvas.setOpaque(true);
+        //width and height of the window
+        //private int windowWidth                   = 1240;
+        //private int windowHeight                  = 700;
+        private int windowWidth                     = 1344;
+        private int windowHeight                    = 872;
         
-        //final parameters for the window
-        this.add(canvas);
+        //the first 'canvas' & the backbuffer (for simple doublebuffer strategy)
+        private JPanel canvas                       = null;
+        private Game game                           = null;
 
-        //verify if fullscreen mode is supported & desired
-        if (fullscreen && isFullScreenAvailable) {
-            // set to Full-screen mode
-            this.setIgnoreRepaint(true);
-            dsd.setFullScreenWindow(this);
-            this.setBufferStrategy();
-            validate();
-        } else {
-            this.pack();
-            this.setLocationRelativeTo(null);
-        }
+        //some support and the graphical device itself
+        private GraphicsEnvironment ge              = null;
+        private GraphicsDevice dsd                  = null;
+        private BufferStrategy bufferStrategy       = null;
+        private Graphics2D g2d                      = null;
 
-        //show the game screen
-        this.setVisible(true);
-        this.requestFocus();
+        //the backbuffer (for simple doublebuffer strategy)
+        private VolatileImage bufferImage           = null;
 
-        //////////////////////////////////////////////////////////////////////
-        // ->>>  create the game elements objects
-        //////////////////////////////////////////////////////////////////////
-        scenario    = new Scenario(g2d, this.wwm, this.whm);
-        frog        = new Frog(g2d, scenario);
-        hud         = new HUD(hudg2d, HUDHeight, scenario, frog);
-        gameOver    = new GameOver(g2d, this.wwm, this.whm);
-        gameState   = new StateMachine(this);
-        theme       = (Audio)LoadingStuffs.getInstance().getStuff("theme");
+        //show or hide the game FPS
+        private boolean showFPS                     = true;
 
-        this.addKeyListener(new KeyAdapter() {
-            @Override
-            public synchronized void keyPressed(KeyEvent e) {
-                if (gameState.getCurrentState() == StateMachine.IN_GAME) {
+        //control and fullscreen controller
+        private volatile boolean canContinue        = true;
+        private boolean fullscreen                  = false;
+        private boolean isFullScreenAvailable       = false;
+
+        /**
+         * Game canvas constructor
+        */
+        public Canvas() {
+
+            //////////////////////////////////////////////////////////////////////
+            //set some properties for this window
+            //////////////////////////////////////////////////////////////////////
+            Dimension basic = new Dimension(this.windowWidth, this.windowHeight);
+            this.setPreferredSize(basic);
+            this.setMinimumSize(basic);
+            this.setUndecorated(true);
+
+            //default operation on close (exit in this case)
+            this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+            //recover the desktop resolution
+            Dimension size = Toolkit.getDefaultToolkit(). getScreenSize();
+
+            //center the current window regards the desktop resolution
+            this.positionX  = (int)((size.getWidth() / 2) - (this.windowWidth / 2));
+            this.positionY  = (int)((size.getHeight() / 2) - (this.windowHeight / 2));
+            this.setLocation(this.positionX, this.positionY);
+
+            //create the backbuffer from the size of screen resolution to avoid any resize process penalty
+            this.ge             = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            this.dsd            = ge.getDefaultScreenDevice();
+            this.bufferImage    = dsd.getDefaultConfiguration().createCompatibleVolatileImage(this.windowWidth, this.windowHeight);
+            this.g2d            = (Graphics2D)bufferImage.getGraphics();
+            this.g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+
+            //verify if fullscreen is posible
+            this.isFullScreenAvailable = dsd.isFullScreenSupported();
+            this.setUndecorated(true);
+            this.setResizable(false);
+
+            //////////////////////////////////////////////////////////////////////
+            // ->>>  now, for the canvas
+            //////////////////////////////////////////////////////////////////////
+            //initialize the canvas
+            this.canvas = new JPanel(null);
+            this.canvas.setSize(basic.width, basic.height);
+            this.canvas.setBackground(Color.BLACK);
+            this.canvas.setOpaque(true);
+            
+            //final parameters for the window
+            this.add(canvas);
+
+            //verify if fullscreen mode is supported & desired
+            if (fullscreen && isFullScreenAvailable) {
+                // set to Full-screen mode
+                this.setIgnoreRepaint(true);
+                dsd.setFullScreenWindow(this);
+                this.setBufferStrategy();
+                validate();
+            } else {
+                this.pack();
+                this.setLocationRelativeTo(null);
+            }
+
+            //start the game controller
+            this.game = new Game(this.g2d, size);
+
+            //KeyListener
+            this.addKeyListener(new KeyAdapter() {
+                @Override
+                public synchronized void keyPressed(KeyEvent e) {
                     if (canContinue) {
                         canContinue = false;
-                        frog.move(e.getKeyCode());
+                        game.movement(e.getKeyCode());
                     }
                 }
-            }
-            @Override
-            public synchronized void keyReleased(KeyEvent e) {
-                canContinue = true;
-                if (e.getKeyCode() == 27) {setVisible(false); System.exit(0);}
-            }
-        });
-    }
+                @Override
+                public synchronized void keyReleased(KeyEvent e) {
+                    canContinue = true;
+                    if (e.getKeyCode() == 27) {setVisible(false); System.exit(0);}
+                }
+            });     
 
-    /**
-     * Update the game logic / receives the frametime
-     * @param frametime
-     */
-    public synchronized void update(long frametime) {
-
-        //how many pixels per second I want?
-        //ex.: movement at 200px/s
-        //To do so, I need to divide 1_000_000_000 (1 second) by the exactly frametime to know the current FPS
-        //With this number in hand, divide the pixel distance by the current fps
-        //this must be your maximum movement amount in pixels
-        //example:
-        //double movementPerSecond = 100D;
-        //double step = movementPerSecond / (double)(1_000_000_000D / (double)frametime);
-
-        //////////////////////////////////////////////////////////////////////
-        // ->>>  update the game elements
-        //////////////////////////////////////////////////////////////////////
-        if (this.gameState.getCurrentState() == StateMachine.STARTING) {
-            theme.play(-1);
-        } else if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
-            scenario.update(frametime);
-            frog.update(frametime);
-            hud.update(frametime);
-            //after possible colision, check lives.
-            if (frog.getLives() == 0) {
-                this.gameState.setCurrentState(StateMachine.GAME_OVER);
-            }
-        } else if (this.gameState.getCurrentState() == StateMachine.GAME_OVER) {
-            this.framecounter += frametime;
-            if (framecounter >= 3_000_000_000L) {
-                this.framecounter = 0;
-                frog.frogReset();
-                frog.resetLives();
-                hud.reset();
-                this.gameState.setCurrentState(StateMachine.IN_GAME);
-            } else {
-                this.gameState.setCurrentState(StateMachine.GAME_OVER);
-            }
+            //show the game screen
+            this.setVisible(true);
+            this.requestFocus();
         }
-    }
-    
-    /**
-     * Draw the game / receives the frametime
-     * WTMD: This method draw the current screen, some steps described here:
-                1) Clear the stage
-     * @param frametime
-     */
-    public synchronized void draw(long frametime) {
-        if (this.gameState.getCurrentState() != StateMachine.STARTING) {
-            //update the window size variables if the user resize it.
-            this.windowHeight   = this.getHeight() - this.HUDHeight;
-            this.windowWidth    = this.getWidth();
+
+        /**
+         * Update the game logic / receives the frametime
+         * @param frametime
+         */
+        public synchronized void update(long frametime) {
+            this.game.update(frametime);
+        }
+        
+        /**
+         * Draw the game / receives the frametime
+         * WTMD: This method draw the current screen, some steps described here:
+                    1) Clear the stage
+        * @param frametime
+        */
+        public synchronized void draw(long frametime) {
 
             if (fullscreen && isFullScreenAvailable) {
                 //set the buffer strategy
                 this.g2d = (Graphics2D)this.bufferStrategy.getDrawGraphics();
 
+                //update the game graphics
+                this.game.setGraphics2D(this.g2d);
+
                 //render the game elements
-                this.renderGameElements(frametime);
+                this.game.draw(frametime);
 
                 //At least, copy the backbuffer to the backbuffer
-                this.g2d.drawImage(this.bufferImage, 0, 0, this.windowWidth, this.windowHeight, 
-                                                     0, 0, this.wwm, this.whm, this);
-
-                //Draw the HUD
-                this.g2d.drawImage(this.hudImage, 0, 10 + this.windowHeight, this.windowWidth, 10 + (this.windowHeight + this.HUDHeight), //dest 
-                                                  0, 0, this.hudImage.getWidth(), this.hudImage.getHeight(),                    //source
-                                                  this);
+                this.g2d.drawImage(this.bufferImage, 0, 0, this.getWidth(), this.getHeight(),                 //destine
+                                                    0, 0, this.windowWidth, this.windowHeight, // source
+                                                    this);
 
                 this.renderFPSLayer(frametime, this.g2d);
 
@@ -255,82 +187,215 @@ public class Frogger extends JFrame implements Game {
                 //verify if the Graphics element isn't lost
                 if (this.g2d != null) {
                 
+                    //update the game graphics
+                    this.game.setGraphics2D(this.g2d);
+
                     //render the game elements
-                    this.renderGameElements(frametime);
+                    this.game.draw(frametime);
         
                     this.renderFPSLayer(frametime, (Graphics2D)this.bufferImage.getGraphics());
 
                     //At least, copy the backbuffer to the canvas screen
-                    this.canvas.getGraphics().drawImage(this.bufferImage, 0, 0, this.windowWidth, this.windowHeight, 
-                                                                          0, 0, this.wwm, this.whm, this);
-
-                    //Draw the HUD
-                    this.canvas.getGraphics().drawImage(this.hudImage, 0, 10 + this.windowHeight, this.windowWidth, 10 + (this.windowHeight + this.HUDHeight), //dest 
-                                                                       0, 0, this.hudImage.getWidth(), this.hudImage.getHeight(),                    //source
-                                                                       this);
+                    this.canvas.getGraphics().drawImage(this.bufferImage, 0, 0, this.windowWidth, this.windowHeight,                 //destine
+                                                                        0, 0, this.windowWidth, this.windowHeight, //source
+                                                                        this);
                 }
             }
-        } else {
-            this.gameState.setCurrentState(StateMachine.IN_GAME);
+        }
+
+        /**
+         * Show FPS Layer
+         * @param frametime
+         * @param g
+         */
+        private void renderFPSLayer(long frametime, Graphics2D g) {
+            //verify if the user want to show the FPS
+            if (this.showFPS) {
+                g.setColor(Color.WHITE);
+                g.drawString("fps: " + (int)(1_000_000_000D / frametime), 10, 20);
+            }
+        }
+
+        /**
+         * Create the bufferstrategy
+         */
+        private void setBufferStrategy() { 
+            try {
+                EventQueue.invokeAndWait(new Runnable() {
+                    public void run() { 
+                        createBufferStrategy(2); 
+                    }});
+            } catch (Exception e) {
+                System.exit(0);
+            }
+            try {     
+                Thread.sleep(500);
+            } catch(InterruptedException ex){}
+            this.bufferStrategy = super.getBufferStrategy();
         }
     }
 
     /**
-     * Show FPS Layer
-     * @param frametime
-     * @param g
+     * Class of GameEngine
      */
-    private void renderFPSLayer(long frametime, Graphics2D g) {
-        //verify if the user want to show the FPS
-        if (this.showFPS) {
-            g.setColor(Color.WHITE);
-            g.drawString("fps: " + (int)(1_000_000_000D / frametime), 10, 20);
+    private class GameEngine implements Runnable {
+
+        private boolean isEngineRunning     = true;
+        private long FPS240                 = (long)(1_000_000_000 / 240);
+        private long FPS120                 = (long)(1_000_000_000 / 120);
+        private long FPS90                  = (long)(1_000_000_000 / 90);
+        private long FPS60                  = (long)(1_000_000_000 / 60);
+        private long FPS30                  = (long)(1_000_000_000 / 30);
+        private long TARGET_FRAMETIME       = FPS60;
+        private boolean UNLIMITED_FPS       = false;
+        private CanvasEngine game           = null;
+    
+        /*
+            WTMD: constructor
+                    receives the target FPS (0, 30, 60, 120, 240) and starts the engine
+        */
+        public GameEngine(int targetFPS, CanvasEngine game) {
+    
+            this.UNLIMITED_FPS = false;
+            switch(targetFPS) {
+                case 30:
+                    this.TARGET_FRAMETIME = FPS30;
+                    break;
+                case 60:
+                    this.TARGET_FRAMETIME = FPS60;
+                    break;
+                case 90:
+                    this.TARGET_FRAMETIME = FPS90;
+                    break;
+                case 120:
+                    this.TARGET_FRAMETIME = FPS120;
+                    break;
+                case 240:
+                    this.TARGET_FRAMETIME = FPS240;
+                    break;
+                case 0:
+                    this.UNLIMITED_FPS = true;
+                    break;
+                default:
+                    this.TARGET_FRAMETIME = FPS30;
+                    break;
+            }
+            this.game = game;
+        }
+        
+        /* Método de execução da thread */
+        @SuppressWarnings("unused") //just temporary, for the counter variable... delete this...
+        public void run() {
+            long timeReference      = System.nanoTime();
+            long beforeUpdate       = 0;
+            long afterUpdate        = 0;
+            long beforeDraw         = 0;
+            long afterDraw          = 0;
+            long accumulator        = 0;
+            long timeElapsed        = 0;
+            long timeStamp          = 0;
+            long counter            = 0;
+    
+            if (UNLIMITED_FPS) {
+                while (isEngineRunning) {
+    
+                    //mark the time before the iteration
+                    timeStamp = System.nanoTime();
+    
+                    //compute the time from previous iteration and the current
+                    timeElapsed = (timeStamp - timeReference);
+    
+                    //save the difference in an accumulator to control the pacing
+                    accumulator += timeElapsed;
+    
+                    //update the game (gathering input from user, and processing the necessary games updates)
+                    this.update(timeElapsed);
+    
+                    //draw
+                    this.draw(timeElapsed);
+    
+                    //update the referencial time with the initial time
+                    timeReference = timeStamp;
+                }
+            } else {
+                
+                while (isEngineRunning) {
+    
+                    accumulator = 0;
+    
+                    //calc the update time
+                    beforeUpdate = System.nanoTime();
+    
+                    //update the game (gathering input from user, and processing the necessary games updates)
+                    this.update(TARGET_FRAMETIME);
+    
+                    //get the timestamp after the update
+                    afterUpdate = System.nanoTime() - beforeUpdate;
+                    
+                    //only draw if there is some (any) enough time
+                    if ((TARGET_FRAMETIME - afterUpdate) > 0) {
+                        
+                        beforeDraw = System.nanoTime();
+    
+                        //draw
+                        this.draw(TARGET_FRAMETIME);
+                        
+                        //and than, store the time spent
+                        afterDraw = System.nanoTime() - beforeDraw;
+                    }
+    
+                    //reset the accumulator
+                    accumulator = TARGET_FRAMETIME - (afterUpdate + afterDraw);
+    
+                    if (accumulator > 0) {
+                        try {
+                            Thread.sleep((long)(accumulator * 0.000001));
+                        } catch (Exception e) {}
+                    } else {
+                        /*  
+                        Explanation:
+                            if the total time to execute, consumes more miliseconds than the target-frame's amount, 
+                            is necessary to keep updating without render, to recover the pace.
+                        Important: Something here isn't working with very slow machines. 
+                                   So, this compensation have to be re-tested with this new approuch (exiting beforeUpdate).
+                                   Please test this code with your scenario.
+                        */
+                        //System.out.println("Skip 1 frame... " + ++counter + " time(s)");
+                        if (accumulator < 0) {
+                            this.update(TARGET_FRAMETIME);
+                        }
+                    }
+                }
+            }
+        }
+    
+        /* Método de update, só executa quando a flag permite */
+        public void update(long frametime) {
+            this.game.update(frametime);
+        }
+    
+        /* Método de desenho, só executa quando a flag permite */
+        public void draw(long frametime) {
+            this.game.draw(frametime);
         }
     }
 
+    //target FPS
+    private int targetFPS = 0;
+
     /**
-     * Render the game elements
-     * @param frametime
+     * Thread Constructor
+     * @param targetFPS
      */
-    private void renderGameElements(long frametime) {
-        //this graphical device (g2d) points to backbuffer, so, we are making things behide the scenes
-        //clear the stage
-        this.g2d.setBackground(Color.BLACK);
-        this.g2d.clearRect(0, 0, this.resolutionW, this.resolutionH);
-        this.hudg2d.setBackground(Color.BLACK);
-        this.hudg2d.clearRect(0, 0, this.resolutionW, this.HUDHeight);
-   
-        //////////////////////////////////////////////////////////////////////
-        // ->>>  draw the game elements
-        //////////////////////////////////////////////////////////////////////
-        //if (g2d != null) {
-        //    scenario.setG2d(g2d);
-        //    frog.setG2d(g2d);
-        //}
-        if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
-            scenario.draw(frametime);
-            hud.draw(frametime);
-            frog.draw(frametime);
-        } else if (this.gameState.getCurrentState() == StateMachine.GAME_OVER) {
-            gameOver.draw(frametime);
-        }
+    public Frogger(int targetFPS) {
+        this.targetFPS  = targetFPS;
     }
 
     /**
-     * Create the bufferstrategy
+     * Run the gameengine
      */
-    private void setBufferStrategy() { 
-        try {
-            EventQueue.invokeAndWait(new Runnable() {
-                public void run() { 
-                    createBufferStrategy(2); 
-                }});
-        } catch (Exception e) {
-            System.exit(0);
-        }
-        try {     
-            Thread.sleep(500);
-        } catch(InterruptedException ex){}
-        this.bufferStrategy = super.getBufferStrategy();
+    @Override
+    public void run() {
+        new GameEngine(this.targetFPS, new Canvas()).run();
     }
 }
