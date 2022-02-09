@@ -79,6 +79,10 @@ public class LoadingStuffs {
             stuffs.put("live", image);
             //stuffs.put("turtles", createVImage(ImageIO.read(new File("images\\turtles.png"))));
 
+            image = ImageIO.read(new File("images\\clear.png"));
+            stuffs.put("stage-clear", image);
+            //stuffs.put("stage-clear", createVImage(ImageIO.read(new File("images\\clear.png"))));
+
             Logger.INFO("read all images...", this);
 
 
