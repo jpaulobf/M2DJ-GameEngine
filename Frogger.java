@@ -137,6 +137,8 @@ public class Frogger implements Runnable {
                 public synchronized void keyReleased(KeyEvent e) {
                     canContinue = true;
                     if (e.getKeyCode() == 27) {setVisible(false); System.exit(0);}
+                    if (e.getKeyCode() == 77) {game.toogleMuteTheme();}
+                    if (e.getKeyCode() == 80) {game.tooglePause();}
                 }
             });     
 
