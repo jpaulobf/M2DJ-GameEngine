@@ -36,23 +36,6 @@ public class Scenario {
     protected final byte halfTileX      = (byte)(tileX / 2);
     protected final byte halfTileY      = (byte)(tileY / 2);
 
-    //getters
-    public Vehicles getVehicles() {
-        return (this.vehicles);
-    }
-
-    public Trunks getTrunks() {
-        return (this.trunks);
-    }
-
-    public Turtles getTurtles() {
-        return (this.turtles);
-    }
-
-    public Dockers getDockers() {
-        return (this.dockers);
-    }
-
     /**
      * Constructor
      * @param g2d
@@ -67,11 +50,6 @@ public class Scenario {
         //the game is construct having one resolution as target
         //any different resolution is streched in the final process
         //the code below, allow another approuche, calculating everything in a dynamic way (more cpu intensive)
-        /*this.tileX          = (byte)(this.windowWidth / tilesInX);
-        this.tileY          = (byte)(this.windowHeight / tilesInY);
-        this.halfTileX      = (byte)(tileX / 2);
-        this.halfTileY      = (byte)(tileY / 2);*/
-
         this.vehicles       = new Vehicles(g2d, windowWidth, windowHeight);
         this.trunks         = new Trunks(g2d, windowWidth, windowHeight);
         this.turtles        = new Turtles(g2d, windowWidth, windowHeight);
@@ -247,5 +225,24 @@ public class Scenario {
         this.trunks.draw(frametime);
         this.turtles.draw(frametime);
         this.dockers.draw(frametime);
+    }
+
+    
+    /**
+     * Accessors
+     * @return
+     */
+    public Vehicles getVehicles()   {   return (this.vehicles); }
+    public Trunks getTrunks()       {   return (this.trunks);   }
+    public Turtles getTurtles()     {   return (this.turtles);  }
+    public Dockers getDockers()     {   return (this.dockers);  }
+
+    /**
+     * Toogle the pause button
+     */
+    public void tooglePause() {
+        this.vehicles.toogleStop();
+        this.trunks.toogleStop();
+        this.turtles.toogleStop();
     }
 }
