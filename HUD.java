@@ -28,12 +28,12 @@ public class HUD {
      * @param scenario
      * @param frog
      */
-    public HUD(Graphics2D g2d, int wwm, int whm, byte HUDHeight, Frog frog) {
+    public HUD(Graphics2D g2d, int wwm, int whm, byte HUDHeight, Game game) {
         this.HUDHeight      = HUDHeight;
         this.wwm            = wwm;
         this.whm            = whm;
         this.g2d            = g2d;
-        this.frogRef        = frog;
+        this.frogRef        = game.getFrog();
         this.lives          = this.frogRef.getLives();
         this.hudBG          = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().createCompatibleVolatileImage(wwm, HUDHeight);
         this.bg2d           = (Graphics2D)this.hudBG.getGraphics();
