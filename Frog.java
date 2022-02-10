@@ -11,6 +11,7 @@ import interfaces.Lanes;
 public class Frog extends SpriteImpl {
     
     //game variable
+    private Game gameReference              = null;
     private final byte INITIAL_LIVES        = 5;
     private volatile byte lives             = INITIAL_LIVES;
     private final byte INITIAL_T_POS_X      = 10;
@@ -50,19 +51,23 @@ public class Frog extends SpriteImpl {
     private volatile byte jumpX             = 0;
     private volatile byte jumpY             = 0;
     private volatile byte lastMovement      = UP;
+    private volatile boolean stopped        = false;
 
     /**
      * Frog constructor
      * @param g2d
      * @param scenario
      */
-    public Frog(Graphics2D g2d, Scenario scenario) {
+    public Frog(Graphics2D g2d, Game game) {
 
         //store the G2D
-        this.g2d        = g2d;
+        this.g2d            = g2d;
+
+        //store the game reference
+        this.gameReference  = game;
         
         //retrieve the tile size
-        this.scenario   = scenario;
+        this.scenario   = game.getScenario();
         this.tileX      = scenario.getTileX();
         this.tileY      = scenario.getTileY();
 
@@ -137,7 +142,7 @@ public class Frog extends SpriteImpl {
      */
     public synchronized void move(int keycode) {
         //just if the frog can move
-        if (keyMap.get(keycode) != null) {
+        if (keyMap.get(keycode) != null && !this.stopped) {
 
             //filter the pressed keys
             if (this.canMove) {
@@ -204,191 +209,194 @@ public class Frog extends SpriteImpl {
      */
     @Override
     public void update(long frametime) {
-        
-        //while the frog is animating (moving inbetween)
-        if (this.animating) {
+        if (!this.stopped) {
+            //while the frog is animating (moving inbetween)
+            if (this.animating) {
 
-            //calc frog step for each cicle
-            double step = frogVelocity / (1_000_000_000D / (double)frametime);
+                //calc frog step for each cicle
+                double step = frogVelocity / (1_000_000_000D / (double)frametime);
 
-            switch(this.direction) {
-                case UP: //animate foward position
-                    
-                //calc the new Y adding the new step distance
-                    this.positionY     -= step;
-                    
-                    //update images position static-values
-                    this.width          = 32;
-                    this.height         = 36;
-                    this.drawImgW       = this.width;
-                    this.drawImgH       = this.height;
-                    this.drawImgX       = 131;
-                    this.drawImgY       = ((double)(this.positionY - this.destPositionY) <= (0.35 * this.distanceY))?(short)68:(short)31;
+                switch(this.direction) {
+                    case UP: //animate foward position
+                        
+                    //calc the new Y adding the new step distance
+                        this.positionY     -= step;
+                        
+                        //update images position static-values
+                        this.width          = 32;
+                        this.height         = 36;
+                        this.drawImgW       = this.width;
+                        this.drawImgH       = this.height;
+                        this.drawImgX       = 131;
+                        this.drawImgY       = ((double)(this.positionY - this.destPositionY) <= (0.35 * this.distanceY))?(short)68:(short)31;
 
-                    //compare to verify if frog reach the target position
-                    if (this.positionY <= this.destPositionY) {                      
-                        this.positionY  = this.destPositionY;
-                        this.positionX  = this.destPositionX;
-                        this.animating  = false;
-                        this.canMove    = true;
-                        this.height     = 25;
-                        this.drawImgY   = 3;
-                        this.drawImgH   = this.height;
-                    }
-                    break;
-                case DOWN: //animate backward position
-                    //calc the new Y
-                    this.positionY     += step;
-                    
-                    //update images position static-values
-                    this.width          = 32;
-                    this.height         = 36;
-                    this.drawImgW       = this.width;
-                    this.drawImgH       = this.height;
-                    this.drawImgX       = 164;
-                    this.drawImgY       = ((double)(this.destPositionY - this.positionY) <= (0.35 * this.distanceY))?(short)68:(short)31;
-
-                    //compare to verify if frog reach the target position
-                    if (this.positionY >= this.destPositionY) {
-                        this.positionY  = this.destPositionY;
-                        this.positionX  = this.destPositionX;
-                        this.animating  = false;
-                        this.canMove    = true;
-                        this.height     = 25;
-                        this.drawImgY   = 3;
-                        this.drawImgH   = this.height;
-                    }
-                    break;
-                case LEFT: //animate going left position
-                    //calc the new X
-                    this.positionX     -= step;
-
-                    //update images position static-values
-                    this.height         = 32;
-                    this.width          = 36;
-                    this.drawImgH       = this.height;
-                    this.drawImgW       = this.width;
-                    this.drawImgX       = 197;
-                    this.drawImgY       = ((double)(this.positionX - this.destPositionX) <= (0.35 * this.distanceX))?(short)70:(short)33;
-
-                    //compare to verify if frog reach the target position
-                    if (this.positionX <= this.destPositionX) {
-                        this.positionX  = this.destPositionX;
-                        this.positionY  = this.destPositionY;
-                        this.animating  = false;
-                        this.canMove    = true;
-                        this.width      = 25;
-                        this.drawImgY   = 0;
-                        this.drawImgW   = this.width;
-                    }
-                    break;
-                case RIGHT: //animate going right position
-                    //calc the new X
-                    this.positionX     += step;
-
-                    //update images position dynamic-values
-                    this.height         = 32;
-                    this.width          = 36;
-                    this.drawImgH       = this.height;
-                    this.drawImgW       = this.width;
-                    this.drawImgX       = 234;
-                    this.drawImgY       = ((double)(this.destPositionX - this.positionX) <= (0.35 * this.distanceX))?(short)70:(short)33;
-                    
-                    //compare to verify if frog reach the target position
-                    if (this.positionX >= this.destPositionX) {
-                        this.positionX  = this.destPositionX;
-                        this.positionY  = this.destPositionY;
-                        this.animating  = false;
-                        this.canMove    = true;
-                        this.width      = 25;
-                        this.drawImgX   = 245;
-                        this.drawImgY   = 0;
-                        this.drawImgW   = this.width;
-                    }
-                    break;
-            }
-        }
-
-        if ((this.positionX + this.width) > this.scenario.getWindowWidth() || this.positionX < 0) {
-            this.canMove    = false;
-            this.isDead     = true;
-            this.animating  = false;
-            this.squashAudio.play();
-        }
-
-        //colision detection or dead animation
-        int colliding = -1;
-        if (!this.isDead) {
-            //this line test the colisions only with the cars, in the lanes.
-            if (this.positionY > Lanes.streetLanes[0]) {
-                colliding = this.scenario.getVehicles().testColision(this);
-                if (colliding != -1) {
-                    this.canMove    = false;
-                    this.isDead     = true;
-                    this.animating  = false;
-                    this.squashAudio.play();
-                }
-            } else if ((this.positionY   > Lanes.riverLanes[3] && this.positionY <= (Lanes.riverLanes[4])) ||
-                         (this.positionY > Lanes.riverLanes[2] && this.positionY <= (Lanes.riverLanes[3])) ||
-                         (this.positionY > Lanes.riverLanes[0] && this.positionY <= (Lanes.riverLanes[1]))) {
-                colliding = this.scenario.getTrunks().testColision(this);
-                if (colliding != -1) {
-                    if (!this.animating) {
-                        this.positionX += (this.scenario.getTrunks().getCalculatedStep(colliding) / 1_000);
-                    }
-                } else {
-                    if (!animating) {
-                        this.canMove    = false;
-                        this.isDead     = true;
-                        this.animating  = false;
-                        this.plunkAudio.play();
-                    }
-                }
-            } else if ((this.positionY > Lanes.riverLanes[4]) && (this.positionY <= (Lanes.riverLanes[4] + this.tileY)) ||
-                       (this.positionY > Lanes.riverLanes[1]) && (this.positionY <= (Lanes.riverLanes[2]))) {
-                colliding = this.scenario.getTurtles().testColision(this);
-                if (colliding != -1) {
-                    if (!this.animating) {
-                        this.positionX += (this.scenario.getTurtles().getCalculatedStep(colliding) / 1_000);
-                    }
-                } else {
-                    if (!animating) {
-                        this.canMove    = false;
-                        this.isDead     = true;
-                        this.animating  = false;
-                        this.plunkAudio.play();
-                    }
-                }
-            } else if (this.positionY >= Lanes.docksLanes[0] && this.positionY < Lanes.docksLanes[1]) {
-                colliding = this.scenario.getDockers().testColision(this);
-                if (colliding != -1) {
-                    if (!this.scenario.getDockers().getIsInDock()[colliding]) {
-                        this.scenario.getDockers().setIsInDock(colliding);
-
-                        if (this.scenario.getDockers().getDockersComplete()) {
-                            this.clearAudio.play();
-                        } else {
-                            this.dockerAudio.play();
+                        //compare to verify if frog reach the target position
+                        if (this.positionY <= this.destPositionY) {                      
+                            this.positionY  = this.destPositionY;
+                            this.positionX  = this.destPositionX;
+                            this.animating  = false;
+                            this.canMove    = true;
+                            this.height     = 25;
+                            this.drawImgY   = 3;
+                            this.drawImgH   = this.height;
                         }
-                        this.frogReset();    
+                        break;
+                    case DOWN: //animate backward position
+                        //calc the new Y
+                        this.positionY     += step;
+                        
+                        //update images position static-values
+                        this.width          = 32;
+                        this.height         = 36;
+                        this.drawImgW       = this.width;
+                        this.drawImgH       = this.height;
+                        this.drawImgX       = 164;
+                        this.drawImgY       = ((double)(this.destPositionY - this.positionY) <= (0.35 * this.distanceY))?(short)68:(short)31;
+
+                        //compare to verify if frog reach the target position
+                        if (this.positionY >= this.destPositionY) {
+                            this.positionY  = this.destPositionY;
+                            this.positionX  = this.destPositionX;
+                            this.animating  = false;
+                            this.canMove    = true;
+                            this.height     = 25;
+                            this.drawImgY   = 3;
+                            this.drawImgH   = this.height;
+                        }
+                        break;
+                    case LEFT: //animate going left position
+                        //calc the new X
+                        this.positionX     -= step;
+
+                        //update images position static-values
+                        this.height         = 32;
+                        this.width          = 36;
+                        this.drawImgH       = this.height;
+                        this.drawImgW       = this.width;
+                        this.drawImgX       = 197;
+                        this.drawImgY       = ((double)(this.positionX - this.destPositionX) <= (0.35 * this.distanceX))?(short)70:(short)33;
+
+                        //compare to verify if frog reach the target position
+                        if (this.positionX <= this.destPositionX) {
+                            this.positionX  = this.destPositionX;
+                            this.positionY  = this.destPositionY;
+                            this.animating  = false;
+                            this.canMove    = true;
+                            this.width      = 25;
+                            this.drawImgY   = 0;
+                            this.drawImgW   = this.width;
+                        }
+                        break;
+                    case RIGHT: //animate going right position
+                        //calc the new X
+                        this.positionX     += step;
+
+                        //update images position dynamic-values
+                        this.height         = 32;
+                        this.width          = 36;
+                        this.drawImgH       = this.height;
+                        this.drawImgW       = this.width;
+                        this.drawImgX       = 234;
+                        this.drawImgY       = ((double)(this.destPositionX - this.positionX) <= (0.35 * this.distanceX))?(short)70:(short)33;
+                        
+                        //compare to verify if frog reach the target position
+                        if (this.positionX >= this.destPositionX) {
+                            this.positionX  = this.destPositionX;
+                            this.positionY  = this.destPositionY;
+                            this.animating  = false;
+                            this.canMove    = true;
+                            this.width      = 25;
+                            this.drawImgX   = 245;
+                            this.drawImgY   = 0;
+                            this.drawImgW   = this.width;
+                        }
+                        break;
+                }
+            }
+
+            if ((this.positionX + this.width) > this.scenario.getWindowWidth() || this.positionX < 0) {
+                this.canMove    = false;
+                this.isDead     = true;
+                this.animating  = false;
+                this.squashAudio.play();
+            }
+
+            //colision detection or dead animation
+            int colliding = -1;
+            if (!this.isDead) {
+                //this line test the colisions only with the cars, in the lanes.
+                if (this.positionY > Lanes.streetLanes[0]) {
+                    colliding = this.scenario.getVehicles().testColision(this);
+                    if (colliding != -1) {
+                        this.canMove    = false;
+                        this.isDead     = true;
+                        this.animating  = false;
+                        this.squashAudio.play();
+                    }
+                } else if ((this.positionY   > Lanes.riverLanes[3] && this.positionY <= (Lanes.riverLanes[4])) ||
+                            (this.positionY > Lanes.riverLanes[2] && this.positionY <= (Lanes.riverLanes[3])) ||
+                            (this.positionY > Lanes.riverLanes[0] && this.positionY <= (Lanes.riverLanes[1]))) {
+                    colliding = this.scenario.getTrunks().testColision(this);
+                    if (colliding != -1) {
+                        if (!this.animating) {
+                            this.positionX += (this.scenario.getTrunks().getCalculatedStep(colliding) / 1_000);
+                        }
+                    } else {
+                        if (!animating) {
+                            this.canMove    = false;
+                            this.isDead     = true;
+                            this.animating  = false;
+                            this.plunkAudio.play();
+                        }
+                    }
+                } else if ((this.positionY > Lanes.riverLanes[4]) && (this.positionY <= (Lanes.riverLanes[4] + this.tileY)) ||
+                        (this.positionY > Lanes.riverLanes[1]) && (this.positionY <= (Lanes.riverLanes[2]))) {
+                    colliding = this.scenario.getTurtles().testColision(this);
+                    if (colliding != -1) {
+                        if (!this.animating) {
+                            this.positionX += (this.scenario.getTurtles().getCalculatedStep(colliding) / 1_000);
+                        }
+                    } else {
+                        if (!animating) {
+                            this.canMove    = false;
+                            this.isDead     = true;
+                            this.animating  = false;
+                            this.plunkAudio.play();
+                        }
+                    }
+                } else if (this.positionY >= Lanes.docksLanes[0] && this.positionY < Lanes.docksLanes[1]) {
+                    colliding = this.scenario.getDockers().testColision(this);
+                    if (colliding != -1) {
+                        if (!this.scenario.getDockers().getIsInDock()[colliding]) {
+                            this.scenario.getDockers().setIsInDock(colliding);
+
+                            if (this.scenario.getDockers().getDockersComplete()) {
+                                this.gameReference.tooglePause();
+                                this.gameReference.getMessages().tooglePause();
+                                this.clearAudio.play();
+                            } else {
+                                this.dockerAudio.play();
+                            }
+                            this.frogReset();    
+                        } else {
+                            this.canMove    = false;
+                            this.isDead     = true;
+                            this.animating  = false;
+                            this.squashAudio.play();
+                        }
                     } else {
                         this.canMove    = false;
                         this.isDead     = true;
                         this.animating  = false;
                         this.squashAudio.play();
                     }
-                } else {
-                    this.canMove    = false;
-                    this.isDead     = true;
-                    this.animating  = false;
-                    this.squashAudio.play();
                 }
+                this.animationCounter = 0;
+            } else { 
+                //The frog is dead... Define the dead animation parameters...
+                this.animationCounter += frametime;
+                this.setDeadAnimationFrame();
             }
-            this.animationCounter = 0;
-        } else { 
-            //The frog is dead... Define the dead animation parameters...
-            this.animationCounter += frametime;
-            this.setDeadAnimationFrame();
         }
     }
 
@@ -397,7 +405,6 @@ public class Frog extends SpriteImpl {
      */
     @Override
     public void draw(long frametime) {     
-
         if (this.isDead) {
             short dx1 = (short)(this.positionX - ((this.drawImgW - this.width) / 2));
             short dy1 = (short)(this.positionY - ((this.drawImgH - this.height) / 2));
@@ -452,5 +459,12 @@ public class Frog extends SpriteImpl {
             this.lives--;
             this.frogReset();
         }
+    }
+
+    /**
+     * Toogle the stop control
+     */
+    public void tooglePause() {
+        this.stopped = !this.stopped;
     }
 }
