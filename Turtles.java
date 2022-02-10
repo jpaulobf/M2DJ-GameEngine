@@ -20,6 +20,7 @@ public class Turtles extends SpriteCollection {
     protected int windowWidth           = 0;
     protected int windowHeight          = 0;
     protected Graphics2D g2d            = null;
+    private volatile boolean stopped    = false;
 
     /**
      * Constructor
@@ -50,70 +51,72 @@ public class Turtles extends SpriteCollection {
         byte indexLines         = 0;
         byte positionYOffset    = 16;
 
-        for (int i = 0; i < Stages.S1_TURTLES.length; i++) {
+        if (!this.stopped) {
+            for (int i = 0; i < Stages.S1_TURTLES.length; i++) {
 
-            if (Stages.S1_TURTLES[i].length != 0) {
+                if (Stages.S1_TURTLES[i].length != 0) {
 
-                byte direction      = (byte)Stages.S1_TURTLES[i][0][0];
-                short velocity      = (short)Stages.S1_TURTLES[i][1][0];
+                    byte direction      = (byte)Stages.S1_TURTLES[i][0][0];
+                    short velocity      = (short)Stages.S1_TURTLES[i][1][0];
 
-                for (int j = 0; j < Stages.S1_TURTLES[i][3].length; j++, index++) {
+                    for (int j = 0; j < Stages.S1_TURTLES[i][3].length; j++, index++) {
 
-                    //read & set the turtles parameters
-                    double step                     = (double)velocity / (double)(1_000_000D / (double)frametime);
-                    double stepDir                  = step * direction;
-                    double position                 = Stages.S1_TURTLES[i][4][j];
-                    double calcPos                  = position + stepDir;
-                    byte dive                       = (byte)Stages.S1_TURTLES[i][3][j];
-                    turtles[index].calculatedStep   = stepDir;
-                    turtles[index].type             = (byte)Stages.S1_TURTLES[i][2][0];
-                    turtles[index].velocity         = velocity;
+                        //read & set the turtles parameters
+                        double step                     = (double)velocity / (double)(1_000_000D / (double)frametime);
+                        double stepDir                  = step * direction;
+                        double position                 = Stages.S1_TURTLES[i][4][j];
+                        double calcPos                  = position + stepDir;
+                        byte dive                       = (byte)Stages.S1_TURTLES[i][3][j];
+                        turtles[index].calculatedStep   = stepDir;
+                        turtles[index].type             = (byte)Stages.S1_TURTLES[i][2][0];
+                        turtles[index].velocity         = velocity;
 
-                    //update the turtles
-                    turtles[index].update(frametime);
+                        //update the turtles
+                        turtles[index].update(frametime);
 
-                    //update the width based on type
-                    short width                     = turtles[index].getWidth();
-                    int width1000                   = width * 1_000;
-                    int windowWidthLessWidth1000    = ((this.windowWidth - width) * 1_000);
+                        //update the width based on type
+                        short width                     = turtles[index].getWidth();
+                        int width1000                   = width * 1_000;
+                        int windowWidthLessWidth1000    = ((this.windowWidth - width) * 1_000);
 
-                    if ((calcPos < 0) && calcPos > (-width1000)) {
-                        //define the necessary offset sprite parameters
-                        this.offsetTurtles[indexLines].type       = this.turtles[index].type;
-                        this.offsetTurtles[indexLines].direction  = direction;
+                        if ((calcPos < 0) && calcPos > (-width1000)) {
+                            //define the necessary offset sprite parameters
+                            this.offsetTurtles[indexLines].type       = this.turtles[index].type;
+                            this.offsetTurtles[indexLines].direction  = direction;
 
-                        //test if the position is "far" (first time), in this case, utilises the width of the turtles (reverse)
-                        //otherwise, sum the current position to the next distance step
-                        if (this.offsetTurtles[indexLines].positionX == this.far) {
-                            this.offsetPosX[indexLines] = this.windowWidth1000;
-                        } else {
-                            this.offsetPosX[indexLines] = (this.offsetPosX[indexLines] + stepDir);
+                            //test if the position is "far" (first time), in this case, utilises the width of the turtles (reverse)
+                            //otherwise, sum the current position to the next distance step
+                            if (this.offsetTurtles[indexLines].positionX == this.far) {
+                                this.offsetPosX[indexLines] = this.windowWidth1000;
+                            } else {
+                                this.offsetPosX[indexLines] = (this.offsetPosX[indexLines] + stepDir);
+                            }
+
+                            //set the offset turtles parameters
+                            this.offsetTurtles[indexLines].positionX        = (short)(this.offsetPosX[indexLines]/1_000);
+                            this.offsetTurtles[indexLines].positionY        = (short)Lanes.riverLanes[i] + positionYOffset; 
+                            this.offsetTurtles[indexLines].calculatedStep   = stepDir;
+                            this.offsetTurtles[indexLines].update(frametime);
+
+                        } else if (calcPos < (-width1000)) {
+                            calcPos = windowWidthLessWidth1000;
+                        } else if (calcPos < windowWidthLessWidth1000 && calcPos > windowWidthLessWidth1000 - 5_000) {
+                            this.offsetTurtles[indexLines].positionX = this.far;
                         }
 
-                        //set the offset turtles parameters
-                        this.offsetTurtles[indexLines].positionX        = (short)(this.offsetPosX[indexLines]/1_000);
-                        this.offsetTurtles[indexLines].positionY        = (short)Lanes.riverLanes[i] + positionYOffset; 
-                        this.offsetTurtles[indexLines].calculatedStep   = stepDir;
-                        this.offsetTurtles[indexLines].update(frametime);
+                        //store the new X position in the array
+                        Stages.S1_TURTLES[i][4][j]      = (int)Math.round(calcPos);
 
-                    } else if (calcPos < (-width1000)) {
-                        calcPos = windowWidthLessWidth1000;
-                    } else if (calcPos < windowWidthLessWidth1000 && calcPos > windowWidthLessWidth1000 - 5_000) {
-                        this.offsetTurtles[indexLines].positionX = this.far;
+                        //set the turtles parameters
+                        this.turtles[index].direction    = direction;
+                        this.turtles[index].dive         = dive;
+                        this.turtles[index].positionX    = (short)(position/1_000);
+                        this.turtles[index].positionY    = (short)Lanes.riverLanes[i] + positionYOffset; //incrementa o index ao final
                     }
 
-                    //store the new X position in the array
-                    Stages.S1_TURTLES[i][4][j]      = (int)Math.round(calcPos);
-
-                    //set the turtles parameters
-                    this.turtles[index].direction    = direction;
-                    this.turtles[index].dive         = dive;
-                    this.turtles[index].positionX    = (short)(position/1_000);
-                    this.turtles[index].positionY    = (short)Lanes.riverLanes[i] + positionYOffset; //incrementa o index ao final
-                }
-
-                if (Stages.S1_TURTLES[i].length > 0) {
-                    indexLines++;
+                    if (Stages.S1_TURTLES[i].length > 0) {
+                        indexLines++;
+                    }
                 }
             }
         }
@@ -140,5 +143,12 @@ public class Turtles extends SpriteCollection {
     protected Sprite[] getSpriteCollection() {
         return (java.util.stream.Stream.concat(java.util.Arrays.stream(this.turtles), 
                                                java.util.Arrays.stream(this.offsetTurtles)).toArray(Sprite[]::new));
+    }
+    
+    /**
+     * Toogle the stop control
+     */
+    public void toogleStop() {
+        this.stopped = !this.stopped;
     }
 }
