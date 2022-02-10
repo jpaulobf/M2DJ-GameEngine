@@ -26,8 +26,10 @@ public class Game {
     private HUD hud                     = null;
     private Frog frog                   = null;
     private GameOver gameOver           = null;
+    private Message message             = null;
     private volatile Audio theme        = null;
     private long framecounter           = 0;
+    private boolean mute                = false;
 
     //width and height of window for base metrics of the game (minus HUD)
     private final int wwm               = 1344;
@@ -51,11 +53,14 @@ public class Game {
         // ->>>  create the game elements objects
         //////////////////////////////////////////////////////////////////////
         this.scenario       = new Scenario(this.g2d, this.wwm, this.whm);
-        this.frog           = new Frog(this.g2d, this.scenario);
-        this.hud            = new HUD(this.g2d, this.wwm, this.whm, this.HUDHeight, this.frog);
+        this.frog           = new Frog(this.g2d, this);
+        this.hud            = new HUD(this.g2d, this.wwm, this.whm, this.HUDHeight, this);
         this.gameOver       = new GameOver(this.g2d, this.wwm, this.whm);
+        this.message        = new Message(g2d, wwm, whm, this);
         this.gameState      = new StateMachine(this);
         this.theme          = (Audio)LoadingStuffs.getInstance().getStuff("theme");
+
+        this.theme.play(-1);
     }
     
     /**
@@ -75,9 +80,7 @@ public class Game {
         //////////////////////////////////////////////////////////////////////
         // ->>>  update the game elements
         //////////////////////////////////////////////////////////////////////
-        if (this.gameState.getCurrentState() == StateMachine.STARTING) {
-            this.theme.play(-1);
-        } else if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
+        if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
             this.scenario.update(frametime);
             this.frog.update(frametime);
             this.hud.update(frametime);
@@ -121,6 +124,7 @@ public class Game {
                 this.scenario.draw(frametime);
                 this.frog.draw(frametime);
                 this.hud.draw(frametime);
+                this.message.draw(frametime);
             } else if (this.gameState.getCurrentState() == StateMachine.GAME_OVER) {
                 this.gameOver.draw(frametime);
             }
@@ -141,10 +145,49 @@ public class Game {
     }
 
     /**
+     * Mute / unmute the game theme
+     */
+    public void toogleMuteTheme() {
+        if (!this.mute) {
+            this.theme.pause();
+        } else {
+            this.theme.play();
+        }
+        this.mute = !this.mute;
+    }
+
+    /**
+     * Stop the theme position
+     */
+    public void stopTheme() {
+        this.theme.stop();
+    }
+
+    /**
      * Update game graphics
      * @param g2d
      */
     public void setGraphics2D(Graphics2D g2d) {
         this.g2d = g2d;
     }
+
+    /**
+     * Toogle the pause button
+     */
+    public void tooglePause() {
+        this.toogleMuteTheme();
+        this.frog.tooglePause();
+        this.scenario.tooglePause();
+    }
+
+    /**
+     * Accessor methods
+     * @return
+     */
+    public Scenario getScenario()       {   return (this.scenario); }
+    public HUD getHud()                 {   return this.hud;        }
+    public Frog getFrog()               {   return this.frog;       }
+    public GameOver getGameOver()       {   return this.gameOver;   }
+    public StateMachine getGameState()  {   return this.gameState;  }
+    public Message getMessages()        {   return this.message;    }
 }
