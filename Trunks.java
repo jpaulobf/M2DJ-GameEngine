@@ -20,6 +20,7 @@ public class Trunks extends SpriteCollection {
     private double[] offsetPosX         = new double[offsetTrunks.length];
     private final short far             = -10_000;
     private int windowWidth1000         =  0;
+    private volatile boolean stopped    = false;
 
     /**
      * Load the tile image
@@ -51,69 +52,72 @@ public class Trunks extends SpriteCollection {
         byte indexLines         = 0;
         byte positionYOffset    = 16;
 
-        for (int i = 0; i < Stages.S1_TRUNKS.length; i++) {
+        if (!this.stopped) {
 
-            if (Stages.S1_TRUNKS[i].length != 0) {
+            for (int i = 0; i < Stages.S1_TRUNKS.length; i++) {
 
-                byte direction = (byte)Stages.S1_TRUNKS[i][0][0];
-                short velocity = (short)Stages.S1_TRUNKS[i][1][0];
-                
-                for (int j = 0; j < Stages.S1_TRUNKS[i][3].length; j++, index++) {
+                if (Stages.S1_TRUNKS[i].length != 0) {
 
-                    //read & set the trunk parameters
-                    double step                     = (double)velocity / (double)(1_000_000D / (double)frametime);
-                    double position                 = Stages.S1_TRUNKS[i][3][j];
-                    double calcPos                  = position + step;
-                    trunks[index].calculatedStep    = step;
-                    trunks[index].type              = (byte)Stages.S1_TRUNKS[i][2][0];
+                    byte direction = (byte)Stages.S1_TRUNKS[i][0][0];
+                    short velocity = (short)Stages.S1_TRUNKS[i][1][0];
+                    
+                    for (int j = 0; j < Stages.S1_TRUNKS[i][3].length; j++, index++) {
 
-                    //update the trunk
-                    trunks[index].update(frametime);
+                        //read & set the trunk parameters
+                        double step                     = (double)velocity / (double)(1_000_000D / (double)frametime);
+                        double position                 = Stages.S1_TRUNKS[i][3][j];
+                        double calcPos                  = position + step;
+                        trunks[index].calculatedStep    = step;
+                        trunks[index].type              = (byte)Stages.S1_TRUNKS[i][2][0];
 
-                    //update the width based on type
-                    short width                     = trunks[index].getWidth();
-                    int width1000                   = width * 1_000;
-                    int windowWidthLessWidth1000    = ((this.windowWidth - width) * 1_000);
+                        //update the trunk
+                        trunks[index].update(frametime);
 
-                    //if the trunk touch the left side of the screen 
-                    //we need to create another offset trunk to represent the loop
-                    if (calcPos > (windowWidthLessWidth1000) && (calcPos < this.windowWidth1000)) {
-                        //define the necessary offset sprite parameters
-                        this.offsetTrunks[indexLines].type       = this.trunks[index].type;
-                        this.offsetTrunks[indexLines].direction  = direction;
-                        
-                        //test if the position is "far" (first time), in this case, utilises the width of the trunk (reverse)
-                        //otherwise, sum the current position to the next distance step
-                        if (this.offsetTrunks[indexLines].positionX == this.far) {
-                            this.offsetPosX[indexLines] = -width1000;
-                        } else {
-                            this.offsetPosX[indexLines] = (this.offsetPosX[indexLines] + step);
+                        //update the width based on type
+                        short width                     = trunks[index].getWidth();
+                        int width1000                   = width * 1_000;
+                        int windowWidthLessWidth1000    = ((this.windowWidth - width) * 1_000);
+
+                        //if the trunk touch the left side of the screen 
+                        //we need to create another offset trunk to represent the loop
+                        if (calcPos > (windowWidthLessWidth1000) && (calcPos < this.windowWidth1000)) {
+                            //define the necessary offset sprite parameters
+                            this.offsetTrunks[indexLines].type       = this.trunks[index].type;
+                            this.offsetTrunks[indexLines].direction  = direction;
+                            
+                            //test if the position is "far" (first time), in this case, utilises the width of the trunk (reverse)
+                            //otherwise, sum the current position to the next distance step
+                            if (this.offsetTrunks[indexLines].positionX == this.far) {
+                                this.offsetPosX[indexLines] = -width1000;
+                            } else {
+                                this.offsetPosX[indexLines] = (this.offsetPosX[indexLines] + step);
+                            }
+
+                            //set the offset trunk parameters
+                            this.offsetTrunks[indexLines].positionX      = (short)(this.offsetPosX[indexLines]/1_000);
+                            this.offsetTrunks[indexLines].positionY      = (short)Lanes.riverLanes[i] + positionYOffset;
+                            this.offsetTrunks[indexLines].calculatedStep = step;
+                            this.offsetTrunks[indexLines].update(frametime);
+
+                        //when the trunk surpass the entire screen
+                        //hide the offset trunk (back it to "far"), and set the main trunk back to the begining (calcPos = 0)
+                        } else if (calcPos > this.windowWidth1000) {
+                            calcPos = 0;
+                        } else if (calcPos > 0 && calcPos < 5_000) {
+                            this.offsetTrunks[indexLines].positionX = this.far;
                         }
 
-                        //set the offset trunk parameters
-                        this.offsetTrunks[indexLines].positionX      = (short)(this.offsetPosX[indexLines]/1_000);
-                        this.offsetTrunks[indexLines].positionY      = (short)Lanes.riverLanes[i] + positionYOffset;
-                        this.offsetTrunks[indexLines].calculatedStep = step;
-                        this.offsetTrunks[indexLines].update(frametime);
+                        //store the new X position in the array
+                        Stages.S1_TRUNKS[i][3][j]   = (int)Math.round(calcPos);
 
-                    //when the trunk surpass the entire screen
-                    //hide the offset trunk (back it to "far"), and set the main trunk back to the begining (calcPos = 0)
-                    } else if (calcPos > this.windowWidth1000) {
-                        calcPos = 0;
-                    } else if (calcPos > 0 && calcPos < 5_000) {
-                        this.offsetTrunks[indexLines].positionX = this.far;
+                        //set the trunk parameters
+                        this.trunks[index].direction    = direction;
+                        this.trunks[index].positionX    = (short)(position/1_000);
+                        this.trunks[index].positionY    = (short)Lanes.riverLanes[i] + positionYOffset; //incrementa o index ao final
                     }
 
-                    //store the new X position in the array
-                    Stages.S1_TRUNKS[i][3][j]   = (int)Math.round(calcPos);
-
-                    //set the trunk parameters
-                    this.trunks[index].direction    = direction;
-                    this.trunks[index].positionX    = (short)(position/1_000);
-                    this.trunks[index].positionY    = (short)Lanes.riverLanes[i] + positionYOffset; //incrementa o index ao final
+                    indexLines++;
                 }
-
-                indexLines++;
             }
         }
     }
@@ -142,5 +146,12 @@ public class Trunks extends SpriteCollection {
     protected Sprite[] getSpriteCollection() {
         return (java.util.stream.Stream.concat(java.util.Arrays.stream(this.trunks), 
                                                java.util.Arrays.stream(this.offsetTrunks)).toArray(Sprite[]::new));
+    }
+    
+    /**
+     * Toogle the stop control
+     */
+    public void toogleStop() {
+        this.stopped = !this.stopped;
     }
 }
