@@ -11,7 +11,7 @@ public class Turtles extends SpriteCollection {
 
     //define the turtles array
     private Turtle[] turtles            = new Turtle[Stages.CURRENT_STAGE_TURTLES[Stages.CURRENT_STAGE]];
-    private Turtle[] offsetTurtles      = new Turtle[Stages.S1_TURTLES.length];
+    private Turtle[] offsetTurtles      = new Turtle[Stages.TURTLES.length];
     private double[] offsetPosX         = new double[offsetTurtles.length];
     private final short far             = -10_000;
     private int windowWidth1000         =  0;
@@ -52,23 +52,23 @@ public class Turtles extends SpriteCollection {
         byte positionYOffset    = 16;
 
         if (!this.stopped) {
-            for (int i = 0; i < Stages.S1_TURTLES.length; i++) {
+            for (int i = 0; i < Stages.TURTLES[Stages.CURRENT_STAGE].length; i++) {
 
-                if (Stages.S1_TURTLES[i].length != 0) {
+                if (Stages.TURTLES[Stages.CURRENT_STAGE][i].length != 0) {
 
-                    byte direction      = (byte)Stages.S1_TURTLES[i][0][0];
-                    short velocity      = (short)Stages.S1_TURTLES[i][1][0];
+                    byte direction      = (byte)Stages.TURTLES[Stages.CURRENT_STAGE][i][0][0];
+                    short velocity      = (short)Stages.TURTLES[Stages.CURRENT_STAGE][i][1][0];
 
-                    for (int j = 0; j < Stages.S1_TURTLES[i][3].length; j++, index++) {
+                    for (int j = 0; j < Stages.TURTLES[Stages.CURRENT_STAGE][i][3].length; j++, index++) {
 
                         //read & set the turtles parameters
                         double step                     = (double)velocity / (double)(1_000_000D / (double)frametime);
                         double stepDir                  = step * direction;
-                        double position                 = Stages.S1_TURTLES[i][4][j];
+                        double position                 = Stages.TURTLES[Stages.CURRENT_STAGE][i][4][j];
                         double calcPos                  = position + stepDir;
-                        byte dive                       = (byte)Stages.S1_TURTLES[i][3][j];
+                        byte dive                       = (byte)Stages.TURTLES[Stages.CURRENT_STAGE][i][3][j];
                         turtles[index].calculatedStep   = stepDir;
-                        turtles[index].type             = (byte)Stages.S1_TURTLES[i][2][0];
+                        turtles[index].type             = (byte)Stages.TURTLES[Stages.CURRENT_STAGE][i][2][0];
                         turtles[index].velocity         = velocity;
 
                         //update the turtles
@@ -105,7 +105,7 @@ public class Turtles extends SpriteCollection {
                         }
 
                         //store the new X position in the array
-                        Stages.S1_TURTLES[i][4][j]      = (int)Math.round(calcPos);
+                        Stages.TURTLES[Stages.CURRENT_STAGE][i][4][j]      = (int)Math.round(calcPos);
 
                         //set the turtles parameters
                         this.turtles[index].direction    = direction;
@@ -114,7 +114,7 @@ public class Turtles extends SpriteCollection {
                         this.turtles[index].positionY    = (short)Lanes.riverLanes[i] + positionYOffset; //incrementa o index ao final
                     }
 
-                    if (Stages.S1_TURTLES[i].length > 0) {
+                    if (Stages.TURTLES[Stages.CURRENT_STAGE][i].length > 0) {
                         indexLines++;
                     }
                 }
@@ -126,8 +126,8 @@ public class Turtles extends SpriteCollection {
     public void draw(long frametime) {
         int index = 0;
         //draw the turtles
-        for (byte i = 0; i < Stages.S1_TURTLES.length; i++) {
-            for (byte j = 0; Stages.S1_TURTLES[i].length != 0 && j < Stages.S1_TURTLES[i][3].length; j++, index++) {
+        for (byte i = 0; i < Stages.TURTLES[Stages.CURRENT_STAGE].length; i++) {
+            for (byte j = 0; Stages.TURTLES[Stages.CURRENT_STAGE][i].length != 0 && j < Stages.TURTLES[Stages.CURRENT_STAGE][i][3].length; j++, index++) {
                 turtles[index].draw(frametime);
             }
         }
