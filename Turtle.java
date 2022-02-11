@@ -28,7 +28,9 @@ public class Turtle extends SpriteImpl {
     private final short smallWidth      = turtleW + separator + turtleW;
     private final short mediumWidth     = turtleW + separator + turtleW + separator + turtleW;
     protected byte dive                 = 0;
-    private final int [][] frameList    = {{0}, {0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 3, 4, 4, 5, 5, 4, 4, 3, 3, 0, 1, 2}};
+    private final int [][] frameList    = {{0}, 
+                                           {0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 3, 4, 4, 5, 5, 4, 4, 3, 3, 0, 1, 2}, 
+                                           {0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 3, 4, 4, 5, 5, 4, 4, 3, 3, 0, 1, 2}};
     byte index = 0;
     
     /**
