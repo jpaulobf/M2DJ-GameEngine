@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 /**
  * Class to show messages on screen
  */
+@SuppressWarnings("unused")
 public class Message {
     private Graphics2D g2d              = null;
     private BufferedImage messageTile   = null;
