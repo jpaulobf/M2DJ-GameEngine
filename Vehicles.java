@@ -10,12 +10,12 @@ import interfaces.Stages;
 public class Vehicles extends SpriteCollection {
  
     //The tile image, and its elements (positions)
-    protected int windowWidth       = 0;
-    protected int windowHeight      = 0;
-    protected Graphics2D g2d        = null;
+    protected int windowWidth           = 0;
+    protected int windowHeight          = 0;
+    protected Graphics2D g2d            = null;
 
     //define the vehicules array
-    private Vehicle [] vehicles     =  new Vehicle[Stages.CURRENT_STAGE_CARS[Stages.CURRENT_STAGE]];
+    private Vehicle [] vehicles         =  new Vehicle[Stages.CURRENT_STAGE_CARS[Stages.CURRENT_STAGE]];
     private volatile boolean stopped    = false; 
 
     /**
@@ -26,7 +26,6 @@ public class Vehicles extends SpriteCollection {
         this.g2d            = g2d;
         this.windowWidth    = windowWidth;
         this.windowHeight   = windowHeight;
-
         for (byte i = 0; i < vehicles.length; i++) {
             vehicles[i] = new Vehicle(this.g2d);
         }
@@ -45,17 +44,17 @@ public class Vehicles extends SpriteCollection {
         byte index      = 0;
 
         if (!this.stopped) {
-            for (int i = 0; i < Stages.S1_CARS.length; i++) {
+            for (int i = 0; i < Stages.CARS[Stages.CURRENT_STAGE].length; i++) {
 
-                direction   = (byte)Stages.S1_CARS[i][0][0];
-                velocity    = (short)Stages.S1_CARS[i][1][0];
+                direction   = (byte)Stages.CARS[Stages.CURRENT_STAGE][i][0][0];
+                velocity    = (short)Stages.CARS[Stages.CURRENT_STAGE][i][1][0];
 
-                for (int j = 0; j < Stages.S1_CARS[i][3].length; j++) {
+                for (int j = 0; j < Stages.CARS[Stages.CURRENT_STAGE][i][3].length; j++) {
 
-                    position             = Stages.S1_CARS[i][3][j];
+                    position             = Stages.CARS[Stages.CURRENT_STAGE][i][3][j];
                     step                 = (double)velocity / (double)(1_000_000D / (double)frametime);
                     calcPos              = position + (step * direction);
-                    vehicles[index].type = (byte)Stages.S1_CARS[i][2][0];
+                    vehicles[index].type = (byte)Stages.CARS[Stages.CURRENT_STAGE][i][2][0];
 
                     if (direction == RIGHT) {
                         if (calcPos > (this.windowWidth * 1000) + Vehicle.largerVehicule) {
@@ -67,11 +66,12 @@ public class Vehicles extends SpriteCollection {
                         }
                     }
                     //atualiza a posição do objeto na array
-                    Stages.S1_CARS[i][3][j]      = (int)Math.round(calcPos);
+                    Stages.CARS[Stages.CURRENT_STAGE][i][3][j]      = (int)Math.round(calcPos);
 
                     //recupera e atualiza cada veículo
                     vehicles[index].direction    = direction;
                     vehicles[index].positionX    = (short)(position/1000);
+                    
                     //incrementa o index ao final
                     vehicles[index].width        = (byte)Vehicle.vehiclesW[vehicles[index].type];
                     vehicles[index++].positionY  = (short)Lanes.streetLanes[i];
@@ -86,8 +86,8 @@ public class Vehicles extends SpriteCollection {
     @Override
     public void draw(long frametime) {
         int index = 0;
-        for (byte i = 0; i < Stages.S1_CARS.length; i++) {
-            for (byte j = 0; j < Stages.S1_CARS[i][3].length; j++, index++) {
+        for (byte i = 0; i < Stages.CARS[Stages.CURRENT_STAGE].length; i++) {
+            for (byte j = 0; j < Stages.CARS[Stages.CURRENT_STAGE][i][3].length; j++, index++) {
                 this.vehicles[index].draw(frametime);
             }
         }
