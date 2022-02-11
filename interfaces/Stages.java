@@ -3,7 +3,7 @@ package interfaces;
 public interface Stages extends Directions {
     
     //Set the current stage
-    public static int CURRENT_STAGE                       = 1;  
+    public static int CURRENT_STAGE                       = 2;  
   
     //Stage 1 parameters
     public static final short [][] S1_CARS_VELOCITIES     = {{120}, {180}, {90}, {330}, {300}};
@@ -32,11 +32,21 @@ public interface Stages extends Directions {
 
     //for each lane, each car parameter:
     //direction, velocity, type, then for each car: start-position-x
-    public static int [][][] S1_CARS        =  { { {LEFT},  {S1_CARS_VELOCITIES[4][0]}, {4}, { S1_CARS_POSITION_X[4][0], S1_CARS_POSITION_X[4][1] }},
-                                                 { {RIGHT}, {S1_CARS_VELOCITIES[3][0]}, {3}, { S1_CARS_POSITION_X[3][0] }},
-                                                 { {LEFT},  {S1_CARS_VELOCITIES[2][0]}, {2}, { S1_CARS_POSITION_X[2][0], S1_CARS_POSITION_X[2][1], S1_CARS_POSITION_X[2][2] } }, 
-                                                 { {RIGHT}, {S1_CARS_VELOCITIES[1][0]}, {1}, { S1_CARS_POSITION_X[1][0], S1_CARS_POSITION_X[1][1], S1_CARS_POSITION_X[1][2] } },
-                                                 { {LEFT},  {S1_CARS_VELOCITIES[0][0]}, {0}, { S1_CARS_POSITION_X[0][0], S1_CARS_POSITION_X[0][1], S1_CARS_POSITION_X[0][2] } } 
+    public static int [][][][] CARS         =  { 
+                                                 {
+                                                 }, //stage 0
+                                                 { { {LEFT},  {S1_CARS_VELOCITIES[4][0]}, {4}, { S1_CARS_POSITION_X[4][0], S1_CARS_POSITION_X[4][1] }},
+                                                   { {RIGHT}, {S1_CARS_VELOCITIES[3][0]}, {3}, { S1_CARS_POSITION_X[3][0] }},
+                                                   { {LEFT},  {S1_CARS_VELOCITIES[2][0]}, {2}, { S1_CARS_POSITION_X[2][0], S1_CARS_POSITION_X[2][1], S1_CARS_POSITION_X[2][2] } }, 
+                                                   { {RIGHT}, {S1_CARS_VELOCITIES[1][0]}, {1}, { S1_CARS_POSITION_X[1][0], S1_CARS_POSITION_X[1][1], S1_CARS_POSITION_X[1][2] } },
+                                                   { {LEFT},  {S1_CARS_VELOCITIES[0][0]}, {0}, { S1_CARS_POSITION_X[0][0], S1_CARS_POSITION_X[0][1], S1_CARS_POSITION_X[0][2] } } 
+                                                 }, //stage 1
+                                                 { { {LEFT},  {S2_CARS_VELOCITIES[4][0]}, {4}, { S2_CARS_POSITION_X[4][0], S2_CARS_POSITION_X[4][1], S2_CARS_POSITION_X[4][2] }                           },
+                                                   { {RIGHT}, {S2_CARS_VELOCITIES[3][0]}, {3}, { S2_CARS_POSITION_X[3][0], S2_CARS_POSITION_X[3][1] }                                                     },
+                                                   { {LEFT},  {S2_CARS_VELOCITIES[2][0]}, {2}, { S2_CARS_POSITION_X[2][0], S2_CARS_POSITION_X[2][1], S2_CARS_POSITION_X[2][2], S2_CARS_POSITION_X[2][3] } }, 
+                                                   { {RIGHT}, {S2_CARS_VELOCITIES[1][0]}, {1}, { S2_CARS_POSITION_X[1][0], S2_CARS_POSITION_X[1][1], S2_CARS_POSITION_X[1][2] }                           },
+                                                   { {LEFT},  {S2_CARS_VELOCITIES[0][0]}, {0}, { S2_CARS_POSITION_X[0][0], S2_CARS_POSITION_X[0][1], S2_CARS_POSITION_X[0][2], S2_CARS_POSITION_X[0][3] } } 
+                                                 } //stage 2
                                                };
 
     // public static int [][][] S6_CARS        =  { { {LEFT},  {S6_CARS_VELOCITIES[4][0]}, {4}, {S6_CARS_POSITION_X[4][0], S6_CARS_POSITION_X[4][1], S6_CARS_POSITION_X[4][2] }},
