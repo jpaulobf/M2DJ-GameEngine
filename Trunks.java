@@ -54,21 +54,21 @@ public class Trunks extends SpriteCollection {
 
         if (!this.stopped) {
 
-            for (int i = 0; i < Stages.S1_TRUNKS.length; i++) {
+            for (int i = 0; i < Stages.TRUNKS[Stages.CURRENT_STAGE].length; i++) {
 
-                if (Stages.S1_TRUNKS[i].length != 0) {
+                if (Stages.TRUNKS[Stages.CURRENT_STAGE][i].length != 0) {
 
-                    byte direction = (byte)Stages.S1_TRUNKS[i][0][0];
-                    short velocity = (short)Stages.S1_TRUNKS[i][1][0];
+                    byte direction = (byte)Stages.TRUNKS[Stages.CURRENT_STAGE][i][0][0];
+                    short velocity = (short)Stages.TRUNKS[Stages.CURRENT_STAGE][i][1][0];
                     
-                    for (int j = 0; j < Stages.S1_TRUNKS[i][3].length; j++, index++) {
+                    for (int j = 0; j < Stages.TRUNKS[Stages.CURRENT_STAGE][i][3].length; j++, index++) {
 
                         //read & set the trunk parameters
                         double step                     = (double)velocity / (double)(1_000_000D / (double)frametime);
-                        double position                 = Stages.S1_TRUNKS[i][3][j];
+                        double position                 = Stages.TRUNKS[Stages.CURRENT_STAGE][i][3][j];
                         double calcPos                  = position + step;
                         trunks[index].calculatedStep    = step;
-                        trunks[index].type              = (byte)Stages.S1_TRUNKS[i][2][0];
+                        trunks[index].type              = (byte)Stages.TRUNKS[Stages.CURRENT_STAGE][i][2][0];
 
                         //update the trunk
                         trunks[index].update(frametime);
@@ -108,7 +108,7 @@ public class Trunks extends SpriteCollection {
                         }
 
                         //store the new X position in the array
-                        Stages.S1_TRUNKS[i][3][j]   = (int)Math.round(calcPos);
+                        Stages.TRUNKS[Stages.CURRENT_STAGE][i][3][j]   = (int)Math.round(calcPos);
 
                         //set the trunk parameters
                         this.trunks[index].direction    = direction;
@@ -129,8 +129,8 @@ public class Trunks extends SpriteCollection {
     public void draw(long frametime) {
         int index = 0;
         //draw the main trunks
-        for (byte i = 0; i < Stages.S1_TRUNKS.length; i++) {
-            for (byte j = 0; Stages.S1_TRUNKS[i].length != 0 && j < Stages.S1_TRUNKS[i][3].length; j++, index++) {
+        for (byte i = 0; i < Stages.TRUNKS[Stages.CURRENT_STAGE].length; i++) {
+            for (byte j = 0; Stages.TRUNKS[Stages.CURRENT_STAGE][i].length != 0 && j < Stages.TRUNKS[Stages.CURRENT_STAGE][i][3].length; j++, index++) {
                 trunks[index].draw(frametime);
             }
         }
