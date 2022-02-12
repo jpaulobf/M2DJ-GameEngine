@@ -8,10 +8,11 @@ public interface Stages extends Directions {
     //Stage 1 parameters
     public static final short [][] S1_CARS_VELOCITIES     = {{120}, {180}, {90}, {330}, {300}};
     public static final short [][] S2_CARS_VELOCITIES     = {{140}, {200}, {100}, {360}, {350}};
+    public static final short [][] S6_CARS_VELOCITIES     = {{180}, {240}, {140}, {400}, {380}};
 
     public static final int [][] S1_CARS_POSITION_X       = {{300_000, 650_000, 1000_000}, {100_000, 400_000, 700_000}, {100_000, 500_000, 900_000}, {100_000}, {100_000, 750_000}};
     public static final int [][] S2_CARS_POSITION_X       = {{300_000, 600_000, 900_000, 1_200_000}, {0_000, 400_000, 800_000}, {-100_000, 150_000, 400_000, 650_000}, {100_000, 800_000}, {100_000, 600_000, 1_100_000}};
-    //public static final int [][] S6_CARS_POSITION_X       = {{250_000, 500_000, 750_000, 1_000_000, 1_250_000}, {120_000, 340_000, 560_000, 780_000, 1_000_000, 1_220_000, 1_440_000}, {0_000, 280_000, 560_000, 840_000, 1_120_000}, {100_000, 400_000, 700_000, 1_000_000}, {100_000, 500_000, 900_000}};
+    public static final int [][] S6_CARS_POSITION_X       = {{250_000, 500_000, 750_000, 1_000_000, 1_250_000}, {120_000, 340_000, 560_000, 780_000, 1_000_000, 1_220_000, 1_440_000}, {0_000, 280_000, 560_000, 840_000, 1_120_000}, {100_000, 400_000, 700_000, 1_000_000}, {100_000, 500_000, 900_000}};
 
     public static final int [][] S1_TRUNKS_POSITION_X     = {{50_000, 350_000, 650_000}, {100_000, 800_000}, {0_000, 400_000, 800_000}};
     public static final int [][] S2_TRUNKS_POSITION_X     = {{100_000, 650_000}, {-200_000, 500_000}, {0_000, 400_000, 800_000}};
@@ -46,15 +47,17 @@ public interface Stages extends Directions {
                                                    { {LEFT},  {S2_CARS_VELOCITIES[2][0]}, {2}, { S2_CARS_POSITION_X[2][0], S2_CARS_POSITION_X[2][1], S2_CARS_POSITION_X[2][2], S2_CARS_POSITION_X[2][3] } }, 
                                                    { {RIGHT}, {S2_CARS_VELOCITIES[1][0]}, {1}, { S2_CARS_POSITION_X[1][0], S2_CARS_POSITION_X[1][1], S2_CARS_POSITION_X[1][2] }                           },
                                                    { {LEFT},  {S2_CARS_VELOCITIES[0][0]}, {0}, { S2_CARS_POSITION_X[0][0], S2_CARS_POSITION_X[0][1], S2_CARS_POSITION_X[0][2], S2_CARS_POSITION_X[0][3] } } 
-                                                 } //stage 2
+                                                 }, //stage 2
+                                                 {}, //stage 3
+                                                 {}, //stage 4
+                                                 {}, //stage 5
+                                                 { { {LEFT},  {S6_CARS_VELOCITIES[4][0]}, {4}, {S6_CARS_POSITION_X[4][0], S6_CARS_POSITION_X[4][1], S6_CARS_POSITION_X[4][2] }},
+                                                   { {RIGHT}, {S6_CARS_VELOCITIES[3][0]}, {3}, {S6_CARS_POSITION_X[3][0], S6_CARS_POSITION_X[3][1], S6_CARS_POSITION_X[3][2], S6_CARS_POSITION_X[3][3]}},
+                                                   { {LEFT},  {S6_CARS_VELOCITIES[2][0]}, {2}, {S6_CARS_POSITION_X[2][0], S6_CARS_POSITION_X[2][1], S6_CARS_POSITION_X[2][2], S6_CARS_POSITION_X[2][3], S6_CARS_POSITION_X[2][4]} }, 
+                                                   { {RIGHT}, {S6_CARS_VELOCITIES[1][0]}, {1}, {S6_CARS_POSITION_X[1][0], S6_CARS_POSITION_X[1][1], S6_CARS_POSITION_X[1][2], S6_CARS_POSITION_X[1][3], S6_CARS_POSITION_X[1][4], S6_CARS_POSITION_X[1][5], S6_CARS_POSITION_X[1][6]} },
+                                                   { {LEFT},  {S6_CARS_VELOCITIES[0][0]}, {0}, {S6_CARS_POSITION_X[0][0], S6_CARS_POSITION_X[0][1], S6_CARS_POSITION_X[0][2], S6_CARS_POSITION_X[0][3], S6_CARS_POSITION_X[0][4]} } 
+                                                 } //stage 6
                                                };
-
-    // public static int [][][] S6_CARS        =  { { {LEFT},  {S6_CARS_VELOCITIES[4][0]}, {4}, {S6_CARS_POSITION_X[4][0], S6_CARS_POSITION_X[4][1], S6_CARS_POSITION_X[4][2] }},
-    //                                              { {RIGHT}, {S6_CARS_VELOCITIES[3][0]}, {3}, {S6_CARS_POSITION_X[3][0], S6_CARS_POSITION_X[3][1], S6_CARS_POSITION_X[3][2], S6_CARS_POSITION_X[3][3]}},
-    //                                              { {LEFT},  {S6_CARS_VELOCITIES[2][0]}, {2}, {S6_CARS_POSITION_X[2][0], S6_CARS_POSITION_X[2][1], S6_CARS_POSITION_X[2][2], S6_CARS_POSITION_X[2][3], S6_CARS_POSITION_X[2][4]} }, 
-    //                                              { {RIGHT}, {S6_CARS_VELOCITIES[1][0]}, {1}, {S6_CARS_POSITION_X[1][0], S6_CARS_POSITION_X[1][1], S6_CARS_POSITION_X[1][2], S6_CARS_POSITION_X[1][3], S6_CARS_POSITION_X[1][4], S6_CARS_POSITION_X[1][5], S6_CARS_POSITION_X[1][6]} },
-    //                                              { {LEFT},  {S6_CARS_VELOCITIES[0][0]}, {0}, {S6_CARS_POSITION_X[0][0], S6_CARS_POSITION_X[0][1], S6_CARS_POSITION_X[0][2], S6_CARS_POSITION_X[0][3], S6_CARS_POSITION_X[0][4]} } 
-    //                                            };
 
     //for each lane, each trunk parameter:
     //direction, velocity, type, then for each trunk: start-position-x
