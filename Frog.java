@@ -126,6 +126,8 @@ public class Frog extends SpriteImpl {
 
         //in the begining frog can move
         this.canMove            = true;
+        this.isDead             = false;
+        this.animating          = false;
         this.lastMovement       = UP;
     }
 
