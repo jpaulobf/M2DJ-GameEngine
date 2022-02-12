@@ -11,7 +11,7 @@ public abstract class SpriteImpl implements Sprite, Directions {
     //variable member values 
     protected volatile byte type                = 0;
     protected volatile byte direction           = LEFT;
-    protected volatile short velocity            = 0;
+    protected volatile short velocity           = 0;
     protected volatile double positionX         = 0;
     protected volatile double positionY         = 0;
     protected volatile double destPositionX     = 0;
@@ -21,6 +21,7 @@ public abstract class SpriteImpl implements Sprite, Directions {
     protected volatile byte height              = 0;
     protected volatile byte offsetTop           = 0;
     protected volatile byte offsetLeft          = 0;
+    protected volatile int ogPositionX          = 0;
     protected Rectangle2D rectangle             = null;
     protected Graphics2D g2d                    = null;
     
