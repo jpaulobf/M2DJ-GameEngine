@@ -75,7 +75,7 @@ public class Turtle extends SpriteImpl {
                 }
             }
         } else {
-            if (this.framecounter > (300_000_000 + ((100 - this.velocity) * 1_000_000))) {
+            if (this.framecounter > (300_000_000 + ((120 - this.velocity) * 1_000_000))) {
                 this.currentFrame = frameList[Stages.CURRENT_STAGE][index++];
                 this.isSubmersed = (this.currentFrame == 5);
                 this.framecounter = 0;
@@ -174,5 +174,12 @@ public class Turtle extends SpriteImpl {
                                                     (int)(i * turtleW), 0, (int)((i * turtleW) + turtleW), this.height,
                                                     null);
         }
+    }
+
+    protected void resetAnimation() {
+        this.framecounter   = 0;
+        this.currentFrame   = 0;
+        this.isSubmersed    = false;
+        this.index          = 0;
     }
 }
