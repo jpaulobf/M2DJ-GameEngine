@@ -15,7 +15,7 @@ public class Vehicles extends SpriteCollection {
     protected Graphics2D g2d            = null;
 
     //define the vehicules array
-    private Vehicle [] vehicles         =  new Vehicle[Stages.CURRENT_STAGE_CARS[Stages.CURRENT_STAGE]];
+    private Vehicle [] vehicles         = new Vehicle[Stages.CURRENT_STAGE_CARS[Stages.CURRENT_STAGE]];
     private volatile boolean stopped    = false; 
 
     /**
@@ -28,6 +28,12 @@ public class Vehicles extends SpriteCollection {
         this.windowHeight   = windowHeight;
         for (byte i = 0; i < vehicles.length; i++) {
             vehicles[i] = new Vehicle(this.g2d);
+        }
+
+        for (int i = 0, index = 0; i < Stages.CARS[Stages.CURRENT_STAGE].length; i++) {
+            for (int j = 0; j < Stages.CARS[Stages.CURRENT_STAGE][i][3].length; j++) {
+                vehicles[index++].ogPositionX = Stages.CARS[Stages.CURRENT_STAGE][i][3][j];
+            }
         }
     }
         
@@ -66,7 +72,7 @@ public class Vehicles extends SpriteCollection {
                         }
                     }
                     //atualiza a posição do objeto na array
-                    Stages.CARS[Stages.CURRENT_STAGE][i][3][j]      = (int)Math.round(calcPos);
+                    Stages.CARS[Stages.CURRENT_STAGE][i][3][j] = (int)Math.round(calcPos);
 
                     //recupera e atualiza cada veículo
                     vehicles[index].direction    = direction;
@@ -103,5 +109,16 @@ public class Vehicles extends SpriteCollection {
      */
     public void toogleStop() {
         this.stopped = !this.stopped;
+    }
+
+    /**
+     * Reset the current Vehicles state
+     */
+    public void reset() {
+        for (int i = 0, index = 0; i < Stages.CARS[Stages.CURRENT_STAGE].length; i++) {
+            for (int j = 0; j < Stages.CARS[Stages.CURRENT_STAGE][i][3].length; j++) {
+                Stages.CARS[Stages.CURRENT_STAGE][i][3][j] = vehicles[index++].ogPositionX;
+            }
+        }
     }
 }
