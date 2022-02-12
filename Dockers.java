@@ -75,4 +75,11 @@ public class Dockers extends SpriteCollection {
         }
         return (complete);
     }
+
+    public void reset() {
+        //initialize the dockers
+        for (int i = 0; i < this.isInDock.length; i++) {
+            isInDock[i] = false;
+        }
+    }
 }
