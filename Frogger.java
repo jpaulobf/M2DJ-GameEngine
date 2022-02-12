@@ -1,6 +1,6 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import interfaces.CanvasEngine;
+import interfaces.ICanvasEngine;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -13,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.EventQueue;
 import java.awt.RenderingHints;
+import interfaces.IGame;
 
 /*
     Project:    Modern 2D Java Game Engine
@@ -26,7 +27,7 @@ public class Frogger implements Runnable {
     /**
      * Game Canvas
      */
-    private class Canvas extends JFrame implements CanvasEngine {
+    private class Canvas extends JFrame implements ICanvasEngine {
 
         private static final long serialVersionUID  = 1L;
 
@@ -42,7 +43,7 @@ public class Frogger implements Runnable {
         
         //the first 'canvas' & the backbuffer (for simple doublebuffer strategy)
         private JPanel canvas                       = null;
-        private Game game                           = null;
+        private IGame game                          = null;
 
         //some support and the graphical device itself
         private GraphicsEnvironment ge              = null;
@@ -57,7 +58,6 @@ public class Frogger implements Runnable {
         private boolean showFPS                     = true;
 
         //control and fullscreen controller
-        private volatile boolean canContinue        = true;
         private boolean fullscreen                  = false;
         private boolean isFullScreenAvailable       = false;
 
@@ -122,23 +122,18 @@ public class Frogger implements Runnable {
             }
 
             //start the game controller
-            this.game = new Game(this.g2d, size);
+            this.game = GameFactory.getGameInstance(g2d, size);
 
             //KeyListener
             this.addKeyListener(new KeyAdapter() {
                 @Override
                 public synchronized void keyPressed(KeyEvent e) {
-                    if (canContinue) {
-                        canContinue = false;
-                        game.movement(e.getKeyCode());
-                    }
+                    game.keyPressed(e.getKeyCode());
                 }
                 @Override
                 public synchronized void keyReleased(KeyEvent e) {
-                    canContinue = true;
                     if (e.getKeyCode() == 27) {setVisible(false); System.exit(0);}
-                    if (e.getKeyCode() == 77) {game.toogleMuteTheme();}
-                    if (e.getKeyCode() == 80) {game.tooglePause();}
+                    game.keyReleased(e.getKeyCode());
                 }
             });     
 
@@ -168,16 +163,17 @@ public class Frogger implements Runnable {
                 this.g2d = (Graphics2D)this.bufferStrategy.getDrawGraphics();
 
                 //update the game graphics
-                this.game.setGraphics2D(this.g2d);
+                this.game.updateGraphics2D(this.g2d);
 
                 //render the game elements
                 this.game.draw(frametime);
 
                 //At least, copy the backbuffer to the backbuffer
-                this.g2d.drawImage(this.bufferImage, 0, 0, this.getWidth(), this.getHeight(),                 //destine
-                                                    0, 0, this.windowWidth, this.windowHeight, // source
-                                                    this);
+                this.g2d.drawImage(this.bufferImage, 0, 0, this.getWidth(), this.getHeight(),  //destine
+                                                     0, 0, this.windowWidth, this.windowHeight, // source
+                                                     this);
 
+                //render the fps counter
                 this.renderFPSLayer(frametime, this.g2d);
 
                 //show the buffer content
@@ -190,17 +186,18 @@ public class Frogger implements Runnable {
                 if (this.g2d != null) {
                 
                     //update the game graphics
-                    this.game.setGraphics2D(this.g2d);
+                    this.game.updateGraphics2D(this.g2d);
 
                     //render the game elements
                     this.game.draw(frametime);
         
+                    //render the fps counter
                     this.renderFPSLayer(frametime, (Graphics2D)this.bufferImage.getGraphics());
 
                     //At least, copy the backbuffer to the canvas screen
                     this.canvas.getGraphics().drawImage(this.bufferImage, 0, 0, this.windowWidth, this.windowHeight,                 //destine
-                                                                        0, 0, this.windowWidth, this.windowHeight, //source
-                                                                        this);
+                                                                          0, 0, this.windowWidth, this.windowHeight, //source
+                                                                          this);
                 }
             }
         }
@@ -250,13 +247,13 @@ public class Frogger implements Runnable {
         private long FPS30                  = (long)(1_000_000_000 / 30);
         private long TARGET_FRAMETIME       = FPS60;
         private boolean UNLIMITED_FPS       = false;
-        private CanvasEngine game           = null;
+        private ICanvasEngine game          = null;
     
         /*
             WTMD: constructor
                     receives the target FPS (0, 30, 60, 120, 240) and starts the engine
         */
-        public GameEngine(int targetFPS, CanvasEngine game) {
+        public GameEngine(int targetFPS, ICanvasEngine game) {
     
             this.UNLIMITED_FPS = false;
             switch(targetFPS) {

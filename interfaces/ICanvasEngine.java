@@ -3,7 +3,7 @@ package interfaces;
 /**
  * Game interface (update & draw methods)
  */
-public interface CanvasEngine {
+public interface ICanvasEngine {
     /**
      * Update the game logic / receives the frametime
      * @param frametime
