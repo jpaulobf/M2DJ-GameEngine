@@ -40,6 +40,14 @@ public class Trunks extends SpriteCollection {
             offsetTrunks[i]             = new TreeTrunk(this.g2d);
             offsetTrunks[i].positionX   = far;
         }
+
+        for (int i = 0, index = 0; i < Stages.TRUNKS[Stages.CURRENT_STAGE].length; i++) {
+            if (Stages.TRUNKS[Stages.CURRENT_STAGE][i].length != 0) {
+                for (int j = 0; j < Stages.TRUNKS[Stages.CURRENT_STAGE][i][3].length; j++) {
+                    this.trunks[index++].ogPositionX = Stages.TRUNKS[Stages.CURRENT_STAGE][i][3][j];
+                }
+            }
+        }
     }
 
     /**
@@ -153,5 +161,21 @@ public class Trunks extends SpriteCollection {
      */
     public void toogleStop() {
         this.stopped = !this.stopped;
+    }
+
+    /**
+     * Reset the current trucks state
+     */
+    public void reset() {
+        for (int i = 0, index = 0; i < Stages.TRUNKS[Stages.CURRENT_STAGE].length; i++) {
+            if (Stages.TRUNKS[Stages.CURRENT_STAGE][i].length != 0) {
+                for (int j = 0; j < Stages.TRUNKS[Stages.CURRENT_STAGE][i][3].length; j++) {
+                    Stages.TRUNKS[Stages.CURRENT_STAGE][i][3][j] = this.trunks[index++].ogPositionX;
+                }
+            }
+        }
+        for (byte i = 0; i < offsetTrunks.length; i++) {
+            offsetTrunks[i].positionX   = far;
+        }
     }
 }
