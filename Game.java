@@ -2,38 +2,40 @@ import util.Audio;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import interfaces.IGame;
 
 /**
  * Class responsable for the game
  */
-public class Game {
+public class Game implements IGame {
 
     //the game statemachine goes here
-    private StateMachine gameState      = null;
+    private StateMachine gameState          = null;
 
     //some support and the graphical device itself
-    private Graphics2D g2d              = null;
+    private Graphics2D g2d                  = null;
 
     //desktop properties
-    private int resolutionH             = 0;
-    private int resolutionW             = 0;
+    private int resolutionH                 = 0;
+    private int resolutionW                 = 0;
 
     //extra volatile image for hud
-    private final byte HUDHeight        = 40;
+    private final byte HUDHeight            = 40;
 
     //the game variables go here...
-    private Scenario scenario           = null;
-    private HUD hud                     = null;
-    private Frog frog                   = null;
-    private GameOver gameOver           = null;
-    private Message message             = null;
-    private volatile Audio theme        = null;
-    private long framecounter           = 0;
-    private boolean mute                = false;
+    private Scenario scenario               = null;
+    private HUD hud                         = null;
+    private Frog frog                       = null;
+    private GameOver gameOver               = null;
+    private Message message                 = null;
+    private volatile Audio theme            = null;
+    private volatile long framecounter      = 0;
+    private volatile boolean mute           = false;
+    private volatile boolean canContinue    = true;
 
     //width and height of window for base metrics of the game (minus HUD)
-    private final int wwm               = 1344;
-    private final int whm               = 832;
+    private final int wwm                   = 1344;
+    private final int whm                   = 832;
 
     /**
      * Game constructor
@@ -60,13 +62,14 @@ public class Game {
         this.gameState      = new StateMachine(this);
         this.theme          = (Audio)LoadingStuffs.getInstance().getStuff("theme");
 
-        this.theme.play(-1);
+        this.theme.playContinuously();
     }
     
     /**
      * Update the game logic / receives the frametime
      * @param frametime
      */
+    @Override
     public synchronized void update(long frametime) {
         //how many pixels per second I want?
         //ex.: movement at 200px/s
@@ -108,6 +111,7 @@ public class Game {
                 1) Clear the stage
      * @param frametime
      */
+    @Override
     public synchronized void draw(long frametime) {
 
         if (this.gameState.getCurrentState() != StateMachine.STARTING) {
@@ -147,11 +151,12 @@ public class Game {
     /**
      * Mute / unmute the game theme
      */
+    @Override
     public void toogleMuteTheme() {
         if (!this.mute) {
             this.theme.pause();
         } else {
-            this.theme.play();
+            this.theme.playContinuously();
         }
         this.mute = !this.mute;
     }
@@ -159,6 +164,7 @@ public class Game {
     /**
      * Stop the theme position
      */
+    @Override
     public void stopTheme() {
         this.theme.stop();
     }
@@ -167,17 +173,51 @@ public class Game {
      * Update game graphics
      * @param g2d
      */
-    public void setGraphics2D(Graphics2D g2d) {
+    @Override
+    public void updateGraphics2D(Graphics2D g2d) {
         this.g2d = g2d;
     }
 
     /**
      * Toogle the pause button
      */
+    @Override
     public void tooglePause() {
         this.toogleMuteTheme();
         this.frog.tooglePause();
         this.scenario.tooglePause();
+    }
+
+    /**
+     * Game reset
+     */
+    @Override
+    public void softReset() {
+        this.scenario.getVehicles().reset();
+        this.scenario.getTrunks().reset();
+        this.scenario.getTurtles().reset();
+        this.scenario.getDockers().reset();
+        this.frog.frogReset();
+    }
+
+    /**
+     * Game keypress
+     */
+    public void keyPressed(int keyCode) {
+        if (this.canContinue) {
+            this.canContinue = false;
+            this.movement(keyCode);
+        }
+    }
+
+    /**
+     * Game keyRelease
+     */
+    public void keyReleased(int keyCode) {
+        this.canContinue = true;
+        if (keyCode == 77) {this.toogleMuteTheme();}
+        if (keyCode == 80) {this.tooglePause();}
+        if (keyCode == 82) {this.softReset();}
     }
 
     /**
