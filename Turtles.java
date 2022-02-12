@@ -42,6 +42,14 @@ public class Turtles extends SpriteCollection {
             offsetTurtles[i]             = new Turtle(this.g2d);
             offsetTurtles[i].positionX   = far;
         }
+
+        for (int i = 0, index = 0; i < Stages.TURTLES[Stages.CURRENT_STAGE].length; i++) {
+            if (Stages.TURTLES[Stages.CURRENT_STAGE][i].length != 0) {
+                for (int j = 0; j < Stages.TURTLES[Stages.CURRENT_STAGE][i][3].length; j++) {
+                    this.turtles[index++].ogPositionX  = Stages.TURTLES[Stages.CURRENT_STAGE][i][4][j];
+                }
+            }
+        }
     }
 
     @Override
@@ -150,5 +158,23 @@ public class Turtles extends SpriteCollection {
      */
     public void toogleStop() {
         this.stopped = !this.stopped;
+    }
+
+    /**
+     * reset method
+     */
+    public void reset() {
+        for (int i = 0, index = 0; i < Stages.TURTLES[Stages.CURRENT_STAGE].length; i++) {
+            if (Stages.TURTLES[Stages.CURRENT_STAGE][i].length != 0) {
+                for (int j = 0; j < Stages.TURTLES[Stages.CURRENT_STAGE][i][3].length; j++) {
+                    Stages.TURTLES[Stages.CURRENT_STAGE][i][4][j] = this.turtles[index].ogPositionX;
+                    this.turtles[index++].resetAnimation();
+                }
+            }
+        }
+        for (byte i = 0; i < offsetTurtles.length; i++) {
+            offsetTurtles[i].positionX = far;
+            offsetTurtles[i].resetAnimation();
+        }
     }
 }
