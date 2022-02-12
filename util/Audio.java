@@ -42,6 +42,10 @@ public class Audio {
         }
     }
 
+    public void playContinuously() {
+        play(-1);
+    }
+
     public void play() {
         play(0);
     }
