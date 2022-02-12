@@ -10,7 +10,7 @@ public class Vehicle extends SpriteImpl {
     public static final int vehiclesImgX[][]    = { {0,54}, {155,107}, {204,249}, {337,294}, {461,382} };
     public static final int vehiclesW[]         = { 45, 45, 43, 41, 76 };
     public static final int largerVehicule      = 76_000;
-
+    
     /**
      * Load the tile image
      */
