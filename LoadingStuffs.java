@@ -37,51 +37,42 @@ public class LoadingStuffs {
 
             image = ImageIO.read(new File("images\\froggerdead.png"));
             stuffs.put("froggerDeadTiles", image);
-            //stuffs.put("froggerDeadTiles", createVImage(ImageIO.read(new File("images\\froggerdead.png"))));
 
             image = ImageIO.read(new File("images\\gameover.png"));
             stuffs.put("gameover", image);
-            //stuffs.put("gameover", createVImage(ImageIO.read(new File("images\\gameover.png"))));
 
             image = ImageIO.read(new File("images\\sidewalk.png"));
             stuffs.put("sidewalk", image);
-            //stuffs.put("sidewalk", createVImage(ImageIO.read(new File("images\\sidewalk.png"))));
 
             image = ImageIO.read(new File("images\\splash.png"));
             stuffs.put("splashImage", image);
-            //stuffs.put("splashImage", createVImage(ImageIO.read(new File("images\\splash.png"))));
 
             image = ImageIO.read(new File("images\\vehicules.png"));
             stuffs.put("vehiclesTile", image);
-            //stuffs.put("vehiclesTile", createVImage(ImageIO.read(new File("images\\vehicules.png"))));
 
             image = ImageIO.read(new File("images\\grass.png"));
             stuffs.put("grass", image);
-            //stuffs.put("grass", createVImage(ImageIO.read(new File("images\\grass.png"))));
 
             image = ImageIO.read(new File("images\\subgrass.png"));
             stuffs.put("subgrass", image);
-            //stuffs.put("subgrass", createVImage(ImageIO.read(new File("images\\subgrass.png"))));
 
             image = ImageIO.read(new File("images\\trunks.png"));
             stuffs.put("trunksTiles", image);
-            //stuffs.put("trunksTiles", createVImage(ImageIO.read(new File("images\\trunks.png"))));
 
             image = ImageIO.read(new File("images\\pixel.png"));
             stuffs.put("pixel", image);
-            //stuffs.put("trunksTiles", createVImage(ImageIO.read(new File("images\\pixel.png"))));
 
             image = ImageIO.read(new File("images\\turtles.png"));
             stuffs.put("turtles", image);
-            //stuffs.put("turtles", createVImage(ImageIO.read(new File("images\\turtles.png"))));
 
             image = ImageIO.read(new File("images\\live.png"));
             stuffs.put("live", image);
-            //stuffs.put("turtles", createVImage(ImageIO.read(new File("images\\turtles.png"))));
 
             image = ImageIO.read(new File("images\\clear.png"));
             stuffs.put("stage-clear", image);
-            //stuffs.put("stage-clear", createVImage(ImageIO.read(new File("images\\clear.png"))));
+
+            image = ImageIO.read(new File("images\\time.png"));
+            stuffs.put("time-tile", image);
 
             Logger.INFO("read all images...", this);
 
@@ -114,6 +105,11 @@ public class LoadingStuffs {
             audio = new Audio("audio/clear.wav", 0);
             if (audio != null && audio.isReady()) {
                 stuffs.put("clearAudio", audio);
+            }
+
+            audio = new Audio("audio/gameover.wav", 0);
+            if (audio != null && audio.isReady()) {
+                stuffs.put("gameover-theme", audio);
             }
 
         } catch (java.io.IOException e) {
