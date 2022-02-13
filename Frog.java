@@ -316,7 +316,7 @@ public class Frog extends SpriteImpl {
                 }
             }
 
-            if ((this.positionX + this.width) > this.scenario.getWindowWidth() || this.positionX < 0) {
+            if ((this.positionX + this.width) > this.scenario.getWindowWidth() || this.positionX < 0 || this.gameReference.getTimer().getTimeOver()) {
                 this.canMove    = false;
                 this.isDead     = true;
                 this.animating  = false;
@@ -375,8 +375,10 @@ public class Frog extends SpriteImpl {
                             if (this.scenario.getDockers().getDockersComplete()) {
                                 this.gameReference.tooglePause();
                                 this.gameReference.getMessages().tooglePause();
+                                this.gameReference.getTimer().tooglePause();
                                 this.clearAudio.play();
                             } else {
+                                this.gameReference.getTimer().reset();
                                 this.dockerAudio.play();
                             }
                             this.frogReset();    
@@ -398,6 +400,7 @@ public class Frog extends SpriteImpl {
                 //The frog is dead... Define the dead animation parameters...
                 this.animationCounter += frametime;
                 this.setDeadAnimationFrame();
+                this.gameReference.getTimer().reset();
             }
         }
     }
