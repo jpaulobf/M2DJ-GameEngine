@@ -28,7 +28,9 @@ public class Game implements IGame {
     private Frog frog                       = null;
     private GameOver gameOver               = null;
     private Message message                 = null;
+    private Timer timer                     = null;
     private volatile Audio theme            = null;
+    private volatile Audio gameoverTheme    = null;
     private volatile long framecounter      = 0;
     private volatile boolean mute           = false;
     private volatile boolean canContinue    = true;
@@ -60,7 +62,9 @@ public class Game implements IGame {
         this.gameOver       = new GameOver(this.g2d, this.wwm, this.whm);
         this.message        = new Message(g2d, wwm, whm, this);
         this.gameState      = new StateMachine(this);
+        this.timer          = new Timer(g2d, wwm, whm, this);
         this.theme          = (Audio)LoadingStuffs.getInstance().getStuff("theme");
+        this.gameoverTheme  = (Audio)LoadingStuffs.getInstance().getStuff("gameover-theme");
 
         this.theme.playContinuously();
     }
@@ -87,19 +91,22 @@ public class Game implements IGame {
             this.scenario.update(frametime);
             this.frog.update(frametime);
             this.hud.update(frametime);
+            this.timer.update(frametime);
             //after possible colision, check lives.
             if (this.frog.getLives() == 0) {
                 this.gameState.setCurrentState(StateMachine.GAME_OVER);
             }
         } else if (this.gameState.getCurrentState() == StateMachine.GAME_OVER) {
             this.framecounter += frametime;
-            if (this.framecounter >= 3_000_000_000L) {
+            if (this.framecounter >= 7_000_000_000L) {
                 this.framecounter = 0;
-                this.frog.frogReset();
                 this.frog.resetLives();
-                this.hud.reset();
+                this.softReset();
+                this.theme.playContinuously();
                 this.gameState.setCurrentState(StateMachine.IN_GAME);
-            } else {
+            } else if (this.framecounter == frametime) { //run just once
+                this.theme.stop();
+                this.gameoverTheme.play();
                 this.gameState.setCurrentState(StateMachine.GAME_OVER);
             }
         }
@@ -129,6 +136,7 @@ public class Game implements IGame {
                 this.frog.draw(frametime);
                 this.hud.draw(frametime);
                 this.message.draw(frametime);
+                this.timer.draw(frametime);
             } else if (this.gameState.getCurrentState() == StateMachine.GAME_OVER) {
                 this.gameOver.draw(frametime);
             }
@@ -186,6 +194,7 @@ public class Game implements IGame {
         this.toogleMuteTheme();
         this.frog.tooglePause();
         this.scenario.tooglePause();
+        this.timer.tooglePause();
     }
 
     /**
@@ -197,6 +206,8 @@ public class Game implements IGame {
         this.scenario.getTrunks().reset();
         this.scenario.getTurtles().reset();
         this.scenario.getDockers().reset();
+        this.hud.reset();
+        this.timer.reset();
         this.frog.frogReset();
     }
 
@@ -230,4 +241,5 @@ public class Game implements IGame {
     public GameOver getGameOver()       {   return this.gameOver;   }
     public StateMachine getGameState()  {   return this.gameState;  }
     public Message getMessages()        {   return this.message;    }
+    public Timer getTimer()             {   return this.timer;      }
 }
