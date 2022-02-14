@@ -36,10 +36,10 @@ public class Frogger implements Runnable {
         private int positionY                       = 0;
 
         //width and height of the window
-        private int windowWidth                     = 1240;
-        private int windowHeight                    = 700;
-        //private int windowWidth                     = 1344;
-        //private int windowHeight                    = 872;
+        //private int windowWidth                     = 1240;
+        //private int windowHeight                    = 700;
+        private int windowWidth                     = 1344;
+        private int windowHeight                    = 872;
         
         //the first 'canvas' & the backbuffer (for simple doublebuffer strategy)
         private JPanel canvas                       = null;
