@@ -175,7 +175,7 @@ public class SplashScreen extends JFrame implements Runnable {
             Thread.sleep(1_000);
             this.setVisible(false);
             //start the thread
-            Thread thread = new Thread(new Frogger(120), "engine");
+            Thread thread = new Thread(new Frogger(0), "engine");
             thread.setPriority(Thread.MAX_PRIORITY);
             thread.start();
         } catch (Exception e) {}
