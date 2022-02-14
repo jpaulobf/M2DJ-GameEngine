@@ -55,4 +55,10 @@ public interface IGame {
      * @param g2d
      */
     public void updateGraphics2D(Graphics2D g2d);
+
+    public int getInternalResolutionWidth();
+
+    public int getInternalResolutionHeight();
+
+
 }
