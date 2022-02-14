@@ -242,4 +242,14 @@ public class Game implements IGame {
     public StateMachine getGameState()  {   return this.gameState;  }
     public Message getMessages()        {   return this.message;    }
     public Timer getTimer()             {   return this.timer;      }
+
+    @Override
+    public int getInternalResolutionWidth() {
+        return (this.wwm);
+    }
+
+    @Override
+    public int getInternalResolutionHeight() {
+        return (this.whm + this.HUDHeight);
+    }
 }
