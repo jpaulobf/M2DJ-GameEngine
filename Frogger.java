@@ -192,7 +192,7 @@ public class Frogger implements Runnable {
                     this.game.draw(frametime);
         
                     //render the fps counter
-                    this.renderFPSLayer(frametime, (Graphics2D)this.bufferImage.getGraphics());
+                    this.renderFPSLayer(frametime, this.g2d);
 
                     //At least, copy the backbuffer to the canvas screen
                     this.canvas.getGraphics().drawImage(this.bufferImage, 0, 0, this.windowWidth, this.windowHeight, //destine
