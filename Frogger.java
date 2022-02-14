@@ -36,10 +36,10 @@ public class Frogger implements Runnable {
         private int positionY                       = 0;
 
         //width and height of the window
-        //private int windowWidth                   = 1240;
-        //private int windowHeight                  = 700;
-        private int windowWidth                     = 1344;
-        private int windowHeight                    = 872;
+        private int windowWidth                     = 1240;
+        private int windowHeight                    = 700;
+        //private int windowWidth                     = 1344;
+        //private int windowHeight                    = 872;
         
         //the first 'canvas' & the backbuffer (for simple doublebuffer strategy)
         private JPanel canvas                       = null;
@@ -58,7 +58,7 @@ public class Frogger implements Runnable {
         private boolean showFPS                     = true;
 
         //control and fullscreen controller
-        private boolean fullscreen                  = false;
+        private boolean fullscreen                  = true;
         private boolean isFullScreenAvailable       = false;
 
         /**
@@ -88,7 +88,7 @@ public class Frogger implements Runnable {
             //create the backbuffer from the size of screen resolution to avoid any resize process penalty
             this.ge             = GraphicsEnvironment.getLocalGraphicsEnvironment();
             this.dsd            = ge.getDefaultScreenDevice();
-            this.bufferImage    = dsd.getDefaultConfiguration().createCompatibleVolatileImage(this.windowWidth, this.windowHeight);
+            this.bufferImage    = dsd.getDefaultConfiguration().createCompatibleVolatileImage((int)size.getWidth()*2, (int)size.getHeight()*2);
             this.g2d            = (Graphics2D)bufferImage.getGraphics();
             this.g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 
@@ -170,7 +170,7 @@ public class Frogger implements Runnable {
 
                 //At least, copy the backbuffer to the backbuffer
                 this.g2d.drawImage(this.bufferImage, 0, 0, this.getWidth(), this.getHeight(),  //destine
-                                                     0, 0, this.windowWidth, this.windowHeight, // source
+                                                     0, 0, game.getInternalResolutionWidth(), game.getInternalResolutionHeight(), // source
                                                      this);
 
                 //render the fps counter
@@ -195,8 +195,9 @@ public class Frogger implements Runnable {
                     this.renderFPSLayer(frametime, (Graphics2D)this.bufferImage.getGraphics());
 
                     //At least, copy the backbuffer to the canvas screen
-                    this.canvas.getGraphics().drawImage(this.bufferImage, 0, 0, this.windowWidth, this.windowHeight,                 //destine
-                                                                          0, 0, this.windowWidth, this.windowHeight, //source
+                    this.canvas.getGraphics().drawImage(this.bufferImage, 0, 0, this.windowWidth, this.windowHeight, //destine
+                                                                          0, 0, game.getInternalResolutionWidth(), 
+                                                                          game.getInternalResolutionHeight(), //source
                                                                           this);
                 }
             }
