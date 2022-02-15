@@ -112,6 +112,10 @@ public class LoadingStuffs {
                 stuffs.put("gameover-theme", audio);
             }
 
+            audio = new Audio("audio/lasttime.wav", 0);
+            if (audio != null && audio.isReady()) {
+                stuffs.put("lasttime", audio);
+            }
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
