@@ -186,14 +186,12 @@ public class Frog extends SpriteImpl {
                     this.animating      = false;
                     this.canMove        = false;
                     this.isDead         = true;
+                    this.squashAudio.play();
                 } else {
                     this.canMove        = false;
                     this.animating      = true;
                     this.lastMovement   = direction;
-                }
-
-                if (this.jumpAudio != null) {
-                    this.jumpAudio.play();    
+                    this.jumpAudio.play();
                 }
             }
         }
@@ -375,7 +373,6 @@ public class Frog extends SpriteImpl {
                             if (this.scenario.getDockers().getDockersComplete()) {
                                 this.gameReference.tooglePause();
                                 this.gameReference.getMessages().tooglePause();
-                                this.gameReference.getTimer().tooglePause();
                                 this.clearAudio.play();
                             } else {
                                 this.gameReference.getTimer().reset();
