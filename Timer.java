@@ -2,6 +2,7 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 import interfaces.IGame;
 import java.awt.image.BufferedImage;
+import util.Audio;
 
 public class Timer {
     private Graphics2D g2d              = null;
@@ -15,6 +16,8 @@ public class Timer {
     private final byte timerBarH        = 20;
     private BufferedImage timeTile      = null;
     private volatile boolean stopped    = false;
+    private volatile Audio lasttime     = null;
+    private final short timer3          = (short)(this.timer * 3);
 
     /**
      * HUD Constructor
@@ -31,6 +34,7 @@ public class Timer {
         this.g2d            = g2d;
         this.gameRef        = game;
         this.timeTile       = (BufferedImage)LoadingStuffs.getInstance().getStuff("time-tile");
+        this.lasttime       = (Audio)LoadingStuffs.getInstance().getStuff("lasttime");
     }
 
     /**
@@ -43,6 +47,10 @@ public class Timer {
             if (this.framecounter >= 500_000_000L) {
                 this.framecounter = 0;
                 this.timer = (this.timer <= 0)?0:--this.timer;
+
+                if ((this.timer * 10) == timer3) {
+                    this.lasttime.play();
+                }
             }
         }
     }
@@ -63,7 +71,12 @@ public class Timer {
         
         //save the original color and set new color to green
         Color ogColor = this.g2d.getColor();
-        this.g2d.setColor(Color.GREEN);
+
+        if ((this.timer * 10) <= timer3) {
+            this.g2d.setColor(Color.RED);
+        } else {
+            this.g2d.setColor(Color.GREEN);
+        }
 
         for (int i = 0; i < (timer * timerBarW); i += timerBarW) {
             this.g2d.fillRect(this.wwm - 100 - i, 
