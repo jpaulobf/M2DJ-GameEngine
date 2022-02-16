@@ -65,8 +65,6 @@ public class Game implements IGame {
         this.timer          = new Timer(g2d, wwm, whm, this);
         this.theme          = (Audio)LoadingStuffs.getInstance().getStuff("theme");
         this.gameoverTheme  = (Audio)LoadingStuffs.getInstance().getStuff("gameover-theme");
-
-        this.theme.playContinuously();
     }
     
     /**
@@ -87,14 +85,38 @@ public class Game implements IGame {
         //////////////////////////////////////////////////////////////////////
         // ->>>  update the game elements
         //////////////////////////////////////////////////////////////////////
-        if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
+        if (this.gameState.getCurrentState() == StateMachine.STAGING) {
+            this.framecounter += frametime;
+            if (this.framecounter == frametime) {
+                this.scenario.update(frametime);
+                this.frog.update(frametime);
+                this.hud.update(frametime);
+                this.timer.update(frametime);
+            } else {
+                this.message.update(frametime);
+                if (!this.message.finished()) {
+                    this.message.showStageAnnouncement();
+                } else {
+                    this.framecounter = 0;
+                    this.message.showing(false);
+                    this.message.toogleStageAnnouncement();
+                    this.gameState.setCurrentState(StateMachine.IN_GAME);
+                }
+            }
+        } else if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
+            this.framecounter += frametime;
+            if (this.framecounter == frametime) {
+                this.theme.playContinuously();
+            }
+
             this.scenario.update(frametime);
             this.frog.update(frametime);
             this.hud.update(frametime);
             this.timer.update(frametime);
-            //after possible colision, check lives.
-            if (this.frog.getLives() == 0) {
+            
+            if (this.frog.getLives() == 0) { //after possible colision, check lives.
                 this.gameState.setCurrentState(StateMachine.GAME_OVER);
+                this.framecounter = 0;
             }
         } else if (this.gameState.getCurrentState() == StateMachine.GAME_OVER) {
             this.framecounter += frametime;
@@ -107,7 +129,6 @@ public class Game implements IGame {
             } else if (this.framecounter == frametime) { //run just once
                 this.theme.stop();
                 this.gameoverTheme.play();
-                this.gameState.setCurrentState(StateMachine.GAME_OVER);
             }
         }
     }
@@ -121,28 +142,24 @@ public class Game implements IGame {
     @Override
     public synchronized void draw(long frametime) {
 
-        if (this.gameState.getCurrentState() != StateMachine.STARTING) {
+        //this graphical device (g2d) points to backbuffer, so, we are making things behide the scenes
+        //clear the stage
+        this.g2d.setBackground(Color.BLACK);
+        this.g2d.clearRect(0, 0, this.resolutionW, this.resolutionH);
 
-            //this graphical device (g2d) points to backbuffer, so, we are making things behide the scenes
-            //clear the stage
-            this.g2d.setBackground(Color.BLACK);
-            this.g2d.clearRect(0, 0, this.resolutionW, this.resolutionH);
-
-            //////////////////////////////////////////////////////////////////////
-            // ->>>  draw the game elements
-            //////////////////////////////////////////////////////////////////////
-            if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
-                this.scenario.draw(frametime);
-                this.frog.draw(frametime);
-                this.hud.draw(frametime);
-                this.message.draw(frametime);
-                this.timer.draw(frametime);
-            } else if (this.gameState.getCurrentState() == StateMachine.GAME_OVER) {
-                this.gameOver.draw(frametime);
-            }
-
-        } else {
-            this.gameState.setCurrentState(StateMachine.IN_GAME);
+        //////////////////////////////////////////////////////////////////////
+        // ->>>  draw the game elements
+        //////////////////////////////////////////////////////////////////////
+        if (this.gameState.getCurrentState() == StateMachine.STAGING) {
+            this.message.draw(frametime);
+        } else if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
+            this.scenario.draw(frametime);
+            this.frog.draw(frametime);
+            this.hud.draw(frametime);
+            this.message.draw(frametime);
+            this.timer.draw(frametime);
+        } else if (this.gameState.getCurrentState() == StateMachine.GAME_OVER) {
+            this.gameOver.draw(frametime);
         }
     }
 
