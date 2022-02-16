@@ -74,6 +74,12 @@ public class LoadingStuffs {
             image = ImageIO.read(new File("images\\time.png"));
             stuffs.put("time-tile", image);
 
+            image = ImageIO.read(new File("images\\stage1.png"));
+            stuffs.put("stage-1", image);
+
+            image = ImageIO.read(new File("images\\go.png"));
+            stuffs.put("go!", image);
+
             Logger.INFO("read all images...", this);
 
 
@@ -115,6 +121,11 @@ public class LoadingStuffs {
             audio = new Audio("audio/lasttime.wav", 0);
             if (audio != null && audio.isReady()) {
                 stuffs.put("lasttime", audio);
+            }
+
+            audio = new Audio("audio/beepstart.wav", 0);
+            if (audio != null && audio.isReady()) {
+                stuffs.put("beepstart", audio);
             }
         } catch (java.io.IOException e) {
             e.printStackTrace();
