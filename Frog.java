@@ -372,7 +372,7 @@ public class Frog extends SpriteImpl {
 
                             if (this.scenario.getDockers().getDockersComplete()) {
                                 this.gameReference.tooglePause();
-                                this.gameReference.getMessages().tooglePause();
+                                this.gameReference.getMessages().toogleShowing();
                                 this.clearAudio.play();
                             } else {
                                 this.gameReference.getTimer().reset();
