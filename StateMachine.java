@@ -9,14 +9,15 @@ public class StateMachine {
     public final static int MENU        = 3;
     public final static int OPTIONS     = 4;
     public final static int STARTING    = 5;
-    public final static int IN_GAME     = 6;
-    public final static int CONTINUE    = 7;
-    public final static int GAME_OVER   = 8;
+    public final static int STAGING     = 6;
+    public final static int IN_GAME     = 7;
+    public final static int CONTINUE    = 8;
+    public final static int GAME_OVER   = 9;
     protected int currentState          = STARTING;
     protected Game referencetToGame     = null;
 
     public StateMachine(Game game) {
-        this.currentState = STARTING;
+        this.currentState = STAGING;
         this.referencetToGame = game;
     }
 
