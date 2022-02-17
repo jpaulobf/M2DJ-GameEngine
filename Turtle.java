@@ -2,6 +2,7 @@ import interfaces.Stages;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import interfaces.Sprite;
+import interfaces.SpriteCollection;
 import java.awt.GraphicsEnvironment;
 import java.awt.Transparency;
 
@@ -16,30 +17,31 @@ public class Turtle extends SpriteImpl {
     private BufferedImage turtlesMedium[]   = null;
     private BufferedImage turtle            = null;
     private Graphics2D bgd2                 = null;
+    private SpriteCollection spriteColRef   = null;
 
     //for the vehicles tiles
-    private final byte turtleH          = 36;
-    private final byte turtleW          = 43;
-    private final byte separator        = 6;
-    private final int turtleFrames      = 6;
-    private long framecounter           = 0;
-    private int currentFrame            = 0;
-    private boolean isSubmersed         = false;
-    private final short smallWidth      = turtleW + separator + turtleW;
-    private final short mediumWidth     = turtleW + separator + turtleW + separator + turtleW;
-    protected byte dive                 = 0;
-    private final int [][] frameList    = {{0}, 
-                                           {0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 3, 4, 4, 5, 5, 4, 4, 3, 3, 0, 1, 2}, 
-                                           {0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 3, 4, 4, 5, 5, 4, 4, 3, 3, 0, 1, 2}};
-    byte index = 0;
+    private final byte turtleH              = 36;
+    private final byte turtleW              = 43;
+    private final byte separator            = 6;
+    private final int turtleFrames          = 6;
+    private long framecounter               = 0;
+    private int currentFrame                = 0;
+    private boolean isSubmersed             = false;
+    private final short smallWidth          = turtleW + separator + turtleW;
+    private final short mediumWidth         = turtleW + separator + turtleW + separator + turtleW;
+    protected byte dive                     = 0;
+    private final int [][] frameList        = {{0}, 
+                                               {0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 3, 4, 4, 5, 5, 4, 4, 3, 3, 0, 1, 2}, 
+                                               {0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 3, 4, 4, 5, 5, 4, 4, 3, 3, 0, 1, 2}};
+    private byte index                      = 0;
     
     /**
      * Turtle constructor
      */
-    public Turtle(Graphics2D g2d) {
-        this.g2d    = g2d;
-        this.height = turtleH;
-        this.type   = 0;
+    public Turtle(SpriteCollection spriteCol) {
+        this.spriteColRef   = spriteCol;
+        this.height         = turtleH;
+        this.type           = 0;
 
         //Get the already loaded image from loader
         this.turtlesTiles   = (BufferedImage)LoadingStuffs.getInstance().getStuff("turtles");
@@ -57,9 +59,9 @@ public class Turtle extends SpriteImpl {
     
     @Override
     public void draw(long frametime) {
-        this.g2d.drawImage(this.turtle, (int)this.positionX, (int)this.positionY, (int)(this.positionX + this.turtle.getWidth()), (int)(this.positionY + this.height), //dest w1, h1, w2, h2
-                                        0, 0, this.turtle.getWidth(), this.turtle.getHeight(), //source w1, h1, w2, h2
-                                        null);
+        this.spriteColRef.getG2D().drawImage(this.turtle, (int)this.positionX, (int)this.positionY, (int)(this.positionX + this.turtle.getWidth()), (int)(this.positionY + this.height), //dest w1, h1, w2, h2
+                                                          0, 0, this.turtle.getWidth(), this.turtle.getHeight(), //source w1, h1, w2, h2
+                                                          null);
     }
 
     @Override
@@ -176,6 +178,9 @@ public class Turtle extends SpriteImpl {
         }
     }
 
+    /**
+     * Reset animation
+     */
     protected void resetAnimation() {
         this.framecounter   = 0;
         this.currentFrame   = 0;

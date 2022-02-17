@@ -2,6 +2,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.GraphicsEnvironment;
 import java.awt.Transparency;
+import interfaces.SpriteCollection;
 
 /**
  * Tree trunk (individual) class
@@ -9,30 +10,31 @@ import java.awt.Transparency;
 public class TreeTrunk  extends SpriteImpl {
 
     //define the g2d and the trunks-images
-    private BufferedImage trunksTiles   = null;
-    private BufferedImage trunk         = null;
-    private BufferedImage trunkSmall    = null;
-    private BufferedImage trunkMedium   = null;
-    private BufferedImage trunkLarge    = null;
-    private Graphics2D bgd2             = null;
-    private final byte trunkLeftSideX   = 1;
-    private final byte trunkRightSideX  = 40;
-    private final byte trunkFirstPartX  = 83;
-    private final byte trunkSecondPartX = 108;
-    private final byte trunkLeftSideW   = 38;
-    private final byte trunkRightSideW  = 40;
-    private final byte trunkFirstPartW  = 24;
-    private final byte trunkSecondPartW = 24;
-    private final short smallWidth      = trunkLeftSideW + trunkFirstPartW + trunkSecondPartW + trunkRightSideW;
-    private final short mediumWidth     = trunkLeftSideW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW + trunkRightSideW;
-    private final short largeWidth      = trunkLeftSideW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW + trunkRightSideW;
+    private BufferedImage trunksTiles       = null;
+    private BufferedImage trunk             = null;
+    private BufferedImage trunkSmall        = null;
+    private BufferedImage trunkMedium       = null;
+    private BufferedImage trunkLarge        = null;
+    private Graphics2D bgd2                 = null;
+    private final byte trunkLeftSideX       = 1;
+    private final byte trunkRightSideX      = 40;
+    private final byte trunkFirstPartX      = 83;
+    private final byte trunkSecondPartX     = 108;
+    private final byte trunkLeftSideW       = 38;
+    private final byte trunkRightSideW      = 40;
+    private final byte trunkFirstPartW      = 24;
+    private final byte trunkSecondPartW     = 24;
+    private final short smallWidth          = trunkLeftSideW + trunkFirstPartW + trunkSecondPartW + trunkRightSideW;
+    private final short mediumWidth         = trunkLeftSideW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW + trunkRightSideW;
+    private final short largeWidth          = trunkLeftSideW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW + trunkRightSideW;
+    private SpriteCollection spriteColRef   = null;
 
     /**
      * constructor
      * @param g2d
      */
-    public TreeTrunk(Graphics2D g2d) {
-        this.g2d            = g2d;
+    public TreeTrunk(SpriteCollection spriteCol) {
+        this.spriteColRef   = spriteCol;
         this.height         = 32;
         //Get the already loaded image from loader
         this.trunksTiles    = (BufferedImage)LoadingStuffs.getInstance().getStuff("trunksTiles");
@@ -65,9 +67,9 @@ public class TreeTrunk  extends SpriteImpl {
 
     @Override
     public void draw(long frametime) {
-        this.g2d.drawImage(this.trunk, (int)this.positionX, (int)this.positionY, (int)(this.positionX + this.trunk.getWidth()), (int)(this.positionY + this.height), //dest w1, h1, w2, h2
-                                       0, 0, this.trunk.getWidth(), this.trunk.getHeight(), //source w1, h1, w2, h2
-                                       null);
+        this.spriteColRef.getG2D().drawImage(this.trunk, (int)this.positionX, (int)this.positionY, (int)(this.positionX + this.trunk.getWidth()), (int)(this.positionY + this.height), //dest w1, h1, w2, h2
+                                                          0, 0, this.trunk.getWidth(), this.trunk.getHeight(), //source w1, h1, w2, h2
+                                                          null);
     }
 
     /**
