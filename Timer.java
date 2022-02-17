@@ -1,12 +1,12 @@
-import java.awt.Graphics2D;
 import java.awt.Color;
-import interfaces.IGame;
 import java.awt.image.BufferedImage;
 import util.Audio;
 
+/**
+ * Class responsible for game timer
+ */
 public class Timer {
-    private Graphics2D g2d              = null;
-    private IGame gameRef               = null;
+    private Game gameRef                = null;
     private int wwm                     = 0;
     private int whm                     = 0;
     private volatile long framecounter  = 0;
@@ -28,10 +28,9 @@ public class Timer {
      * @param scenario
      * @param frog
      */
-    public Timer(Graphics2D g2d, int wwm, int whm, IGame game) {
+    public Timer(Game game, int wwm, int whm) {
         this.wwm            = wwm;
         this.whm            = whm;
-        this.g2d            = g2d;
         this.gameRef        = game;
         this.timeTile       = (BufferedImage)LoadingStuffs.getInstance().getStuff("time-tile");
         this.lasttime       = (Audio)LoadingStuffs.getInstance().getStuff("lasttime");
@@ -70,27 +69,27 @@ public class Timer {
     public void draw(long frametime) {
         
         //save the original color and set new color to green
-        Color ogColor = this.g2d.getColor();
+        Color ogColor = this.gameRef.getG2D().getColor();
 
         if ((this.timer * 10) <= timer3) {
-            this.g2d.setColor(Color.RED);
+            this.gameRef.getG2D().setColor(Color.RED);
         } else {
-            this.g2d.setColor(Color.GREEN);
+            this.gameRef.getG2D().setColor(Color.GREEN);
         }
 
         for (int i = 0; i < (timer * timerBarW); i += timerBarW) {
-            this.g2d.fillRect(this.wwm - 100 - i, 
-                              (this.whm + 10), 
-                              timerBarW, 
-                              timerBarH);
+            this.gameRef.getG2D().fillRect(this.wwm - 100 - i, 
+                                          (this.whm + 10), 
+                                          timerBarW, 
+                                          timerBarH);
         }
 
-        this.g2d.drawImage(this.timeTile, this.wwm - this.timeTile.getWidth() - 6, this.whm + 10, this.wwm - 6, (this.whm + this.timeTile.getHeight() + 10),   //dest w1, h1, w2, h2
-                                          0, 0, this.timeTile.getWidth(), this.timeTile.getHeight(),  //source w1, h1, w2, h2
-                                          null);
+        this.gameRef.getG2D().drawImage(this.timeTile, this.wwm - this.timeTile.getWidth() - 6, this.whm + 10, this.wwm - 6, (this.whm + this.timeTile.getHeight() + 10),   //dest w1, h1, w2, h2
+                                                       0, 0, this.timeTile.getWidth(), this.timeTile.getHeight(),  //source w1, h1, w2, h2
+                                                       null);
 
         //return original color
-        this.g2d.setColor(ogColor);
+        this.gameRef.getG2D().setColor(ogColor);
     }
 
     /**
