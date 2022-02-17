@@ -19,8 +19,8 @@ public class Turtles extends SpriteCollection {
     //Screen size ang G2D
     protected int windowWidth           = 0;
     protected int windowHeight          = 0;
-    protected Graphics2D g2d            = null;
     private volatile boolean stopped    = false;
+    private Game gameRef                = null;
 
     /**
      * Constructor
@@ -28,18 +28,18 @@ public class Turtles extends SpriteCollection {
      * @param windowWidth
      * @param windowHeight
      */
-    public Turtles(Graphics2D g2d, int windowWidth, int windowHeight) {
-        this.g2d                = g2d;
+    public Turtles(Game game, int windowWidth, int windowHeight) {
+        this.gameRef            = game;
         this.windowWidth        = windowWidth;
         this.windowHeight       = windowHeight;
         this.windowWidth1000    = this.windowWidth * 1_000;
 
         //instantiate the turtles objects and the offset turtles
         for (byte i = 0; i < turtles.length; i++) {
-            turtles[i] = new Turtle(this.g2d);
+            turtles[i] = new Turtle(this);
         } 
         for (byte i = 0; i < offsetTurtles.length; i++) {
-            offsetTurtles[i]             = new Turtle(this.g2d);
+            offsetTurtles[i]             = new Turtle(this);
             offsetTurtles[i].positionX   = far;
         }
 
@@ -176,5 +176,10 @@ public class Turtles extends SpriteCollection {
             offsetTurtles[i].positionX = far;
             offsetTurtles[i].resetAnimation();
         }
+    }
+
+    @Override
+    public Graphics2D getG2D() {
+        return (this.gameRef.getG2D());
     }
 }

@@ -1,5 +1,10 @@
 package interfaces;
 
+import java.awt.Graphics2D;
+
+/**
+ * Sprite collection abstract class
+ */
 public abstract class SpriteCollection implements Directions {
 
     /**
@@ -48,4 +53,10 @@ public abstract class SpriteCollection implements Directions {
      * @param frametime
      */
     public abstract void draw(long frametime);
+
+    /**
+     * Return the G2D
+     * @return
+     */
+    public abstract Graphics2D getG2D();
 }

@@ -12,22 +12,24 @@ public class Vehicles extends SpriteCollection {
     //The tile image, and its elements (positions)
     protected int windowWidth           = 0;
     protected int windowHeight          = 0;
-    protected Graphics2D g2d            = null;
+    private Game gameRef                = null;
 
     //define the vehicules array
     private Vehicle [] vehicles         = new Vehicle[Stages.CURRENT_STAGE_CARS[Stages.CURRENT_STAGE]];
     private volatile boolean stopped    = false; 
 
     /**
-     * Load the tile image
-     * @param g2d
+     * Vehicles constructor
+     * @param game
+     * @param windowWidth
+     * @param windowHeight
      */
-    public Vehicles(Graphics2D g2d, int windowWidth, int windowHeight) {
-        this.g2d            = g2d;
+    public Vehicles(Game game, int windowWidth, int windowHeight) {
+        this.gameRef        = game;
         this.windowWidth    = windowWidth;
         this.windowHeight   = windowHeight;
         for (byte i = 0; i < vehicles.length; i++) {
-            vehicles[i] = new Vehicle(this.g2d);
+            vehicles[i]     = new Vehicle(this);
         }
 
         for (int i = 0, index = 0; i < Stages.CARS[Stages.CURRENT_STAGE].length; i++) {
@@ -120,5 +122,10 @@ public class Vehicles extends SpriteCollection {
                 Stages.CARS[Stages.CURRENT_STAGE][i][3][j] = vehicles[index++].ogPositionX;
             }
         }
+    }
+
+    @Override
+    public Graphics2D getG2D() {
+        return (this.gameRef.getG2D());
     }
 }

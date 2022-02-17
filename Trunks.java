@@ -12,7 +12,6 @@ public class Trunks extends SpriteCollection {
     //Screen size ang G2D
     protected int windowWidth           = 0;
     protected int windowHeight          = 0;
-    protected Graphics2D g2d            = null;
 
     //define the trunks array
     private TreeTrunk[] trunks          = new TreeTrunk[Stages.CURRENT_STAGE_TRUNKS[Stages.CURRENT_STAGE]];
@@ -21,23 +20,26 @@ public class Trunks extends SpriteCollection {
     private final short far             = -10_000;
     private int windowWidth1000         =  0;
     private volatile boolean stopped    = false;
+    private Game gameRef                = null;
 
     /**
-     * Load the tile image
-     * @param g2d
+     * Trunks constructor
+     * @param game
+     * @param windowWidth
+     * @param windowHeight
      */
-    public Trunks(Graphics2D g2d, int windowWidth, int windowHeight) {
-        this.g2d                = g2d;
+    public Trunks(Game game, int windowWidth, int windowHeight) {
+        this.gameRef            = game;
         this.windowWidth        = windowWidth;
         this.windowHeight       = windowHeight;
         this.windowWidth1000    = this.windowWidth * 1_000;
 
         //instantiate the trunks objects and the offset trunks
         for (byte i = 0; i < trunks.length; i++) {
-            trunks[i] = new TreeTrunk(this.g2d);
+            trunks[i] = new TreeTrunk(this);
         } 
         for (byte i = 0; i < offsetTrunks.length; i++) {
-            offsetTrunks[i]             = new TreeTrunk(this.g2d);
+            offsetTrunks[i]             = new TreeTrunk(this);
             offsetTrunks[i].positionX   = far;
         }
 
@@ -177,5 +179,10 @@ public class Trunks extends SpriteCollection {
         for (byte i = 0; i < offsetTrunks.length; i++) {
             offsetTrunks[i].positionX   = far;
         }
+    }
+
+    @Override
+    public Graphics2D getG2D() {
+        return (this.gameRef.getG2D());
     }
 }
