@@ -12,48 +12,49 @@ import java.awt.Transparency;
 public class Scenario {
 
     //Scenario variables
-    private Graphics2D g2d              = null;
-    private int windowWidth             = 0;
-    private int windowHeight            = 0;
-    private VolatileImage bgBufferImage = null;
-    private Graphics2D bg2d             = null;
-    private Vehicles vehicles           = null;
-    private Trunks trunks               = null;
-    private Dockers dockers             = null;
-    private Turtles turtles             = null;
-    private BufferedImage sidewalk      = null;
-    private BufferedImage grass         = null;
-    private BufferedImage subgrass      = null;
-    private BufferedImage frogHome      = null;
+    private int windowWidth                 = 0;
+    private int windowHeight                = 0;
+    private VolatileImage bgBufferImage     = null;
+    private Graphics2D bg2d                 = null;
+    private Vehicles vehicles               = null;
+    private Trunks trunks                   = null;
+    private Dockers dockers                 = null;
+    private Turtles turtles                 = null;
+    private BufferedImage sidewalk          = null;
+    private BufferedImage grass             = null;
+    private BufferedImage subgrass          = null;
+    private BufferedImage frogHome          = null;
+    private volatile boolean showElements   = true;
+    private Game gameRef                    = null;
 
     //how many tiles in x and in y
-    protected final byte tilesInX       = 21;
-    protected final byte tilesInY       = 13;
+    protected final byte tilesInX           = 21;
+    protected final byte tilesInY           = 13;
     
     //each tile propertie
-    private final byte tileX            = 64;
-    private final byte tileY            = 64;
-    protected final byte halfTileX      = (byte)(tileX / 2);
-    protected final byte halfTileY      = (byte)(tileY / 2);
+    private final byte tileX                = 64;
+    private final byte tileY                = 64;
+    protected final byte halfTileX          = (byte)(tileX / 2);
+    protected final byte halfTileY          = (byte)(tileY / 2);
 
     /**
-     * Constructor
-     * @param g2d
+     * Scenario Constructor
+     * @param game
      * @param windowWidth
      * @param windowHeight
      */
-    public Scenario(Graphics2D g2d, int windowWidth, int windowHeight) {
-        this.g2d            = g2d;
+    public Scenario(Game game, int windowWidth, int windowHeight) {
         this.windowHeight   = windowHeight;
         this.windowWidth    = windowWidth;
+        this.gameRef        = game;
 
         //the game is construct having one resolution as target
         //any different resolution is streched in the final process
         //the code below, allow another approuche, calculating everything in a dynamic way (more cpu intensive)
-        this.vehicles       = new Vehicles(g2d, windowWidth, windowHeight);
-        this.trunks         = new Trunks(g2d, windowWidth, windowHeight);
-        this.turtles        = new Turtles(g2d, windowWidth, windowHeight);
-        this.dockers        = new Dockers(g2d);
+        this.vehicles       = new Vehicles(this.gameRef, windowWidth, windowHeight);
+        this.trunks         = new Trunks(this.gameRef, windowWidth, windowHeight);
+        this.turtles        = new Turtles(this.gameRef, windowWidth, windowHeight);
+        this.dockers        = new Dockers(this.gameRef);
         this.drawBackgroundInBuffer();
 
         int imagePosX = 1;
@@ -211,23 +212,24 @@ public class Scenario {
      */
     public void draw(long frametime) {
         //After construct the bg once, copy it to the graphic device
-        this.g2d.drawImage(this.bgBufferImage, 0, 0, null);
+        this.gameRef.getG2D().drawImage(this.bgBufferImage, 0, 0, null);
         
         for (int cnt = 0; cnt < dockers.getIsInDock().length; cnt++) {
             if (dockers.getIsInDock()[cnt]) {
-                this.g2d.drawImage(this.frogHome, 99 + (cnt * 276), 16, 99 + (cnt * 276) + this.frogHome.getWidth(), this.frogHome.getHeight() + 16, 
-                                                  0, 0, this.frogHome.getWidth(), this.frogHome.getHeight(), null);
+                this.gameRef.getG2D().drawImage(this.frogHome, 99 + (cnt * 276), 16, 99 + (cnt * 276) + this.frogHome.getWidth(), this.frogHome.getHeight() + 16, 
+                                                               0, 0, this.frogHome.getWidth(), this.frogHome.getHeight(), null);
             }
         }
 
         //draw the vehicles
-        this.vehicles.draw(frametime);
-        this.trunks.draw(frametime);
-        this.turtles.draw(frametime);
-        this.dockers.draw(frametime);
+        if (this.showElements) {
+            this.vehicles.draw(frametime);
+            this.trunks.draw(frametime);
+            this.turtles.draw(frametime);
+            this.dockers.draw(frametime);
+        }
     }
 
-    
     /**
      * Accessors
      * @return
@@ -244,5 +246,9 @@ public class Scenario {
         this.vehicles.toogleStop();
         this.trunks.toogleStop();
         this.turtles.toogleStop();
+    }
+
+    public void toogleElements() {
+        this.showElements = !this.showElements;
     }
 }
