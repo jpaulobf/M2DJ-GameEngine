@@ -7,22 +7,22 @@ import java.awt.Graphics2D;
  */
 public class Dockers extends SpriteCollection {
 
-    private Docker[] dockers            = new Docker[5];
-    protected Graphics2D g2d            = null;
-    private boolean [] isInDock         = new boolean[dockers.length];
+    private Docker[] dockers    = new Docker[5];
+    private boolean [] isInDock = new boolean[dockers.length];
+    private Game gameRef        = null;
 
     /**
      * Dockers constructor
      */
-    public Dockers(Graphics2D g2d) {
-        this.g2d              = g2d;
-        double [] positionX   = {102, 378, 654, 930, 1206};
-        double [] positionY   = {14, 14, 14, 14, 14};
-        short  [] width       = {36, 36, 36, 36, 36};
-        byte   [] height      = {50, 50, 50, 50, 50};
+    public Dockers(Game game) {
+        this.gameRef            = game;
+        double [] positionX     = {102, 378, 654, 930, 1206};
+        double [] positionY     = {14, 14, 14, 14, 14};
+        short  [] width         = {36, 36, 36, 36, 36};
+        byte   [] height        = {50, 50, 50, 50, 50};
 
         for (int i = 0; i < dockers.length; i++) {
-            dockers[i] = new Docker(this.g2d);
+            dockers[i] = new Docker(this);
             dockers[i].config(positionX[i], positionY[i], width[i], height[i]);
         }
 
@@ -30,6 +30,11 @@ public class Dockers extends SpriteCollection {
         for (int i = 0; i < this.isInDock.length; i++) {
             isInDock[i] = false;
         }
+
+        isInDock[0] = true;
+        isInDock[1] = true;
+        isInDock[2] = true;
+        isInDock[4] = true;
     }
 
     /**
@@ -76,10 +81,18 @@ public class Dockers extends SpriteCollection {
         return (complete);
     }
 
+    /**
+     * Reset dockers
+     */
     public void reset() {
         //initialize the dockers
         for (int i = 0; i < this.isInDock.length; i++) {
             isInDock[i] = false;
         }
+    }
+
+    @Override
+    public Graphics2D getG2D() {
+        return (this.gameRef.getG2D());
     }
 }
