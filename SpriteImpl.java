@@ -1,4 +1,3 @@
-import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import interfaces.Directions;
 import interfaces.Sprite;
@@ -23,7 +22,6 @@ public abstract class SpriteImpl implements Sprite, Directions {
     protected volatile byte offsetLeft          = 0;
     protected volatile int ogPositionX          = 0;
     protected Rectangle2D rectangle             = null;
-    protected Graphics2D g2d                    = null;
     
     /**
      * Accessor Method
