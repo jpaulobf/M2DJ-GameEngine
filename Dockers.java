@@ -31,10 +31,12 @@ public class Dockers extends SpriteCollection {
             isInDock[i] = false;
         }
 
+        /*
         isInDock[0] = true;
         isInDock[1] = true;
         isInDock[2] = true;
         isInDock[4] = true;
+        */
     }
 
     /**
