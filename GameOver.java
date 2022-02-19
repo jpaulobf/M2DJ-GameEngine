@@ -4,17 +4,17 @@ import java.awt.image.VolatileImage;
 import java.awt.image.BufferedImage;
 import java.awt.GraphicsEnvironment;
 
-/*
-    WTCD: This class represents the gameover scene
-*/
+/**
+ * Class represents the gameover scene
+ */
 public class GameOver {
     //Scenario variables
-    private Graphics2D g2d              = null;
     private Graphics2D bgd2             = null;
     private int windowWidth             = 0;
     private int windowHeight            = 0;
     private VolatileImage bgBufferImage = null;
     private BufferedImage gameover      = null;
+    private Game gameRef                = null;
 
     /**
      * Constructor
@@ -22,10 +22,10 @@ public class GameOver {
      * @param windowWidth
      * @param windowHeight
      */
-    public GameOver(Graphics2D g2d, int windowWidth, int windowHeight) {
-        this.g2d            = g2d;
+    public GameOver(Game game, int windowWidth, int windowHeight) {
         this.windowHeight   = windowHeight;
         this.windowWidth    = windowWidth;
+        this.gameRef        = game;
         this.drawGameOverInBuffer();
     }
 
@@ -60,7 +60,6 @@ public class GameOver {
      * @param frametime
      */
     public void update(long frametime) {
-
     }
 
     /**
@@ -68,7 +67,11 @@ public class GameOver {
      * @param frametime
      */
     public void draw(long frametime) {
+        //clear the stage
+        this.gameRef.getG2D().setBackground(Color.BLACK);
+        this.gameRef.getG2D().clearRect(0, 0, this.windowWidth, this.windowHeight * 2);
+
         //After construct the bg once, copy it to the graphic device
-        this.g2d.drawImage(this.bgBufferImage, 0, 0, null);
+        this.gameRef.getG2D().drawImage(this.bgBufferImage, 0, 0, null);
     }
 }
