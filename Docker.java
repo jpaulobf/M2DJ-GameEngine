@@ -1,5 +1,5 @@
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import interfaces.SpriteCollection;
 
 /**
  * Docker sprite class
@@ -7,14 +7,15 @@ import java.awt.image.BufferedImage;
 public class Docker extends SpriteImpl {
 
     //vehicles tiles
-    private BufferedImage docker = null;
+    private BufferedImage docker            = null;
+    private SpriteCollection spriteColRef   = null;
 
     /**
      * Docker constructor
      */
-    public Docker(Graphics2D g2d) {
-        this.g2d    = g2d;
-        this.docker = (BufferedImage)LoadingStuffs.getInstance().getStuff("pixel");
+    public Docker(SpriteCollection spriteCol) {
+        this.spriteColRef   = spriteCol;
+        this.docker         = (BufferedImage)LoadingStuffs.getInstance().getStuff("pixel");
     }
 
     /**
@@ -33,9 +34,9 @@ public class Docker extends SpriteImpl {
 
     @Override
     public void draw(long frametime) {
-        this.g2d.drawImage(this.docker, (int)this.positionX, (int)this.positionY, (int)(this.positionX + this.width), (int)(this.positionY + this.height), //dest w1, h1, w2, h2
-                                         0, 0, 1, 1, //source w1, h1, w2, h2
-                                         null);
+        this.spriteColRef.getG2D().drawImage(this.docker, (int)this.positionX, (int)this.positionY, (int)(this.positionX + this.width), (int)(this.positionY + this.height), //dest w1, h1, w2, h2
+                                                           0, 0, 1, 1, //source w1, h1, w2, h2
+                                                           null);
         
     }
 
