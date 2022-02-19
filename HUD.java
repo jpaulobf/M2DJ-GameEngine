@@ -4,10 +4,12 @@ import java.awt.image.BufferedImage;
 import java.awt.GraphicsEnvironment;
 import java.awt.Color;
 
+/**
+ * Class representing the game HUD
+ */
 public class HUD {
 
-    private Graphics2D g2d              = null;
-    private Frog frogRef                = null;
+    private Game gameRef               = null;
     private VolatileImage hudBG         = null;
     private BufferedImage livesTile     = null;
     private Graphics2D bg2d             = null;
@@ -18,7 +20,7 @@ public class HUD {
     private final byte separator        = 8;
     private final byte initialDistance  = 10;
     private final byte initialHeight    = 8;
-    
+
     /**
      * HUD Constructor
      * @param g2d
@@ -28,13 +30,12 @@ public class HUD {
      * @param scenario
      * @param frog
      */
-    public HUD(Graphics2D g2d, int wwm, int whm, byte HUDHeight, Game game) {
+    public HUD(Game game, int wwm, int whm, byte HUDHeight) {
         this.HUDHeight      = HUDHeight;
         this.wwm            = wwm;
         this.whm            = whm;
-        this.g2d            = g2d;
-        this.frogRef        = game.getFrog();
-        this.lives          = this.frogRef.getLives();
+        this.gameRef        = game;
+        this.lives          = this.gameRef.getFrog().getLives();
         this.hudBG          = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().createCompatibleVolatileImage(wwm, HUDHeight);
         this.bg2d           = (Graphics2D)this.hudBG.getGraphics();
         this.livesTile      = (BufferedImage)LoadingStuffs.getInstance().getStuff("live");
@@ -45,7 +46,7 @@ public class HUD {
      * @param frametime
      */
     public void update(long frametime) {
-        this.lives = this.frogRef.getLives();
+        this.lives = this.gameRef.getFrog().getLives();
     }
 
     /**
@@ -53,7 +54,6 @@ public class HUD {
      * @param frametime
      */
     public void draw(long frametime) {
-
         //clear the backbuffer
         this.bg2d.setBackground(Color.BLACK);
         this.bg2d.clearRect(0, 0, wwm, HUDHeight);
@@ -69,9 +69,9 @@ public class HUD {
         }
 
         //After HUD rendered, copy to G2D
-        this.g2d.drawImage(this.hudBG, 0, this.whm, this.wwm, (this.whm + this.HUDHeight),   //dest w1, h1, w2, h2
-                                       0, 0, this.hudBG.getWidth(), this.hudBG.getHeight(),  //source w1, h1, w2, h2
-                                       null);
+        this.gameRef.getG2D().drawImage(this.hudBG, 0, this.whm, this.wwm, (this.whm + this.HUDHeight),   //dest w1, h1, w2, h2
+                                                    0, 0, this.hudBG.getWidth(), this.hudBG.getHeight(),  //source w1, h1, w2, h2
+                                                    null);
     }
 
     /**
