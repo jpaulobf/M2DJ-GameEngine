@@ -36,8 +36,8 @@ public class Frogger implements Runnable {
         private int positionY                       = 0;
 
         //width and height of the window
-        //private int windowWidth                     = 1240;
-        //private int windowHeight                    = 700;
+        //private int windowWidth                   = 1240;
+        //private int windowHeight                  = 700;
         private int windowWidth                     = 1344;
         private int windowHeight                    = 872;
         
@@ -163,14 +163,14 @@ public class Frogger implements Runnable {
                 this.g2d = (Graphics2D)this.bufferStrategy.getDrawGraphics();
 
                 //update the game graphics
-                this.game.updateGraphics2D(this.g2d);
+                //this.game.updateGraphics2D(this.g2d);
 
                 //render the game elements
                 this.game.draw(frametime);
 
                 //At least, copy the backbuffer to the backbuffer
                 this.g2d.drawImage(this.bufferImage, 0, 0, this.getWidth(), this.getHeight(),  //destine
-                                                     0, 0, game.getInternalResolutionWidth(), game.getInternalResolutionHeight(), // source
+                                                     0, 0, this.game.getInternalResolutionWidth(), this.game.getInternalResolutionHeight(), // source
                                                      this);
 
                 //render the fps counter
@@ -185,9 +185,6 @@ public class Frogger implements Runnable {
                 //verify if the Graphics element isn't lost
                 if (this.g2d != null) {
                 
-                    //update the game graphics
-                    this.game.updateGraphics2D(this.g2d);
-
                     //render the game elements
                     this.game.draw(frametime);
         
@@ -223,7 +220,7 @@ public class Frogger implements Runnable {
             try {
                 EventQueue.invokeAndWait(new Runnable() {
                     public void run() { 
-                        createBufferStrategy(2); 
+                        createBufferStrategy(3); 
                     }});
             } catch (Exception e) {
                 System.exit(0);
