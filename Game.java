@@ -56,13 +56,13 @@ public class Game implements IGame {
         //////////////////////////////////////////////////////////////////////
         // ->>>  create the game elements objects
         //////////////////////////////////////////////////////////////////////
-        this.scenario       = new Scenario(this.g2d, this.wwm, this.whm);
-        this.frog           = new Frog(this.g2d, this);
-        this.hud            = new HUD(this.g2d, this.wwm, this.whm, this.HUDHeight, this);
-        this.gameOver       = new GameOver(this.g2d, this.wwm, this.whm);
-        this.message        = new Message(g2d, wwm, whm, this);
         this.gameState      = new StateMachine(this);
-        this.timer          = new Timer(g2d, wwm, whm, this);
+        this.scenario       = new Scenario(this, this.wwm, this.whm);
+        this.frog           = new Frog(this);
+        this.hud            = new HUD(this, this.wwm, this.whm, this.HUDHeight);
+        this.gameOver       = new GameOver(this, this.wwm, this.whm);
+        this.message        = new Message(this, this.wwm, this.whm);
+        this.timer          = new Timer(this, this.wwm, this.whm);
         this.theme          = (Audio)LoadingStuffs.getInstance().getStuff("theme");
         this.gameoverTheme  = (Audio)LoadingStuffs.getInstance().getStuff("gameover-theme");
     }
@@ -113,6 +113,7 @@ public class Game implements IGame {
             this.frog.update(frametime);
             this.hud.update(frametime);
             this.timer.update(frametime);
+            this.message.update(frametime);
             
             if (this.frog.getLives() == 0) { //after possible colision, check lives.
                 this.gameState.setCurrentState(StateMachine.GAME_OVER);
@@ -201,6 +202,14 @@ public class Game implements IGame {
     @Override
     public void updateGraphics2D(Graphics2D g2d) {
         this.g2d = g2d;
+    }
+
+    /**
+     * Recupera o G2D
+     * @return
+     */
+    public Graphics2D getG2D() {
+        return (this.g2d);
     }
 
     /**
