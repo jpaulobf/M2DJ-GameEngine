@@ -80,6 +80,9 @@ public class LoadingStuffs {
             image = ImageIO.read(new File("images\\go.png"));
             stuffs.put("go!", image);
 
+            image = ImageIO.read(new File("images\\mosquito.png"));
+            stuffs.put("mosquito", image);
+
             Logger.INFO("read all images...", this);
 
 
