@@ -163,15 +163,16 @@ public class Frogger implements Runnable {
                 this.g2d = (Graphics2D)this.bufferStrategy.getDrawGraphics();
 
                 //update the game graphics
-                //this.game.updateGraphics2D(this.g2d);
+                this.game.updateGraphics2D(this.g2d);
 
                 //render the game elements
                 this.game.draw(frametime);
 
                 //At least, copy the backbuffer to the backbuffer
+                /*
                 this.g2d.drawImage(this.bufferImage, 0, 0, this.getWidth(), this.getHeight(),  //destine
                                                      0, 0, this.game.getInternalResolutionWidth(), this.game.getInternalResolutionHeight(), // source
-                                                     this);
+                                                     this);*/
 
                 //render the fps counter
                 this.renderFPSLayer(frametime, this.g2d);
