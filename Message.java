@@ -22,7 +22,6 @@ public class Message {
     private volatile long quarterAnimationDuration  = animationDuration / 4;
     private volatile long thirthAnimationDuration   = quarterAnimationDuration * 3;
     private volatile Audio beepstart                = null;
-
     private volatile int w1                         = 0;
     private volatile int h1                         = 0;
     private volatile int w2                         = 0;
