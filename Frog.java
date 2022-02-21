@@ -318,7 +318,8 @@ public class Frog extends SpriteImpl {
             }
 
             //colision detection or dead animation
-            int colliding = -1;
+            int colliding               = -1;
+            boolean mosquitoColiding    = false;
             if (!this.isDead) {
                 //this line test the colisions only with the cars, in the lanes.
                 if (this.positionY > Lanes.streetLanes[0]) {
@@ -346,7 +347,7 @@ public class Frog extends SpriteImpl {
                         }
                     }
                 } else if ((this.positionY > Lanes.riverLanes[4]) && (this.positionY <= (Lanes.riverLanes[4] + this.tileY)) ||
-                        (this.positionY > Lanes.riverLanes[1]) && (this.positionY <= (Lanes.riverLanes[2]))) {
+                           (this.positionY > Lanes.riverLanes[1]) && (this.positionY <= (Lanes.riverLanes[2]))) {
                     colliding = this.scenario.getTurtles().testColision(this);
                     if (colliding != -1) {
                         if (!this.animating) {
@@ -363,6 +364,12 @@ public class Frog extends SpriteImpl {
                 } else if (this.positionY >= Lanes.docksLanes[0] && this.positionY < Lanes.docksLanes[1]) {
                     colliding = this.scenario.getDockers().testColision(this);
                     if (colliding != -1) {
+
+                        mosquitoColiding = this.scenario.getDockers().getMosquito().isInTheDocker(colliding);
+                        if (mosquitoColiding) {
+                            this.scenario.getDockers().getMosquito().setInvisible();
+                        }
+
                         if (!this.scenario.getDockers().getIsInDock()[colliding]) {
                             this.scenario.getDockers().setIsInDock(colliding);
 
