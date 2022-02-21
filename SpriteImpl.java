@@ -60,4 +60,28 @@ public abstract class SpriteImpl implements Sprite, Directions {
     public boolean isColliding(Sprite sprite) {
         return (calcMyRect().intersects(sprite.calcMyRect()));
     }
+
+    /**
+     * Verbose sprite colision detection
+     * @param sprite
+     * @param verbose
+     * @return
+     */
+    public boolean isColliding(SpriteImpl sprite, boolean verbose) {
+
+        if (verbose) {
+            System.out.println("my rect: ");
+            System.out.println(this.positionX);
+            System.out.println(this.positionY);
+            System.out.println(this.width);
+            System.out.println(this.height);
+            System.out.println("sprite rect: ");
+            System.out.println(sprite.positionX);
+            System.out.println(sprite.positionY);
+            System.out.println(sprite.width);
+            System.out.println(sprite.height);
+        }
+
+        return (isColliding(sprite));
+    }
 }
