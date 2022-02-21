@@ -204,6 +204,7 @@ public class Scenario {
         this.vehicles.update(frametime);
         this.trunks.update(frametime);
         this.turtles.update(frametime);
+        this.dockers.update(frametime);
     }
 
     /**
