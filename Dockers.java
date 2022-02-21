@@ -7,15 +7,18 @@ import java.awt.Graphics2D;
  */
 public class Dockers extends SpriteCollection {
 
-    private Docker[] dockers    = new Docker[5];
-    private boolean [] isInDock = new boolean[dockers.length];
-    private Game gameRef        = null;
+    private Docker[] dockers            = new Docker[5];
+    private boolean [] isInDock         = new boolean[dockers.length];
+    private Game gameRef                = null;
+    private Mosquito mosquito           = null;
+    private volatile long framecounter  = 0;
 
     /**
      * Dockers constructor
      */
     public Dockers(Game game) {
         this.gameRef            = game;
+        this.mosquito           = new Mosquito(this);
         double [] positionX     = {102, 378, 654, 930, 1206};
         double [] positionY     = {14, 14, 14, 14, 14};
         short  [] width         = {36, 36, 36, 36, 36};
@@ -62,6 +65,14 @@ public class Dockers extends SpriteCollection {
 
     @Override
     public void update(long frametime) {
+        this.framecounter += frametime;
+
+        if (this.framecounter >= 5_000_000_000L) {
+            if (!this.mosquito.isAnimating()) {
+                this.framecounter = 0;
+            }
+            this.mosquito.update(frametime);
+        }
     }
 
     @Override
@@ -69,6 +80,7 @@ public class Dockers extends SpriteCollection {
         for (byte i = 0; i < dockers.length; i++) {
             this.dockers[i].draw(frametime);
         }
+        this.mosquito.draw(frametime);
     }
 
     /**
@@ -81,6 +93,14 @@ public class Dockers extends SpriteCollection {
             complete &= this.isInDock[cnt];
         }
         return (complete);
+    }
+
+    /**
+     * Get the mosquito object
+     * @return
+     */
+    public Mosquito getMosquito() {
+        return (this.mosquito);
     }
 
     /**
