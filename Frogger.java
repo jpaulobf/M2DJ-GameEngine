@@ -36,10 +36,13 @@ public class Frogger implements Runnable {
         private int positionY                       = 0;
 
         //width and height of the window
-        //private int windowWidth                   = 1240;
+        //private int windowWidth                   = 1079;
         //private int windowHeight                  = 700;
         private int windowWidth                     = 1344;
         private int windowHeight                    = 872;
+        private int fullScreenWidth                 = 0;
+        private int fullScreenHeight                = 0;
+        private int fullScreenXPos                  = 0;
         
         //the first 'canvas' & the backbuffer (for simple doublebuffer strategy)
         private JPanel canvas                       = null;
@@ -58,7 +61,7 @@ public class Frogger implements Runnable {
         private boolean showFPS                     = true;
 
         //control and fullscreen controller
-        private boolean fullscreen                  = false;
+        private boolean fullscreen                  = true;
         private boolean isFullScreenAvailable       = false;
 
         /**
@@ -111,6 +114,11 @@ public class Frogger implements Runnable {
 
             //verify if fullscreen mode is supported & desired
             if (fullscreen && isFullScreenAvailable) {
+                // calc fullscreen width/height
+                this.fullScreenHeight   = (int)size.getHeight();
+                this.fullScreenWidth    = (size.getHeight() > this.windowHeight)?(int)((double)this.windowWidth/(double)this.windowHeight*(double)size.getHeight()):this.getWidth();
+                this.fullScreenXPos     = (int)((size.getWidth() - this.fullScreenWidth) / 2);
+                this.fullScreenWidth    += this.fullScreenXPos;
                 // set to Full-screen mode
                 this.setIgnoreRepaint(true);
                 dsd.setFullScreenWindow(this);
@@ -161,18 +169,19 @@ public class Frogger implements Runnable {
             if (fullscreen && isFullScreenAvailable) {
                 //set the buffer strategy
                 this.g2d = (Graphics2D)this.bufferStrategy.getDrawGraphics();
+                this.g2d.setBackground(Color.BLACK);
+                this.g2d.clearRect(0, 0, this.getWidth(), this.getHeight());
 
                 //update the game graphics
-                this.game.updateGraphics2D(this.g2d);
+                //this.game.updateGraphics2D(this.g2d);
 
                 //render the game elements
                 this.game.draw(frametime);
 
                 //At least, copy the backbuffer to the backbuffer
-                /*
-                this.g2d.drawImage(this.bufferImage, 0, 0, this.getWidth(), this.getHeight(),  //destine
+                this.g2d.drawImage(this.bufferImage, this.fullScreenXPos, 0, this.fullScreenWidth, this.fullScreenHeight,  //destine
                                                      0, 0, this.game.getInternalResolutionWidth(), this.game.getInternalResolutionHeight(), // source
-                                                     this);*/
+                                                     this);
 
                 //render the fps counter
                 this.renderFPSLayer(frametime, this.g2d);
