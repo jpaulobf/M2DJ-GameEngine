@@ -22,6 +22,7 @@ public class Frog extends SpriteImpl {
     private volatile Audio squashAudio      = null;
     private volatile Audio dockerAudio      = null;
     private volatile Audio clearAudio       = null;
+    private volatile Audio catchAudio       = null;
 
     //render variables
     private byte tileX                      = 0;
@@ -87,6 +88,7 @@ public class Frog extends SpriteImpl {
         this.squashAudio    = (Audio)LoadingStuffs.getInstance().getStuff("squashAudio");
         this.dockerAudio    = (Audio)LoadingStuffs.getInstance().getStuff("docker");
         this.clearAudio     = (Audio)LoadingStuffs.getInstance().getStuff("clearAudio");
+        this.catchAudio     = (Audio)LoadingStuffs.getInstance().getStuff("catchAudio");
     }
 
     /**
@@ -367,6 +369,7 @@ public class Frog extends SpriteImpl {
 
                         mosquitoColiding = this.scenario.getDockers().getMosquito().isInTheDocker(colliding);
                         if (mosquitoColiding) {
+                            this.catchAudio.play();
                             this.scenario.getDockers().getMosquito().setInvisible();
                         }
 
