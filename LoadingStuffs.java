@@ -130,7 +130,14 @@ public class LoadingStuffs {
             if (audio != null && audio.isReady()) {
                 stuffs.put("beepstart", audio);
             }
-        } catch (java.io.IOException e) {
+
+            audio = new Audio("audio/catch.wav", 0);
+            if (audio != null && audio.isReady()) {
+                stuffs.put("catchAudio", audio);
+            }
+
+            Logger.INFO("read all audio...", this);
+        } catch (java.lang.Exception e) {
             e.printStackTrace();
         }
     }
