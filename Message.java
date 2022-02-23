@@ -112,6 +112,8 @@ public class Message {
     public void draw(long frametime) {
         if (this.showing) {
             //draw
+            this.gameReference.getG2D().setBackground(Color.BLACK);
+            this.gameReference.getG2D().clearRect(0, 0, this.wwm, this.wwm);
             this.gameReference.getG2D().drawImage(this.temp, w1, h1, w2, h2, //dest w1, h1, w2, h2
                                                              0, 0, this.temp.getWidth(), this.temp.getHeight(),  //source w1, h1, w2, h2
                                                              null);
