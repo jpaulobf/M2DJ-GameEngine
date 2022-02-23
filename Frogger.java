@@ -43,6 +43,8 @@ public class Frogger implements Runnable {
         private int fullScreenWidth                 = 0;
         private int fullScreenHeight                = 0;
         private int fullScreenXPos                  = 0;
+        private int fullScreenYPos                  = 0;
+        private int fullscreenState                 = 0;
         
         //the first 'canvas' & the backbuffer (for simple doublebuffer strategy)
         private JPanel canvas                       = null;
@@ -53,6 +55,7 @@ public class Frogger implements Runnable {
         private GraphicsDevice dsd                  = null;
         private BufferStrategy bufferStrategy       = null;
         private Graphics2D g2d                      = null;
+        private Dimension size                      = null;
 
         //the backbuffer (for simple doublebuffer strategy)
         private VolatileImage bufferImage           = null;
@@ -81,7 +84,7 @@ public class Frogger implements Runnable {
             this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
             //recover the desktop resolution
-            Dimension size = Toolkit.getDefaultToolkit(). getScreenSize();
+            this.size = Toolkit.getDefaultToolkit(). getScreenSize();
 
             //center the current window regards the desktop resolution
             this.positionX  = (int)((size.getWidth() / 2) - (this.windowWidth / 2));
@@ -100,6 +103,11 @@ public class Frogger implements Runnable {
             this.setUndecorated(true);
             this.setResizable(false);
 
+            this.fullScreenHeight   = (int)size.getHeight();
+            this.fullScreenWidth    = (int)size.getWidth();
+            this.fullScreenXPos     = 0;
+            this.fullScreenYPos     = 0;
+
             //////////////////////////////////////////////////////////////////////
             // ->>>  now, for the canvas
             //////////////////////////////////////////////////////////////////////
@@ -114,11 +122,7 @@ public class Frogger implements Runnable {
 
             //verify if fullscreen mode is supported & desired
             if (fullscreen && isFullScreenAvailable) {
-                // calc fullscreen width/height
-                this.fullScreenHeight   = (int)size.getHeight();
-                this.fullScreenWidth    = (size.getHeight() > this.windowHeight)?(int)((double)this.windowWidth/(double)this.windowHeight*(double)size.getHeight()):this.getWidth();
-                this.fullScreenXPos     = (int)((size.getWidth() - this.fullScreenWidth) / 2);
-                this.fullScreenWidth    += this.fullScreenXPos;
+                
                 // set to Full-screen mode
                 this.setIgnoreRepaint(true);
                 dsd.setFullScreenWindow(this);
@@ -140,6 +144,7 @@ public class Frogger implements Runnable {
                 }
                 @Override
                 public synchronized void keyReleased(KeyEvent e) {
+                    if (e.getKeyCode() == 113) {toogleFullscreenResolution();}
                     if (e.getKeyCode() == 27) {setVisible(false); System.exit(0);}
                     game.keyReleased(e.getKeyCode());
                 }
@@ -156,6 +161,39 @@ public class Frogger implements Runnable {
          */
         public synchronized void update(long frametime) {
             this.game.update(frametime);
+        }
+
+        /**
+         * Change screen stretch on the fly (F2)
+         */
+        public void toogleFullscreenResolution() {
+            this.fullscreenState = (this.fullscreenState + 1)%3;
+
+            switch (this.fullscreenState) {
+                case 0:
+                    this.fullScreenHeight   = (int)size.getHeight();
+                    this.fullScreenWidth    = (int)this.getWidth();
+                    this.fullScreenXPos     = 0;
+                    this.fullScreenYPos     = 0;
+                    break;
+                case 1:
+                    // calc fullscreen width/height
+                    this.fullScreenHeight   = (int)size.getHeight();
+                    this.fullScreenWidth    = (size.getHeight() > this.windowHeight)?(int)((double)this.windowWidth/(double)this.windowHeight*(double)size.getHeight()):this.getWidth();
+                    this.fullScreenXPos     = (int)((size.getWidth() - this.fullScreenWidth) / 2);
+                    this.fullScreenYPos     = (int)((size.getHeight() - this.fullScreenHeight) / 2);
+                    this.fullScreenWidth    += this.fullScreenXPos;
+                    this.fullScreenHeight   += this.fullScreenYPos;
+                    break;
+                case 2:
+                    this.fullScreenHeight   = this.windowHeight;
+                    this.fullScreenWidth    = this.windowWidth;
+                    this.fullScreenXPos     = (int)((size.getWidth() - this.fullScreenWidth) / 2);
+                    this.fullScreenYPos     = (int)((size.getHeight() - this.fullScreenHeight) / 2);
+                    this.fullScreenWidth    += this.fullScreenXPos;
+                    this.fullScreenHeight   += this.fullScreenYPos;
+                    break;
+            }
         }
         
         /**
@@ -179,7 +217,7 @@ public class Frogger implements Runnable {
                 this.game.draw(frametime);
 
                 //At least, copy the backbuffer to the backbuffer
-                this.g2d.drawImage(this.bufferImage, this.fullScreenXPos, 0, this.fullScreenWidth, this.fullScreenHeight,  //destine
+                this.g2d.drawImage(this.bufferImage, this.fullScreenXPos, this.fullScreenYPos, this.fullScreenWidth, this.fullScreenHeight,  //destine
                                                      0, 0, this.game.getInternalResolutionWidth(), this.game.getInternalResolutionHeight(), // source
                                                      this);
 
