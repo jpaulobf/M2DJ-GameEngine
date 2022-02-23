@@ -64,7 +64,7 @@ public class Frogger implements Runnable {
         private boolean showFPS                     = true;
 
         //control and fullscreen controller
-        private boolean fullscreen                  = false;
+        private boolean fullscreen                  = true;
         private boolean isFullScreenAvailable       = false;
 
         /**
@@ -188,7 +188,11 @@ public class Frogger implements Runnable {
                 case 1:
                     // calc fullscreen width/height
                     this.fullScreenHeight   = (int)size.getHeight();
-                    this.fullScreenWidth    = (size.getHeight() > this.windowHeight)?(int)((double)this.windowWidth/(double)this.windowHeight*(double)size.getHeight()):this.getWidth();
+                    this.fullScreenWidth    = (int)((double)this.windowWidth/(double)this.windowHeight*(double)size.getHeight());
+                    if (this.fullScreenWidth > this.size.getWidth()) {
+                        this.fullScreenHeight = (int)((double)this.fullScreenHeight * (double)this.size.getWidth() / (double)this.fullScreenWidth);
+                        this.fullScreenWidth = (int)this.size.getWidth();
+                    }
                     this.fullScreenXPos     = (int)((size.getWidth() - this.fullScreenWidth) / 2);
                     this.fullScreenYPos     = (int)((size.getHeight() - this.fullScreenHeight) / 2);
                     this.fullScreenWidth    += this.fullScreenXPos;
