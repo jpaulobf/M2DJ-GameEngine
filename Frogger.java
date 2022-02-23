@@ -64,17 +64,30 @@ public class Frogger implements Runnable {
         private boolean showFPS                     = true;
 
         //control and fullscreen controller
-        private boolean fullscreen                  = true;
+        private boolean fullscreen                  = false;
         private boolean isFullScreenAvailable       = false;
 
         /**
          * Game canvas constructor
         */
         public Canvas() {
-
             //////////////////////////////////////////////////////////////////////
             //set some properties for this window
             //////////////////////////////////////////////////////////////////////
+
+            //recover the desktop resolution
+            this.size = Toolkit.getDefaultToolkit(). getScreenSize();
+
+            //Verify if Windows width/height fits the current resolution
+            // otherwise, resize it.
+            if (this.windowHeight > this.size.getHeight()) {
+                this.windowWidth = (int)((double)this.windowWidth / (double)this.windowHeight * (double)this.size.getHeight());
+                this.windowHeight = (int)this.size.getHeight();
+            } if (this.windowWidth > this.size.getWidth()) {
+                this.windowHeight = (int)((double)this.windowHeight * (double)this.size.getWidth() / (double)this.windowWidth);
+                this.windowWidth = (int)this.size.getWidth();
+            }
+
             Dimension basic = new Dimension(this.windowWidth, this.windowHeight);
             this.setPreferredSize(basic);
             this.setMinimumSize(basic);
@@ -82,9 +95,6 @@ public class Frogger implements Runnable {
 
             //default operation on close (exit in this case)
             this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-            //recover the desktop resolution
-            this.size = Toolkit.getDefaultToolkit(). getScreenSize();
 
             //center the current window regards the desktop resolution
             this.positionX  = (int)((size.getWidth() / 2) - (this.windowWidth / 2));
@@ -113,7 +123,7 @@ public class Frogger implements Runnable {
             //////////////////////////////////////////////////////////////////////
             //initialize the canvas
             this.canvas = new JPanel(null);
-            this.canvas.setSize(basic.width, basic.height);
+            this.canvas.setSize(this.windowWidth, this.windowHeight);
             this.canvas.setBackground(Color.BLACK);
             this.canvas.setOpaque(true);
             
@@ -122,7 +132,6 @@ public class Frogger implements Runnable {
 
             //verify if fullscreen mode is supported & desired
             if (fullscreen && isFullScreenAvailable) {
-                
                 // set to Full-screen mode
                 this.setIgnoreRepaint(true);
                 dsd.setFullScreenWindow(this);
