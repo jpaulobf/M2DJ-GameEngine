@@ -1,5 +1,4 @@
 import interfaces.IGame;
-import java.awt.Dimension;
 
 /**
  * Game factory
