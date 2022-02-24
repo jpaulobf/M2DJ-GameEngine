@@ -1,8 +1,11 @@
 import util.Audio;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import interfaces.IGame;
+import java.awt.image.VolatileImage;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.RenderingHints;
 
 /**
  * Class responsable for the game
@@ -14,10 +17,6 @@ public class Game implements IGame {
 
     //some support and the graphical device itself
     private Graphics2D g2d                  = null;
-
-    //desktop properties
-    private int resolutionH                 = 0;
-    private int resolutionW                 = 0;
 
     //extra volatile image for hud
     private final byte HUDHeight            = 40;
@@ -39,19 +38,22 @@ public class Game implements IGame {
     private final int wwm                   = 1344;
     private final int whm                   = 832;
 
+    private VolatileImage bufferImage       = null;
+    private GraphicsEnvironment ge          = null;
+    private GraphicsDevice dsd              = null;
+    private Graphics2D g2dFS                = null;
+
     /**
      * Game constructor
-     * @param g2d
-     * @param size
      */
-    public Game(Graphics2D g2d, Dimension size) {
+    public Game() {
 
-        //create the backbuffer from the size of screen resolution to avoid any resize process penalty
-        this.g2d            = g2d;
-
-        //screen resolution size
-        this.resolutionW    = (int)size.getWidth();
-        this.resolutionH    = (int)size.getHeight();
+        //create the double-buffering image
+        this.ge             = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        this.dsd            = ge.getDefaultScreenDevice();
+        this.bufferImage    = dsd.getDefaultConfiguration().createCompatibleVolatileImage(wwm, whm + HUDHeight);
+        this.g2d            = (Graphics2D)bufferImage.getGraphics();
+        this.g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 
         //////////////////////////////////////////////////////////////////////
         // ->>>  create the game elements objects
@@ -135,9 +137,7 @@ public class Game implements IGame {
     }
 
     /**
-     * Draw the game / receives the frametime
-     * WTMD: This method draw the current screen, some steps described here:
-                1) Clear the stage
+     * Draw the game elements
      * @param frametime
      */
     @Override
@@ -146,7 +146,7 @@ public class Game implements IGame {
         //this graphical device (g2d) points to backbuffer, so, we are making things behide the scenes
         //clear the stage
         this.g2d.setBackground(Color.BLACK);
-        this.g2d.clearRect(0, 0, this.resolutionW, this.resolutionH);
+        this.g2d.clearRect(0, 0, this.wwm, this.whm + this.HUDHeight);
 
         //////////////////////////////////////////////////////////////////////
         // ->>>  draw the game elements
@@ -162,6 +162,15 @@ public class Game implements IGame {
         } else if (this.gameState.getCurrentState() == StateMachine.GAME_OVER) {
             this.gameOver.draw(frametime);
         }
+    }
+
+    /**
+     * Draw the game in full screen
+     */
+    @Override
+    public void drawFullscreen(long frametime, int fullScreenXPos, int fullScreenYPos, int fullScreenWidth, int fullScreenHeight) {
+        this.g2dFS.drawImage(this.bufferImage, fullScreenXPos, fullScreenYPos, fullScreenWidth, fullScreenHeight, 
+                                               0, 0, this.wwm, this.whm + this.HUDHeight, null);
     }
 
     /**
@@ -201,13 +210,14 @@ public class Game implements IGame {
      */
     @Override
     public void updateGraphics2D(Graphics2D g2d) {
-        this.g2d = g2d;
+        this.g2dFS = g2d;
     }
 
     /**
      * Recupera o G2D
      * @return
      */
+    @Override
     public Graphics2D getG2D() {
         return (this.g2d);
     }
@@ -277,5 +287,10 @@ public class Game implements IGame {
     @Override
     public int getInternalResolutionHeight() {
         return (this.whm + this.HUDHeight);
+    }
+
+    @Override
+    public VolatileImage getBufferedImage() {
+        return (this.bufferImage);
     }
 }
