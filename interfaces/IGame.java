@@ -1,6 +1,7 @@
 package interfaces;
 
 import java.awt.Graphics2D;
+import java.awt.image.VolatileImage;
 
 /**
  * All games need to implement the IGame interface
@@ -17,6 +18,46 @@ public interface IGame {
      * @param frametime
      */
     public void draw(long frametime);
+
+    /**
+     * Draw the game in fullscreen
+     * @param frametime
+     * @param fullScreenXPos
+     * @param fullScreenYPos
+     * @param fullScreenWidth
+     * @param fullScreenHeight
+     */
+    public void drawFullscreen(long frametime, int fullScreenXPos, int fullScreenYPos, int fullScreenWidth, int fullScreenHeight);
+
+    /**
+     * Recover the G2D from the buffer
+     * @return
+     */
+    public Graphics2D getG2D();
+
+    /**
+     * Recover the bufferedImage
+     * @return
+     */
+    public VolatileImage getBufferedImage();
+
+    /**
+     * Update Graphics for FullScreen
+     * @param g2d
+     */
+    public void updateGraphics2D(Graphics2D g2d);
+
+    /**
+     * Get internal resolution - W
+     * @return internal width resolution
+     */
+    public int getInternalResolutionWidth();
+
+    /**
+     * Get internal resolution - H
+     * @return internal height resolution
+     */
+    public int getInternalResolutionHeight();
     
     /**
      * Mute the music
@@ -49,16 +90,4 @@ public interface IGame {
      * @param keyCode
      */
     public void keyReleased(int keyCode);
-
-    /**
-     * Update Graphics
-     * @param g2d
-     */
-    public void updateGraphics2D(Graphics2D g2d);
-
-    public int getInternalResolutionWidth();
-
-    public int getInternalResolutionHeight();
-
-
 }
