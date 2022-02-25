@@ -28,7 +28,7 @@ import java.awt.event.KeyAdapter;
 public class SplashScreen extends JFrame implements Runnable {
 
     private static final long serialVersionUID  = 1L;
-    public static final boolean setOpenGL       = true;
+    public static final boolean setOpenGL       = false;
 
     //this window properties
     private int positionX                       = 0;
