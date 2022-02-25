@@ -1,6 +1,6 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import interfaces.ICanvasEngine;
+import interfaces.CanvasEngine;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -24,7 +24,7 @@ public class Frogger implements Runnable {
     /**
      * Game Canvas
      */
-    private class Canvas extends JFrame implements ICanvasEngine {
+    private class Canvas extends JFrame implements CanvasEngine {
 
         private static final long serialVersionUID  = 1L;
 
@@ -58,7 +58,7 @@ public class Frogger implements Runnable {
         private boolean showFPS                     = true;
 
         //control and fullscreen controller
-        private boolean fullscreen                  = true;
+        private boolean fullscreen                  = false;
         private boolean isFullScreenAvailable       = false;
 
         /**
@@ -73,7 +73,7 @@ public class Frogger implements Runnable {
             this.size = Toolkit.getDefaultToolkit(). getScreenSize();
 
             //Verify if Windows width/height fits the current resolution
-            // otherwise, resize it.
+            //otherwise, resize it.
             double heightMinus50 = this.size.getHeight() - 50;
             if (this.windowHeight > heightMinus50) {
                 this.windowWidth = (int)((double)this.windowWidth / (double)this.windowHeight * heightMinus50);
@@ -83,10 +83,12 @@ public class Frogger implements Runnable {
                 this.windowWidth = (int)this.size.getWidth();
             }
 
+            //define windows properties
             Dimension basic = new Dimension(this.windowWidth, this.windowHeight);
             this.setPreferredSize(basic);
             this.setMinimumSize(basic);
             this.setUndecorated(true);
+            this.setResizable(false);
 
             //default operation on close (exit in this case)
             this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -97,14 +99,13 @@ public class Frogger implements Runnable {
             this.setLocation(this.positionX, this.positionY);
 
             //create the backbuffer from the size of screen resolution to avoid any resize process penalty
-            this.ge             = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            this.dsd            = ge.getDefaultScreenDevice();
+            this.ge     = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            this.dsd    = ge.getDefaultScreenDevice();
 
             //verify if fullscreen is posible
             this.isFullScreenAvailable  = dsd.isFullScreenSupported();
-            this.setUndecorated(true);
-            this.setResizable(false);
 
+            //default fullscreen size
             this.fullScreenHeight   = (int)size.getHeight();
             this.fullScreenWidth    = (int)size.getWidth();
             this.fullScreenXPos     = 0;
@@ -191,7 +192,7 @@ public class Frogger implements Runnable {
                     this.game.drawFullscreen(frametime, this.fullScreenXPos, this.fullScreenYPos, this.fullScreenWidth, this.fullScreenHeight);
 
                     //render the fps counter
-                    this.renderFPSLayer(frametime, this.g2d);
+                    this.renderFPSLayer(frametime);
 
                     //show the buffer content
                     this.g2d.dispose();
@@ -206,11 +207,9 @@ public class Frogger implements Runnable {
                     this.game.draw(frametime);
         
                     //render the fps counter
-                    this.renderFPSLayer(frametime, this.g2d);
+                    this.renderFPSLayer(frametime);
 
                     //At least, copy the backbuffer to the canvas screen
-                    this.canvas.getGraphics().setColor(Color.WHITE);
-                    this.canvas.getGraphics().drawString("TESTE 123", 100, 200);
                     this.canvas.getGraphics().drawImage(this.game.getBufferedImage(), 0, 0, this.windowWidth, this.windowHeight, //destine
                                                                                       0, 0, game.getInternalResolutionWidth(), 
                                                                                             game.getInternalResolutionHeight(), //source
@@ -222,16 +221,16 @@ public class Frogger implements Runnable {
         /**
          * Change the window to normal or fullscreen (F3)
          */
-        public void toogleFullscreen() {
+        public synchronized void toogleFullscreen() {
             if (this.fullscreen) { 
                 //back to window
                 this.dsd.setFullScreenWindow(null);
 
-                //toogle fullscreen flag
-                this.fullscreen = false;
-
                 //recover the G2D (not from bufferstrategy)
                 this.g2d = this.game.getG2D();
+
+                //toogle fullscreen flag
+                this.fullscreen = false;
 
                 //config the window
                 this.setIgnoreRepaint(false);
@@ -260,7 +259,7 @@ public class Frogger implements Runnable {
         /**
          * Change screen stretch on the fly (F2)
          */
-        public void toogleFullscreenResolution() {
+        public synchronized void toogleFullscreenResolution() {
             this.fullscreenState = (this.fullscreenState + 1)%3;
 
             switch (this.fullscreenState) {
@@ -297,13 +296,12 @@ public class Frogger implements Runnable {
         /**
          * Show FPS Layer
          * @param frametime
-         * @param g
          */
-        private void renderFPSLayer(long frametime, Graphics2D g) {
+        private void renderFPSLayer(long frametime) {
             //verify if the user want to show the FPS
             if (this.showFPS) {
-                g.setColor(Color.WHITE);
-                g.drawString("fps: " + (int)(1_000_000_000D / frametime), 10, 20);
+                this.g2d.setColor(Color.WHITE);
+                this.g2d.drawString("fps: " + (int)(1_000_000_000D / frametime), 10, 20);
             }
         }
 
@@ -350,13 +348,13 @@ public class Frogger implements Runnable {
         private long FPS30                  = (long)(1_000_000_000 / 30);
         private long TARGET_FRAMETIME       = FPS60;
         private boolean UNLIMITED_FPS       = false;
-        private ICanvasEngine game          = null;
+        private CanvasEngine game          = null;
     
         /*
             WTMD: constructor
                     receives the target FPS (0, 30, 60, 120, 240) and starts the engine
         */
-        public GameEngine(int targetFPS, ICanvasEngine game) {
+        public GameEngine(int targetFPS, CanvasEngine game) {
     
             this.UNLIMITED_FPS = false;
             switch(targetFPS) {
