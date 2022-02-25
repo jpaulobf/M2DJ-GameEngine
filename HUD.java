@@ -9,7 +9,7 @@ import java.awt.Color;
  */
 public class HUD {
 
-    private Game gameRef               = null;
+    private Game gameRef                = null;
     private VolatileImage hudBG         = null;
     private BufferedImage livesTile     = null;
     private Graphics2D bg2d             = null;
