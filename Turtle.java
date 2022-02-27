@@ -59,7 +59,7 @@ public class Turtle extends SpriteImpl {
     
     @Override
     public void draw(long frametime) {
-        this.spriteColRef.getG2D().drawImage(this.turtle, (int)this.positionX, (int)this.positionY, (int)(this.positionX + this.turtle.getWidth()), (int)(this.positionY + this.height), //dest w1, h1, w2, h2
+        this.spriteColRef.getG2D().drawImage(this.turtle, (int)this.positionX, (int)this.positionY + this.scenarioOffsetY, (int)(this.positionX + this.turtle.getWidth()), (int)(this.positionY + this.height + this.scenarioOffsetY), //dest w1, h1, w2, h2
                                                           0, 0, this.turtle.getWidth(), this.turtle.getHeight(), //source w1, h1, w2, h2
                                                           null);
     }

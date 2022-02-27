@@ -61,12 +61,13 @@ public class Frog extends SpriteImpl {
     public Frog(Game game) {
 
         //store the game reference
-        this.gameReference  = game;
+        this.gameReference      = game;
         
         //retrieve the tile size
-        this.scenario   = game.getScenario();
-        this.tileX      = scenario.getTileX();
-        this.tileY      = scenario.getTileY();
+        this.scenario           = game.getScenario();
+        this.tileX              = scenario.getTileX();
+        this.tileY              = scenario.getTileY();
+        this.scenarioOffsetY    = this.gameReference.getScenarioOffsetY();
 
         //start the frog parameters
         this.frogReset();
@@ -418,7 +419,7 @@ public class Frog extends SpriteImpl {
             short dy1 = (short)(this.positionY - ((this.drawImgH - this.height) / 2));
             short dx2 = (short)(dx1 + this.drawImgW);
             short dy2 = (short)(dy1 + this.drawImgH);
-            this.gameReference.getG2D().drawImage(this.froggerDeadTiles, dx1, dy1, dx2, dy2, //dest w1, h1, w2, h2
+            this.gameReference.getG2D().drawImage(this.froggerDeadTiles, dx1, dy1 + this.scenarioOffsetY, dx2, dy2 + this.scenarioOffsetY, //dest w1, h1, w2, h2
                                                                          drawImgX, drawImgY, (drawImgX + drawImgW), (drawImgY + drawImgH), //source w1, h1, w2, h2
                                                                          null);
         } else {
@@ -426,7 +427,7 @@ public class Frog extends SpriteImpl {
             short dy1 = (short)(this.positionY);
             short dx2 = (short)(dx1 + this.width);
             short dy2 = (short)(dy1 + this.height);
-            this.gameReference.getG2D().drawImage(this.animalTiles, dx1, dy1, dx2, dy2,                                                //dest w1, h1, w2, h2
+            this.gameReference.getG2D().drawImage(this.animalTiles, dx1, dy1 + this.scenarioOffsetY, dx2, dy2 + this.scenarioOffsetY,                                                //dest w1, h1, w2, h2
                                                                     drawImgX, drawImgY, (drawImgX + drawImgW), (drawImgY + drawImgH),  //source w1, h1, w2, h2
                                                                     null);
         }

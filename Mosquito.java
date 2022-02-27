@@ -61,7 +61,7 @@ public class Mosquito extends SpriteImpl {
     public void draw(long frametime) {
         if (this.isVisible) {
             Graphics2D g2d = this.spriteColRef.getG2D();
-            g2d.drawImage(this.mosquitoSprite, (int)this.positionX, (int)this.positionY, (int)(this.positionX + this.width), (int)(this.positionY + this.height), //dest w1, h1, w2, h2
+            g2d.drawImage(this.mosquitoSprite, (int)this.positionX, (int)this.positionY + this.scenarioOffsetY, (int)(this.positionX + this.width), (int)(this.positionY + this.height + this.scenarioOffsetY), //dest w1, h1, w2, h2
                                                 0, 0, this.width, this.height, //source w1, h1, w2, h2
                                                 null);
         }
