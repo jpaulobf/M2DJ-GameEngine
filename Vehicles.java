@@ -12,11 +12,15 @@ public class Vehicles extends SpriteCollection {
     //The tile image, and its elements (positions)
     protected int windowWidth           = 0;
     protected int windowHeight          = 0;
-    private Game gameRef                = null;
+    private Scenario scenarioRef        = null;
 
     //define the vehicules array
     private Vehicle [] vehicles         = new Vehicle[Stages.CURRENT_STAGE_CARS[Stages.CURRENT_STAGE]];
     private volatile boolean stopped    = false; 
+
+    public Scenario getScenarioRef() {
+        return (this.scenarioRef);
+    }
 
     /**
      * Vehicles constructor
@@ -24,12 +28,14 @@ public class Vehicles extends SpriteCollection {
      * @param windowWidth
      * @param windowHeight
      */
-    public Vehicles(Game game, int windowWidth, int windowHeight) {
-        this.gameRef        = game;
+    public Vehicles(Scenario scenarioRef, int windowWidth, int windowHeight) {
+        this.scenarioRef    = scenarioRef;
         this.windowWidth    = windowWidth;
         this.windowHeight   = windowHeight;
+        
         for (byte i = 0; i < vehicles.length; i++) {
-            vehicles[i]     = new Vehicle(this);
+            vehicles[i] = new Vehicle(this);
+            vehicles[i].setScenarioOffsetY(this.scenarioRef.getScoreHeight());
         }
 
         for (int i = 0, index = 0; i < Stages.CARS[Stages.CURRENT_STAGE].length; i++) {
@@ -126,6 +132,6 @@ public class Vehicles extends SpriteCollection {
 
     @Override
     public Graphics2D getG2D() {
-        return (this.gameRef.getG2D());
+        return (this.scenarioRef.getGameRef().getG2D());
     }
 }

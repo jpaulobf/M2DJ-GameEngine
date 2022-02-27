@@ -20,7 +20,7 @@ public class Turtles extends SpriteCollection {
     protected int windowWidth           = 0;
     protected int windowHeight          = 0;
     private volatile boolean stopped    = false;
-    private Game gameRef                = null;
+    private Scenario scenarioRef        = null;
 
     /**
      * Constructor
@@ -28,8 +28,8 @@ public class Turtles extends SpriteCollection {
      * @param windowWidth
      * @param windowHeight
      */
-    public Turtles(Game game, int windowWidth, int windowHeight) {
-        this.gameRef            = game;
+    public Turtles(Scenario scenarioRef, int windowWidth, int windowHeight) {
+        this.scenarioRef        = scenarioRef;
         this.windowWidth        = windowWidth;
         this.windowHeight       = windowHeight;
         this.windowWidth1000    = this.windowWidth * 1_000;
@@ -37,10 +37,12 @@ public class Turtles extends SpriteCollection {
         //instantiate the turtles objects and the offset turtles
         for (byte i = 0; i < turtles.length; i++) {
             turtles[i] = new Turtle(this);
+            turtles[i].setScenarioOffsetY(this.scenarioRef.getScoreHeight());
         } 
         for (byte i = 0; i < offsetTurtles.length; i++) {
             offsetTurtles[i]             = new Turtle(this);
             offsetTurtles[i].positionX   = far;
+            offsetTurtles[i].setScenarioOffsetY(this.scenarioRef.getScoreHeight());
         }
 
         for (int i = 0, index = 0; i < Stages.TURTLES[Stages.CURRENT_STAGE].length; i++) {
@@ -180,6 +182,6 @@ public class Turtles extends SpriteCollection {
 
     @Override
     public Graphics2D getG2D() {
-        return (this.gameRef.getG2D());
+        return (this.scenarioRef.getGameRef().getG2D());
     }
 }
