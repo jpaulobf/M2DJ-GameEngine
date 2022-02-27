@@ -22,6 +22,8 @@ public abstract class SpriteImpl implements Sprite, Directions {
     protected volatile byte offsetLeft          = 0;
     protected volatile int ogPositionX          = 0;
     protected Rectangle2D rectangle             = null;
+    protected volatile int scenarioOffsetX      = 0;
+    protected volatile int scenarioOffsetY      = 0;
     
     /**
      * Accessor Method
@@ -36,6 +38,20 @@ public abstract class SpriteImpl implements Sprite, Directions {
      */
     public double getCalculatedStep() {
         return (this.calculatedStep);
+    }
+
+    /**
+     * Setter
+     */
+    public void setScenarioOffsetX(int offsetX) {
+        this.scenarioOffsetX = offsetX;
+    }
+
+    /**
+     * Setter
+     */
+    public void setScenarioOffsetY(int offsetY) {
+        this.scenarioOffsetY = offsetY;
     }
     
     /**

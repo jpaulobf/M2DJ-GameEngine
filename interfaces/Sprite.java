@@ -11,4 +11,6 @@ public interface Sprite {
     public void update(long frametime);
     public boolean isColliding(Sprite sprite);
     public double getCalculatedStep();
+    public void setScenarioOffsetX(int offsetX);
+    public void setScenarioOffsetY(int offsetY);
 }
