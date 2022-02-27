@@ -36,7 +36,7 @@ public class Frogger implements Runnable {
         //private int windowWidth                   = 1079;
         //private int windowHeight                  = 700;
         private int windowWidth                     = 1344;
-        private int windowHeight                    = 872;
+        private int windowHeight                    = 912;
         private int fullScreenWidth                 = 0;
         private int fullScreenHeight                = 0;
         private int fullScreenXPos                  = 0;
@@ -58,7 +58,7 @@ public class Frogger implements Runnable {
         private boolean showFPS                     = true;
 
         //control and fullscreen controller
-        private boolean fullscreen                  = false;
+        private boolean fullscreen                  = true;
         private boolean isFullScreenAvailable       = false;
 
         /**
