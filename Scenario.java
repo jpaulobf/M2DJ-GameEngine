@@ -5,6 +5,7 @@ import java.awt.image.VolatileImage;
 import java.awt.image.BufferedImage;
 import java.awt.GraphicsEnvironment;
 import java.awt.Transparency;
+import interfaces.IGame;
 
 /*
     WTCD: This class represents the Scenario and traps of the Game
@@ -14,6 +15,7 @@ public class Scenario {
     //Scenario variables
     private int windowWidth                 = 0;
     private int windowHeight                = 0;
+    private int scoreHeight                 = 0;
     private VolatileImage bgBufferImage     = null;
     private Graphics2D bg2d                 = null;
     private Vehicles vehicles               = null;
@@ -25,7 +27,7 @@ public class Scenario {
     private BufferedImage subgrass          = null;
     private BufferedImage frogHome          = null;
     private volatile boolean showElements   = true;
-    private Game gameRef                    = null;
+    private IGame gameRef                   = null;
 
     //how many tiles in x and in y
     protected final byte tilesInX           = 21;
@@ -37,13 +39,18 @@ public class Scenario {
     protected final byte halfTileX          = (byte)(tileX / 2);
     protected final byte halfTileY          = (byte)(tileY / 2);
 
+    public int getScoreHeight() {
+        return (this.scoreHeight);
+    }
+
     /**
      * Scenario Constructor
      * @param game
      * @param windowWidth
      * @param windowHeight
      */
-    public Scenario(Game game, int windowWidth, int windowHeight) {
+    public Scenario(IGame game, int windowWidth, int windowHeight, int scoreHeight) {
+        this.scoreHeight    = scoreHeight;
         this.windowHeight   = windowHeight;
         this.windowWidth    = windowWidth;
         this.gameRef        = game;
@@ -51,17 +58,17 @@ public class Scenario {
         //the game is construct having one resolution as target
         //any different resolution is streched in the final process
         //the code below, allow another approuche, calculating everything in a dynamic way (more cpu intensive)
-        this.vehicles       = new Vehicles(this.gameRef, windowWidth, windowHeight);
-        this.trunks         = new Trunks(this.gameRef, windowWidth, windowHeight);
-        this.turtles        = new Turtles(this.gameRef, windowWidth, windowHeight);
-        this.dockers        = new Dockers(this.gameRef);
+        this.vehicles       = new Vehicles(this, windowWidth, windowHeight);
+        this.trunks         = new Trunks(this, windowWidth, windowHeight);
+        this.turtles        = new Turtles(this, windowWidth, windowHeight);
+        this.dockers        = new Dockers(this);
         this.drawBackgroundInBuffer();
 
         int imagePosX = 1;
         int imagePosY = 34;
 
-        BufferedImage animals = (BufferedImage)LoadingStuffs.getInstance().getStuff("animalTiles");
-        this.frogHome = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().createCompatibleImage(43, 45, Transparency.BITMASK);
+        BufferedImage animals   = (BufferedImage)LoadingStuffs.getInstance().getStuff("animalTiles");
+        this.frogHome           = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().createCompatibleImage(43, 45, Transparency.BITMASK);
         this.frogHome.getGraphics().drawImage(animals, 0, 0, this.frogHome.getWidth(), this.frogHome.getHeight(), 
                                                        imagePosX, imagePosY, imagePosX + this.frogHome.getWidth(), imagePosY + this.frogHome.getHeight(), null);
     }
@@ -87,7 +94,6 @@ public class Scenario {
             this.sidewalk       = (BufferedImage)LoadingStuffs.getInstance().getStuff("sidewalk");
             this.grass          = (BufferedImage)LoadingStuffs.getInstance().getStuff("grass");
             this.subgrass       = (BufferedImage)LoadingStuffs.getInstance().getStuff("subgrass");
-            this.frogHome       = (BufferedImage)LoadingStuffs.getInstance().getStuff("frogHome");
 
             //create a backbuffer image for doublebuffer
             byte lines          = (byte)(this.windowHeight / tileY);
@@ -213,12 +219,16 @@ public class Scenario {
      */
     public void draw(long frametime) {
         //After construct the bg once, copy it to the graphic device
-        this.gameRef.getG2D().drawImage(this.bgBufferImage, 0, 0, null);
-        
+        this.gameRef.getG2D().drawImage(this.bgBufferImage, 0, this.scoreHeight, null);
+        short xPos = 0;
         for (int cnt = 0; cnt < dockers.getIsInDock().length; cnt++) {
             if (dockers.getIsInDock()[cnt]) {
-                this.gameRef.getG2D().drawImage(this.frogHome, 99 + (cnt * 276), 16, 99 + (cnt * 276) + this.frogHome.getWidth(), this.frogHome.getHeight() + 16, 
-                                                               0, 0, this.frogHome.getWidth(), this.frogHome.getHeight(), null);
+                xPos = (short)((cnt * 276) + 99);
+                this.gameRef.getG2D().drawImage(this.frogHome,   xPos, 
+                                                                 this.scoreHeight + 16, 
+                                                                 xPos + this.frogHome.getWidth(), 
+                                                                 this.frogHome.getHeight() + 16 + this.scoreHeight, //destine
+                                                               0, 0, this.frogHome.getWidth(), this.frogHome.getHeight(), null); //source
             }
         }
 
@@ -251,5 +261,9 @@ public class Scenario {
 
     public void toogleElements() {
         this.showElements = !this.showElements;
+    }
+
+    public IGame getGameRef() {
+        return (this.gameRef);
     }
 }
