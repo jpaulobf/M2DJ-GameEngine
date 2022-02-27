@@ -20,8 +20,10 @@ public class Game implements IGame {
 
     //extra volatile image for hud
     private final byte HUDHeight            = 40;
+    private final byte scoreHeight          = 40;
 
     //the game variables go here...
+    private Score score                     = null;
     private Scenario scenario               = null;
     private HUD hud                         = null;
     private Frog frog                       = null;
@@ -37,6 +39,7 @@ public class Game implements IGame {
     //width and height of window for base metrics of the game (minus HUD)
     private final int wwm                   = 1344;
     private final int whm                   = 832;
+    private final int completeWhm           = this.scoreHeight + this.whm + this.HUDHeight;
 
     private VolatileImage bufferImage       = null;
     private GraphicsEnvironment ge          = null;
@@ -47,11 +50,10 @@ public class Game implements IGame {
      * Game constructor
      */
     public Game() {
-
         //create the double-buffering image
         this.ge             = GraphicsEnvironment.getLocalGraphicsEnvironment();
         this.dsd            = ge.getDefaultScreenDevice();
-        this.bufferImage    = dsd.getDefaultConfiguration().createCompatibleVolatileImage(wwm, whm + HUDHeight);
+        this.bufferImage    = dsd.getDefaultConfiguration().createCompatibleVolatileImage(this.wwm, this.completeWhm);
         this.g2d            = (Graphics2D)bufferImage.getGraphics();
         this.g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 
@@ -59,12 +61,13 @@ public class Game implements IGame {
         // ->>>  create the game elements objects
         //////////////////////////////////////////////////////////////////////
         this.gameState      = new StateMachine(this);
-        this.scenario       = new Scenario(this, this.wwm, this.whm);
+        this.score          = new Score(this, this.wwm, this.whm, this.scoreHeight);
+        this.scenario       = new Scenario(this, this.wwm, this.whm, this.scoreHeight);
         this.frog           = new Frog(this);
-        this.hud            = new HUD(this, this.wwm, this.whm, this.HUDHeight);
-        this.gameOver       = new GameOver(this, this.wwm, this.whm);
-        this.message        = new Message(this, this.wwm, this.whm);
-        this.timer          = new Timer(this, this.wwm, this.whm);
+        this.hud            = new HUD(this, this.wwm, this.scoreHeight + this.whm, this.HUDHeight);
+        this.gameOver       = new GameOver(this, this.wwm, this.completeWhm);
+        this.message        = new Message(this, this.wwm, this.completeWhm);
+        this.timer          = new Timer(this, this.wwm, this.scoreHeight + this.whm);
         this.theme          = (Audio)LoadingStuffs.getInstance().getStuff("theme");
         this.gameoverTheme  = (Audio)LoadingStuffs.getInstance().getStuff("gameover-theme");
     }
@@ -108,7 +111,7 @@ public class Game implements IGame {
         } else if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
             this.framecounter += frametime;
             if (this.framecounter == frametime) {
-                this.theme.playContinuously();
+                //this.theme.playContinuously();
             }
 
             this.scenario.update(frametime);
@@ -170,7 +173,7 @@ public class Game implements IGame {
     @Override
     public void drawFullscreen(long frametime, int fullScreenXPos, int fullScreenYPos, int fullScreenWidth, int fullScreenHeight) {
         this.g2dFS.drawImage(this.bufferImage, fullScreenXPos, fullScreenYPos, fullScreenWidth, fullScreenHeight, 
-                                               0, 0, this.wwm, this.whm + this.HUDHeight, null);
+                                               0, 0, this.wwm, this.completeWhm, null);
     }
 
     /**
@@ -286,11 +289,16 @@ public class Game implements IGame {
 
     @Override
     public int getInternalResolutionHeight() {
-        return (this.whm + this.HUDHeight);
+        return (this.completeWhm);
     }
 
     @Override
     public VolatileImage getBufferedImage() {
         return (this.bufferImage);
+    }
+
+    @Override
+    public int getScenarioOffsetY() {
+        return (this.scoreHeight);
     }
 }
