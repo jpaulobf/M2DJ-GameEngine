@@ -114,6 +114,7 @@ public class Game implements IGame {
                 //this.theme.playContinuously();
             }
 
+            this.score.update(frametime);
             this.scenario.update(frametime);
             this.frog.update(frametime);
             this.hud.update(frametime);
@@ -157,6 +158,7 @@ public class Game implements IGame {
         if (this.gameState.getCurrentState() == StateMachine.STAGING) {
             this.message.draw(frametime);
         } else if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
+            this.score.draw(frametime);
             this.scenario.draw(frametime);
             this.frog.draw(frametime);
             this.hud.draw(frametime);
