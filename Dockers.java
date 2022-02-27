@@ -38,10 +38,12 @@ public class Dockers extends SpriteCollection {
         //update scenario offset
         this.mosquito.setScenarioOffsetY(this.scenarioRef.getScoreHeight());
 
+        /*
         isInDock[0] = true;
         isInDock[1] = true;
         isInDock[2] = true;
         isInDock[4] = true;
+        */
     }
 
     /**
