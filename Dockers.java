@@ -9,15 +9,15 @@ public class Dockers extends SpriteCollection {
 
     private Docker[] dockers            = new Docker[5];
     private boolean [] isInDock         = new boolean[dockers.length];
-    private Game gameRef                = null;
+    private Scenario scenarioRef        = null;
     private Mosquito mosquito           = null;
     private volatile long framecounter  = 0;
 
     /**
      * Dockers constructor
      */
-    public Dockers(Game game) {
-        this.gameRef            = game;
+    public Dockers(Scenario scenarioRef) {
+        this.scenarioRef        = scenarioRef;
         this.mosquito           = new Mosquito(this);
         double [] positionX     = {102, 378, 654, 930, 1206};
         double [] positionY     = {14, 14, 14, 14, 14};
@@ -27,6 +27,7 @@ public class Dockers extends SpriteCollection {
         for (int i = 0; i < dockers.length; i++) {
             dockers[i] = new Docker(this);
             dockers[i].config(positionX[i], positionY[i], width[i], height[i]);
+            dockers[i].setScenarioOffsetY(this.scenarioRef.getScoreHeight());
         }
 
         //initialize the dockers
@@ -34,12 +35,13 @@ public class Dockers extends SpriteCollection {
             isInDock[i] = false;
         }
 
-        /*
+        //update scenario offset
+        this.mosquito.setScenarioOffsetY(this.scenarioRef.getScoreHeight());
+
         isInDock[0] = true;
         isInDock[1] = true;
         isInDock[2] = true;
         isInDock[4] = true;
-        */
     }
 
     /**
@@ -115,6 +117,6 @@ public class Dockers extends SpriteCollection {
 
     @Override
     public Graphics2D getG2D() {
-        return (this.gameRef.getG2D());
+        return (this.scenarioRef.getGameRef().getG2D());
     }
 }
