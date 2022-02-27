@@ -58,6 +58,12 @@ public interface IGame {
      * @return internal height resolution
      */
     public int getInternalResolutionHeight();
+
+    /**
+     * Return the scenario offsetY
+     * @return
+     */
+    public int getScenarioOffsetY();
     
     /**
      * Mute the music
