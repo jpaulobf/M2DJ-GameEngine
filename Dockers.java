@@ -12,6 +12,7 @@ public class Dockers extends SpriteCollection {
     private Scenario scenarioRef        = null;
     private Mosquito mosquito           = null;
     private volatile long framecounter  = 0;
+    private volatile boolean stopped    = false; 
 
     /**
      * Dockers constructor
@@ -69,13 +70,15 @@ public class Dockers extends SpriteCollection {
 
     @Override
     public void update(long frametime) {
-        this.framecounter += frametime;
+        if (!this.stopped) {
+            this.framecounter += frametime;
 
-        if (this.framecounter >= 5_000_000_000L) {
-            if (!this.mosquito.isAnimating()) {
-                this.framecounter = 0;
+            if (this.framecounter >= 5_000_000_000L) {
+                if (!this.mosquito.isAnimating()) {
+                    this.framecounter = 0;
+                }
+                this.mosquito.update(frametime);
             }
-            this.mosquito.update(frametime);
         }
     }
 
@@ -115,10 +118,18 @@ public class Dockers extends SpriteCollection {
         for (int i = 0; i < this.isInDock.length; i++) {
             isInDock[i] = false;
         }
+        this.mosquito.reset();
     }
 
     @Override
     public Graphics2D getG2D() {
         return (this.scenarioRef.getGameRef().getG2D());
+    }
+
+    /**
+     * Toogle the stop control
+     */
+    public void toogleStop() {
+        this.stopped = !this.stopped;
     }
 }
