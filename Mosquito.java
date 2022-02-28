@@ -85,4 +85,11 @@ public class Mosquito extends SpriteImpl {
     public boolean isInTheDocker(int docker) {
         return (this.sorted == docker);
     }
+
+    /**
+     * 
+     */
+    public void reset() {
+        this.setInvisible();
+    }
 }
