@@ -257,6 +257,7 @@ public class Scenario {
         this.vehicles.toogleStop();
         this.trunks.toogleStop();
         this.turtles.toogleStop();
+        this.dockers.toogleStop();
     }
 
     public void toogleElements() {
