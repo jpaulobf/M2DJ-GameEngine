@@ -111,7 +111,7 @@ public class Game implements IGame {
         } else if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
             this.framecounter += frametime;
             if (this.framecounter == frametime) {
-                //this.theme.playContinuously();
+                this.theme.playContinuously();
             }
 
             this.score.update(frametime);
@@ -276,6 +276,7 @@ public class Game implements IGame {
      * Accessor methods
      * @return
      */
+    public Score getScore()             {   return (this.score);    }
     public Scenario getScenario()       {   return (this.scenario); }
     public HUD getHud()                 {   return this.hud;        }
     public Frog getFrog()               {   return this.frog;       }
