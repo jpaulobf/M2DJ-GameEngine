@@ -52,6 +52,7 @@ public class Frog extends SpriteImpl {
     private volatile byte jumpY             = 0;
     private volatile byte lastMovement      = UP;
     private volatile boolean stopped        = false;
+    private volatile boolean moving         = false;
 
     /**
      * Frog constructor
@@ -128,6 +129,9 @@ public class Frog extends SpriteImpl {
         this.isDead             = false;
         this.animating          = false;
         this.lastMovement       = UP;
+
+        //reset the pointer incrementer
+        this.gameReference.getScore().resetSkipPoint(); 
     }
 
     /**
@@ -173,6 +177,8 @@ public class Frog extends SpriteImpl {
                         this.positionY += offsetYCorrection;
                     }
                 }
+
+                this.moving         = true;
 
                 this.direction      = direction;
                 this.destPositionX  = (short)(this.positionX + this.jumpX);
@@ -332,14 +338,31 @@ public class Frog extends SpriteImpl {
                         this.isDead     = true;
                         this.animating  = false;
                         this.squashAudio.play();
+                    } else {
+                        if (this.moving) {
+                            //increment score
+                            if (this.direction == UP && !this.animating) {
+                                this.gameReference.getScore().addScore(Score.ROAD);
+                            } else if (this.direction == DOWN && !this.animating) {
+                                this.gameReference.getScore().skipPoint();
+                            }
+                        }
                     }
-                } else if ((this.positionY   > Lanes.riverLanes[3] && this.positionY <= (Lanes.riverLanes[4])) ||
+                } else if ((this.positionY  > Lanes.riverLanes[3] && this.positionY <= (Lanes.riverLanes[4])) ||
                             (this.positionY > Lanes.riverLanes[2] && this.positionY <= (Lanes.riverLanes[3])) ||
                             (this.positionY > Lanes.riverLanes[0] && this.positionY <= (Lanes.riverLanes[1]))) {
                     colliding = this.scenario.getTrunks().testColision(this);
                     if (colliding != -1) {
                         if (!this.animating) {
                             this.positionX += (this.scenario.getTrunks().getCalculatedStep(colliding) / 1_000);
+                        }
+                        if (this.moving) {
+                            //increment score
+                            if (this.direction == UP && !this.animating) {
+                                this.gameReference.getScore().addScore(Score.RIVER);
+                            } else if (this.direction == DOWN && !this.animating) {
+                                this.gameReference.getScore().skipPoint();
+                            }
                         }
                     } else {
                         if (!animating) {
@@ -349,12 +372,29 @@ public class Frog extends SpriteImpl {
                             this.plunkAudio.play();
                         }
                     }
+                }  else if (this.positionY > (Lanes.riverLanes[4] + this.tileY) && this.positionY < Lanes.streetLanes[0]) {
+                    if (this.moving) {
+                        if (this.direction == UP && !this.animating) {
+                            this.gameReference.getScore().resetSkipPoint(); 
+                        } else if (this.direction == DOWN && !this.animating) {
+                            this.gameReference.getScore().skipPoint();
+                        }
+                    }
                 } else if ((this.positionY > Lanes.riverLanes[4]) && (this.positionY <= (Lanes.riverLanes[4] + this.tileY)) ||
                            (this.positionY > Lanes.riverLanes[1]) && (this.positionY <= (Lanes.riverLanes[2]))) {
+                    //test colision with turtles
                     colliding = this.scenario.getTurtles().testColision(this);
                     if (colliding != -1) {
                         if (!this.animating) {
                             this.positionX += (this.scenario.getTurtles().getCalculatedStep(colliding) / 1_000);
+                        }
+                        if (this.moving) {
+                            //increment score
+                            if (this.direction == UP && !this.animating) {
+                                this.gameReference.getScore().addScore(Score.RIVER);
+                            } else if (this.direction == DOWN && !this.animating) {
+                                this.gameReference.getScore().skipPoint();
+                            }
                         }
                     } else {
                         if (!animating) {
@@ -365,24 +405,27 @@ public class Frog extends SpriteImpl {
                         }
                     }
                 } else if (this.positionY >= Lanes.docksLanes[0] && this.positionY < Lanes.docksLanes[1]) {
+                    //test colision against the docker
                     colliding = this.scenario.getDockers().testColision(this);
                     if (colliding != -1) {
-
+                        //test colision agains the mosquito
                         mosquitoColiding = this.scenario.getDockers().getMosquito().isInTheDocker(colliding);
                         if (mosquitoColiding) {
                             this.catchAudio.play();
                             this.scenario.getDockers().getMosquito().setInvisible();
+                            this.gameReference.getScore().addScore(Score.MOSQUITO);
                         }
-
+                        //docker filled or docker complete (end of stage)
                         if (!this.scenario.getDockers().getIsInDock()[colliding]) {
                             this.scenario.getDockers().setIsInDock(colliding);
-
                             if (this.scenario.getDockers().getDockersComplete()) {
+                                this.gameReference.getScore().addScore(Score.FULLDOCKER);
                                 this.gameReference.tooglePause();
                                 this.gameReference.getMessages().toogleShowing();
                                 this.clearAudio.play();
                             } else {
                                 this.gameReference.getTimer().reset();
+                                this.gameReference.getScore().addScore(Score.DOCKER);
                                 this.dockerAudio.play();
                             }
                             this.frogReset();    
@@ -400,6 +443,9 @@ public class Frog extends SpriteImpl {
                     }
                 }
                 this.animationCounter = 0;
+                if (!this.animating) {
+                    this.moving = false;
+                }
             } else { 
                 //The frog is dead... Define the dead animation parameters...
                 this.animationCounter += frametime;
