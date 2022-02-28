@@ -83,6 +83,42 @@ public class LoadingStuffs {
             image = ImageIO.read(new File("images\\mosquito.png"));
             stuffs.put("mosquito", image);
 
+            image = ImageIO.read(new File("images\\1up.png"));
+            stuffs.put("oneupTile", image);
+
+            image = ImageIO.read(new File("images\\hiscore.png"));
+            stuffs.put("hiscoreTile", image);
+
+            image = ImageIO.read(new File("images\\number0.png"));
+            stuffs.put("number-0", image);
+
+            image = ImageIO.read(new File("images\\number1.png"));
+            stuffs.put("number-1", image);
+
+            image = ImageIO.read(new File("images\\number2.png"));
+            stuffs.put("number-2", image);
+
+            image = ImageIO.read(new File("images\\number3.png"));
+            stuffs.put("number-3", image);
+
+            image = ImageIO.read(new File("images\\number4.png"));
+            stuffs.put("number-4", image);
+
+            image = ImageIO.read(new File("images\\number5.png"));
+            stuffs.put("number-5", image);
+
+            image = ImageIO.read(new File("images\\number6.png"));
+            stuffs.put("number-6", image);
+            
+            image = ImageIO.read(new File("images\\number7.png"));
+            stuffs.put("number-7", image);
+
+            image = ImageIO.read(new File("images\\number8.png"));
+            stuffs.put("number-8", image);
+
+            image = ImageIO.read(new File("images\\number9.png"));
+            stuffs.put("number-9", image);
+
             Logger.INFO("read all images...", this);
 
 
