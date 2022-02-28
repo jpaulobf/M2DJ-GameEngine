@@ -59,7 +59,7 @@ public class Turtles extends SpriteCollection {
 
         byte index              = 0;
         byte indexLines         = 0;
-        byte positionYOffset    = 16;
+        byte positionYOffset    = 14;
 
         if (!this.stopped) {
             for (int i = 0; i < Stages.TURTLES[Stages.CURRENT_STAGE].length; i++) {
