@@ -11,7 +11,7 @@ public class Mosquito extends SpriteImpl {
     private SpriteCollection spriteColRef   = null;
     private Dockers dockers                 = null;
     private final double [] positionsX      = {102, 378, 654, 930, 1206};
-    private volatile boolean isAnimating    = false;
+    private volatile boolean sorting        = true;
     private volatile long framecounter      = 0;
     private volatile boolean isVisible      = false;
     private volatile byte sorted            = -1;
@@ -30,12 +30,13 @@ public class Mosquito extends SpriteImpl {
 
     @Override
     public void update(long frametime) {
-        if (!this.isAnimating) {
+        if (this.sorting) {
             if (!dockers.getDockersComplete()) {
                 //recover the taked dockers
                 boolean [] isInWhichDock = dockers.getIsInDock();
 
                 //sort one free docker
+                //TODO: TEST AGAINST GATOR-HEAD
                 do {
                     sorted = (byte)(Math.random() * 5);
                 } while (isInWhichDock[sorted] != false);
@@ -44,7 +45,7 @@ public class Mosquito extends SpriteImpl {
                 this.positionX = this.positionsX[sorted];
 
                 //set animating true
-                this.isAnimating = true;
+                this.sorting = false;
             }
         } else {
             //set visible
@@ -71,23 +72,30 @@ public class Mosquito extends SpriteImpl {
      * Makes the mosquito invisible
      */
     public void setInvisible() {
-        this.isAnimating    = false;
+        this.sorting        = true;
         this.framecounter   = 0;
         this.isVisible      = false;
         this.positionX      = -1000;
         this.sorted         = -1;
     }
 
-    public boolean isAnimating() {
-        return (this.isAnimating);
+    /**
+     * Return if mosquito is animating (?)
+     * @return
+     */
+    public boolean isSorting() {
+        return (this.sorting);
     }
 
+    /**
+     * Verify if the mosquito is in the Docker
+     */
     public boolean isInTheDocker(int docker) {
         return (this.sorted == docker);
     }
 
     /**
-     * 
+     * Reset the mosquito
      */
     public void reset() {
         this.setInvisible();
