@@ -83,6 +83,9 @@ public class LoadingStuffs {
             image = ImageIO.read(new File("images\\mosquito.png"));
             stuffs.put("mosquito", image);
 
+            image = ImageIO.read(new File("images\\gatorhead.png"));
+            stuffs.put("gator-head", image);
+
             image = ImageIO.read(new File("images\\1up.png"));
             stuffs.put("oneupTile", image);
 
