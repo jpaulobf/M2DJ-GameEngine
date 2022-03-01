@@ -61,7 +61,7 @@ public class Game implements IGame {
         // ->>>  create the game elements objects
         //////////////////////////////////////////////////////////////////////
         this.gameState      = new StateMachine(this);
-        this.score          = new Score(this, this.wwm, this.whm, this.scoreHeight);
+        this.score          = new Score(this, this.wwm, this.scoreHeight);
         this.scenario       = new Scenario(this, this.wwm, this.whm, this.scoreHeight);
         this.frog           = new Frog(this);
         this.hud            = new HUD(this, this.wwm, this.scoreHeight + this.whm, this.HUDHeight);
@@ -123,6 +123,8 @@ public class Game implements IGame {
             
             if (this.frog.getLives() == 0) { //after possible colision, check lives.
                 this.gameState.setCurrentState(StateMachine.GAME_OVER);
+                this.score.storeNewHighScore();
+                this.score.reset();
                 this.framecounter = 0;
             }
         } else if (this.gameState.getCurrentState() == StateMachine.GAME_OVER) {
