@@ -7,12 +7,15 @@ import java.awt.Graphics2D;
  */
 public class Dockers extends SpriteCollection {
 
-    private Docker[] dockers            = new Docker[5];
-    private boolean [] isInDock         = new boolean[dockers.length];
-    private Scenario scenarioRef        = null;
-    private Mosquito mosquito           = null;
-    private volatile long framecounter  = 0;
-    private volatile boolean stopped    = false; 
+    private Docker[] dockers                = new Docker[5];
+    private boolean [] isInDock             = new boolean[dockers.length];
+    private Scenario scenarioRef            = null;
+    private Mosquito mosquito               = null;
+    private GatorHead gatorHead             = null;
+    private volatile long framecounter      = 0;
+    private volatile boolean stopped        = false;
+    public volatile byte currentMosquito    = -1;
+    public volatile byte currentGatorHead   = -1;
 
     /**
      * Dockers constructor
@@ -20,6 +23,7 @@ public class Dockers extends SpriteCollection {
     public Dockers(Scenario scenarioRef) {
         this.scenarioRef        = scenarioRef;
         this.mosquito           = new Mosquito(this);
+        this.gatorHead          = new GatorHead(this);
         double [] positionX     = {102, 378, 654, 930, 1206};
         double [] positionY     = {14, 14, 14, 14, 14};
         short  [] width         = {36, 36, 36, 36, 36};
@@ -38,46 +42,31 @@ public class Dockers extends SpriteCollection {
 
         //update scenario offset
         this.mosquito.setScenarioOffsetY(this.scenarioRef.getScoreHeight());
+        this.gatorHead.setScenarioOffsetY(this.scenarioRef.getScoreHeight());
 
-        /*
-        isInDock[0] = true;
-        isInDock[1] = true;
-        isInDock[2] = true;
-        isInDock[4] = true;
-        */
+        // isInDock[0] = true;
+        // isInDock[1] = true;
+        // isInDock[2] = true;
+        // isInDock[4] = true;
     }
-
-    /**
-     * Getter
-     * @return
-     */
-    public boolean [] getIsInDock() {
-        return (this.isInDock);
-    }
-
-    /**
-     * Setter
-     * @param position
-     */
-    public void setIsInDock(int position) {
-        this.isInDock[position] = true;
-    }
-
-    @Override
-    protected Sprite[] getSpriteCollection() {
-         return (this.dockers);
-    }
-
+    
     @Override
     public void update(long frametime) {
         if (!this.stopped) {
             this.framecounter += frametime;
 
+            //TODO: SEPARE MOSQUITO & GATOR-HEAD
             if (this.framecounter >= 5_000_000_000L) {
-                if (!this.mosquito.isAnimating()) {
+                if (this.mosquito.isSorting()) {
                     this.framecounter = 0;
                 }
+                
+                if (this.gatorHead.isSorting()) {
+                    this.framecounter = 0;
+                }
+
                 this.mosquito.update(frametime);
+                this.gatorHead.update(frametime);
             }
         }
     }
@@ -88,6 +77,29 @@ public class Dockers extends SpriteCollection {
             this.dockers[i].draw(frametime);
         }
         this.mosquito.draw(frametime);
+        this.gatorHead.draw(frametime);
+    }
+
+    @Override
+    protected Sprite[] getSpriteCollection() {
+         return (this.dockers);
+    }
+
+    @Override
+    public Graphics2D getG2D() {
+        return (this.scenarioRef.getGameRef().getG2D());
+    }
+
+    /**
+     * Return the number of free dockers
+     * @return
+     */
+    public byte getFreeDockersCounter() {
+        byte free = 0;
+        for (int i = 0; i < this.isInDock.length; i++) {
+            free += (this.isInDock[i]?0:1);
+        }
+        return (free);
     }
 
     /**
@@ -103,14 +115,6 @@ public class Dockers extends SpriteCollection {
     }
 
     /**
-     * Get the mosquito object
-     * @return
-     */
-    public Mosquito getMosquito() {
-        return (this.mosquito);
-    }
-
-    /**
      * Reset dockers
      */
     public void reset() {
@@ -119,11 +123,7 @@ public class Dockers extends SpriteCollection {
             isInDock[i] = false;
         }
         this.mosquito.reset();
-    }
-
-    @Override
-    public Graphics2D getG2D() {
-        return (this.scenarioRef.getGameRef().getG2D());
+        this.gatorHead.reset();
     }
 
     /**
@@ -132,4 +132,14 @@ public class Dockers extends SpriteCollection {
     public void toogleStop() {
         this.stopped = !this.stopped;
     }
+
+    //Accessors
+    public void setCurrentMosquito(byte pos)    {   this.currentMosquito = pos;     }
+    public void setCurrentGatorHead(byte pos)   {   this.currentGatorHead   = pos;  }
+    public byte getCurrentMosquito()            {   return(this.currentMosquito);   }
+    public byte getCurrentGatorHead()           {   return(this.currentGatorHead);  }
+    public Mosquito getMosquito()               {   return (this.mosquito);         }
+    public GatorHead getGatorHead()             {   return (this.gatorHead);        }
+    public boolean [] getIsInDock()             {   return (this.isInDock);         }
+    public void setIsInDock(int position)       {   this.isInDock[position] = true; }
 }
