@@ -129,6 +129,7 @@ public class Frog extends SpriteImpl {
         this.isDead             = false;
         this.animating          = false;
         this.lastMovement       = UP;
+        this.moving             = false;
 
         //reset the pointer incrementer
         this.gameReference.getScore().resetSkipPoint(); 
