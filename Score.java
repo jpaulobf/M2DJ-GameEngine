@@ -22,23 +22,26 @@ public class Score {
     private BufferedImage hiscoreTile   = null;
     private BufferedImage [] numbers    = null;
     private Graphics2D bg2d             = null;
-    private volatile int score          = 0;
-    private volatile int hiscore        = 0;
     private volatile String sHiscore    = null;
     private volatile String sDate       = "";
-    private Date dateHiscore            = null;
+    private volatile String sScore      = "0000000";
+    private volatile int score          = 0;
+    private volatile int hiscore        = 0;
+    private volatile Date dateHiscore   = null;
     private int wwm                     = 0;
-    private int wwmdiv4                 = 0;
-    private int wwmdiv4time3            = 0;
-    private int halfOneUpSize           = 0;
-    private int halfHiscoreSize         = 0;
-    private int whm                     = 0;
     private byte scoreHeight            = 0;
     public static final byte ROAD       = 0;
     public static final byte RIVER      = 1;
     public static final byte DOCKER     = 2;
     public static final byte FULLDOCKER = 3;
     public static final byte MOSQUITO   = 4;
+    private final short initialScoreL   = 200;
+    private final short initialScoreX   = 350;
+    private final short initialHiscoreX = 850;
+    private final short initialHiscoreL = 600;
+    private final byte initialScoreY    = 10;
+    private short currentScoreX         = 0;
+    private short currentHiscoreX       = 0;
     private int skipPoint               = 0;
 
     /**
@@ -48,12 +51,9 @@ public class Score {
      * @param whm
      * @param scoreHeight
      */
-    public Score(Game game, int wwm, int whm, byte scoreHeight) {
+    public Score(Game game, int wwm, byte scoreHeight) {
         this.scoreHeight        = scoreHeight;
         this.wwm                = wwm;
-        this.whm                = whm;
-        this.wwmdiv4            = (int)(this.wwm / 4);
-        this.wwmdiv4time3       = this.wwmdiv4 * 3;
         this.gameRef            = game;
         this.score              = 0;
         this.hiscore            = 0;
@@ -72,43 +72,52 @@ public class Score {
         this.numbers[7]         = (BufferedImage)LoadingStuffs.getInstance().getStuff("number-7");
         this.numbers[8]         = (BufferedImage)LoadingStuffs.getInstance().getStuff("number-8");
         this.numbers[9]         = (BufferedImage)LoadingStuffs.getInstance().getStuff("number-9");
-        this.halfOneUpSize      = (this.oneupTile.getWidth() / 2);
-        this.halfHiscoreSize    = (this.hiscoreTile.getWidth() / 2);
+        this.currentScoreX      = this.initialScoreX;
+        this.currentHiscoreX    = this.initialHiscoreX;
 
         //load the file containing the hi score
         this.loadHighScore();
     }
 
     /**
-     * 
+     * Draw the BG
      */
-    public void skipPoint() {
-        this.skipPoint++;
-    }
-
-    public void resetSkipPoint() {
-        this.skipPoint = 0;
-    }
-
     private void drawScoreBG() {
         //clear the backbuffer
         this.bg2d.setBackground(new Color(0, 0, 100));
         this.bg2d.clearRect(0, 0, this.wwm, scoreHeight);
         
         //draw the oneup tile
-        this.bg2d.drawImage(this.oneupTile,     wwmdiv4 - halfOneUpSize, 10, wwmdiv4 - halfOneUpSize + this.oneupTile.getWidth(), 10 + this.oneupTile.getHeight(),
+        this.bg2d.drawImage(this.oneupTile,     this.initialScoreL, this.initialScoreY, (this.initialScoreL + this.oneupTile.getWidth()), this.initialScoreY + this.oneupTile.getHeight(),
                                                 0, 0, this.oneupTile.getWidth(), this.oneupTile.getHeight(),
                                                 null);
 
         //draw the hiscore tile
-        this.bg2d.drawImage(this.hiscoreTile,   wwmdiv4time3 - halfOneUpSize - halfHiscoreSize, 10, wwmdiv4time3 - halfOneUpSize - halfHiscoreSize + this.hiscoreTile.getWidth(), 10 + this.hiscoreTile.getHeight(),
+        this.bg2d.drawImage(this.hiscoreTile,   this.initialHiscoreL, this.initialScoreY, (this.initialHiscoreL + this.hiscoreTile.getWidth()), this.initialScoreY + this.hiscoreTile.getHeight(),
                                                 0, 0, this.hiscoreTile.getWidth(), this.hiscoreTile.getHeight(),
                                                 null);
 
-        //convert the score into image
-        //convert hiscore into image
+        //convert the score & hiscore into image
+        this.currentScoreX = this.initialScoreX;
+        this.currentHiscoreX = this.initialHiscoreX;
+        for (int i = 0; i < this.sScore.length(); i++) {
+            BufferedImage temp = this.numbers[Byte.parseByte(sScore.charAt(i)+"")];
+            this.bg2d.drawImage(temp, this.currentScoreX, this.initialScoreY, this.currentScoreX + temp.getWidth(), this.initialScoreY + temp.getHeight(),
+                                        0, 0, temp.getWidth(), temp.getHeight(),
+                                        null);
+            this.currentScoreX += temp.getWidth();
+
+            temp = this.numbers[Byte.parseByte(sHiscore.charAt(i)+"")];
+            this.bg2d.drawImage(temp, this.currentHiscoreX, this.initialScoreY, this.currentHiscoreX + temp.getWidth(), this.initialScoreY + temp.getHeight(),
+                                        0, 0, temp.getWidth(), temp.getHeight(),
+                                        null);
+            this.currentHiscoreX += temp.getWidth();
+        }
     }
 
+    /**
+     * Load the file highscore
+     */
     private synchronized void loadHighScore() {
         //1 - try load hiscore.p file
         //2 - if file not exist, do nothing!
@@ -131,6 +140,7 @@ public class Score {
                         }
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                         this.hiscore = Integer.parseInt(this.sHiscore);
+                        this.sHiscore = String.format("%07d", this.hiscore);
                         this.dateHiscore = formatter.parse(sDate);
                     }
                 }
@@ -146,12 +156,13 @@ public class Score {
     }
 
     /**
-     * Store new Highscore
+     * Store new highscore to the file.
      */
-    private synchronized void storeNewHighScore() {
+    public synchronized void storeNewHighScore() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        this.dateHiscore = new Date();
         this.sHiscore = String.valueOf(this.hiscore);
-        this.sDate = formatter.format(new Date());
+        this.sDate = formatter.format(this.dateHiscore);
         File hiscorep = new File("hiscore.p");
 
         //if file exists, delete it
@@ -174,7 +185,7 @@ public class Score {
                 writer.append("hiscore:");
                 writer.append(sDate);
                 writer.append(",");
-                writer.append(sHiscore);
+                writer.append(this.hiscore + "");
                 writer.append("\n");
             } catch (IOException e) {
                 System.err.println(e.getMessage());
@@ -196,42 +207,19 @@ public class Score {
         this.storeNewHighScore();
     }
 
-    public void addRoadStepScore() {
-        this.score += 10;
-    }
-
-    public void addRiverStepScore() {
-        this.score += 20;
-    }
-
-    public void addDockerScore() {
-        this.score += 50;
-    }
-
-    public void addAllDockersScore() {
-        this.score += 100;
-    }
-
-    public void addMosquitoScore() {
-        this.score += 200;
-    }
-
-    public void addScore(byte type) {
-        if (this.skipPoint > 0) {
-            this.skipPoint--;
-        } else {
-            System.out.println(type);
-        }
-    }
-
     /**
      * Update the score
      * @param frametime
      */
     public void update(long frametime) {
-        if (this.score > this.hiscore) {
+        if (this.score > 9_999_999) {
             this.hiscore = this.score;
+            this.score = 0;
+        } else if (this.score > this.hiscore) {
+            this.hiscore = this.score;
+            this.sHiscore = String.format("%07d", this.score);
         }
+        this.sScore = String.format("%07d", this.score);
     }
 
     /**
@@ -246,6 +234,84 @@ public class Score {
         this.gameRef.getG2D().drawImage(this.scoreBG, 0, 0, this.wwm, this.scoreHeight,   //dest w1, h1, w2, h2
                                                       0, 0, this.scoreBG.getWidth(), this.scoreBG.getHeight(),  //source w1, h1, w2, h2
                                                       null);
+    }
+
+    /**
+     *  Add road points
+     */    
+    private void addRoadStepScore() {
+        this.score += 10;
+    }
+
+    /**
+     * Add river points
+     */
+    private void addRiverStepScore() {
+        this.score += 20;
+    }
+
+    /**
+     * Add docker points
+     */
+    private void addDockerScore() {
+        this.score += 50;
+    }
+
+    /**
+     * Add full docker points
+     */
+    private void addFullDockersScore() {
+        this.score += 100;
+    }
+
+    /**
+     * Add mosquito points
+     */
+    private void addMosquitoScore() {
+        this.score += 200;
+    }
+
+    /**
+     * Public method to add points
+     * @param type
+     */
+    public void addScore(byte type) {
+        if (this.skipPoint > 0) {
+            this.skipPoint--;
+        } else {
+            switch (type) {
+                case ROAD:
+                    this.addRoadStepScore();
+                    break;
+                case RIVER:
+                    this.addRiverStepScore();
+                    break;
+                case DOCKER:
+                    this.addDockerScore();
+                    break;
+                case MOSQUITO:
+                    this.addMosquitoScore();
+                    break;
+                case FULLDOCKER:
+                    this.addFullDockersScore();
+                default:
+                    break;
+            }
+        }
+    }
+
+    /**
+     * When necessary, skip point acumulation
+     */
+    public void skipPoint() {
+        this.skipPoint++;
+    }
+
+    /**
+     * Reset the skip point controller
+     */
+    public void resetSkipPoint() {
+        this.skipPoint = 0;
     }
 
     /**
