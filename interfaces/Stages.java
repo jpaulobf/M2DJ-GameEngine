@@ -31,6 +31,9 @@ public interface Stages extends Directions {
     public static final int [][] GATOR_HEAD_CONFIG        = {{}, {-1, -1}, {6, 5}, {5, 5}, {5, 5}, {4, 5}};
     public static final int [][] MOSQUITO_CONFIG          = {{}, {5, 5}, {5, 5}, {5, 5}, {6, 4}, {6, 4}};
 
+    //snake speed - ignore item/stage 0
+    public static final short [][] SNAKE_SPEED            = {{}, {-1}, {150}, {200}, {200}, {300}, {300}};
+
     //cars & trunks in each stage (ignore item 0)
     public static final int [] CURRENT_STAGE_CARS         = {0, 12, 16, 0, 0, 0, 24};
     public static final int [] CURRENT_STAGE_TRUNKS       = {0, 8, 7, 7, 7, 7, 6};
