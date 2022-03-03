@@ -45,7 +45,7 @@ public class Mosquito extends SpriteImpl {
 
                 //sort one free docker
                 do {
-                    sorted = (byte)(Math.random() * 5);
+                    this.sorted = (byte)(Math.random() * 5);
                 } while (isInWhichDock[sorted] != false || sorted == this.dockers.getCurrentGatorHead());
 
                 //after sort, set the mosquito
@@ -55,14 +55,13 @@ public class Mosquito extends SpriteImpl {
                 this.positionX = this.positionsX[sorted];
             }
         } else {
-            if (sorted != -1) {
+            if (this.sorted != -1) {
                 //set visible
                 this.isVisible = true;
 
                 //duration
                 if (this.framecounter >= (Stages.MOSQUITO_CONFIG[Stages.CURRENT_STAGE][1] * 1_000_000_000L)) {
                     this.setInvisible();
-                    this.dockers.setCurrentMosquito((byte)-1);
                     this.finished = true;
                 }
             } else {
