@@ -15,7 +15,7 @@ public class Message {
     private Game gameReference                      = null;
     private int wwm                                 = 0;
     private int whm                                 = 0;
-    private volatile boolean showing                = false;
+    private volatile boolean showing                = true;
     private volatile boolean showStage              = false;
     private volatile long framecounter              = 0;
     private volatile long animationDuration         = 3_500_000_000L;
@@ -58,36 +58,38 @@ public class Message {
      * @param frametime
      */
     public void update(long frametime) {
-        if (this.showStage) {
-            this.framecounter += frametime;
-            if (this.framecounter > thirthAnimationDuration) {
-                this.temp = this.goTile;
-                //runs once
-                if (this.framecounter > thirthAnimationDuration && this.framecounter <= (thirthAnimationDuration + frametime)) {
-                    this.calculateOriginalPositions(1);
+        if (this.showing) {
+            if (this.showStage) {
+                this.framecounter += frametime;
+                if (this.framecounter > thirthAnimationDuration) {
+                    this.temp = this.goTile;
+                    //runs once
+                    if (this.framecounter > thirthAnimationDuration && this.framecounter <= (thirthAnimationDuration + frametime)) {
+                        this.calculateOriginalPositions(1);
+                    }
+                } else {
+                    this.temp = this.stageTile;
+                    //runs once
+                    if (this.framecounter == frametime) {
+                        this.calculateOriginalPositions(3);
+                        this.beepstart.play();
+                    }
                 }
-            } else {
-                this.temp = this.stageTile;
-                //runs once
-                if (this.framecounter == frametime) {
-                    this.calculateOriginalPositions(3);
-                    this.beepstart.play();
-                }
-            }
 
-            //calculate the animation steps
-            this.steps = diff * frametime;
-            this.startOgW1 += this.steps;
-            this.w1 = (int)this.startOgW1;
-            this.w2 = this.w1 + this.temp.getWidth();
-            this.h1 = ogH1;
-            this.h2 = ogH2;
-        } else {
-            this.temp = messageTile;
-            this.w1 = (int)((wwm - this.temp.getWidth()) / 2);
-            this.w2 = this.w1 + this.temp.getWidth();
-            this.h1 = (int)((whm - this.temp.getHeight()) / 2) - 20;
-            this.h2 = this.ogH1 + this.temp.getHeight();
+                //calculate the animation steps
+                this.steps = diff * frametime;
+                this.startOgW1 += this.steps;
+                this.w1 = (int)this.startOgW1;
+                this.w2 = this.w1 + this.temp.getWidth();
+                this.h1 = ogH1;
+                this.h2 = ogH2;
+            } else {
+                this.temp = messageTile;
+                this.w1 = (int)((wwm - this.temp.getWidth()) / 2);
+                this.w2 = this.w1 + this.temp.getWidth();
+                this.h1 = (int)((whm - this.temp.getHeight()) / 2) - 20;
+                this.h2 = this.ogH1 + this.temp.getHeight();
+            }
         }
     }
 
@@ -161,10 +163,5 @@ public class Message {
     public void showStageAnnouncement() {
         this.showing    = true;
         this.showStage  = true;
-    }
-
-    public void showStates() {
-        System.out.println(this.showing);
-        System.out.println(this.showStage);
     }
 }
