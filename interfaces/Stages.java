@@ -26,10 +26,19 @@ public interface Stages extends Directions {
     public static final short [][] S1_TURTLES_VELOCITIES  = {{100}, {50}};
     public static final short [][] S2_TURTLES_VELOCITIES  = {{120}, {70}};
 
+    //gator head (time to appearence & duration) - ignore item 0
+    //same for the mosquito
+    public static final int [][] GATOR_HEAD_CONFIG        = {{}, {-1, -1}, {6, 5}, {5, 5}, {5, 5}, {4, 5}};
+    public static final int [][] MOSQUITO_CONFIG          = {{}, {5, 5}, {5, 5}, {5, 5}, {6, 4}, {6, 4}};
+
     //cars & trunks in each stage (ignore item 0)
     public static final int [] CURRENT_STAGE_CARS         = {0, 12, 16, 0, 0, 0, 24};
     public static final int [] CURRENT_STAGE_TRUNKS       = {0, 8, 7, 7, 7, 7, 6};
     public static final int [] CURRENT_STAGE_TURTLES      = {0, 8, 7, 7, 7, 7, 6};
+
+    //ignore (item 0 - stage 0)
+    //points distribution: ROAD STEP, RIVER STEP, DOCKER IN, DOCKER COMPLETE, MOSQUITO
+    public static final int [][] STAGE_POINTS             = {{}, {10, 20, 50, 100, 200}, {15, 20, 60, 120, 220}, {20, 25, 60, 120, 220}, {20, 25, 60, 150, 250}, {20, 25, 60, 150, 250}, {20, 25, 60, 150, 250}};
 
     //for each lane, each car parameter:
     //direction, velocity, type, then for each car: start-position-x
