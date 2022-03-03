@@ -1,6 +1,7 @@
 import interfaces.Sprite;
 import interfaces.SpriteCollection;
 import java.awt.Graphics2D;
+import interfaces.Stages;
 
 /**
  * Collection of Docker class
@@ -13,6 +14,7 @@ public class Dockers extends SpriteCollection {
     private Mosquito mosquito               = null;
     private GatorHead gatorHead             = null;
     private volatile long framecounter      = 0;
+    private volatile long framecounterG     = 0;
     private volatile boolean stopped        = false;
     public volatile byte currentMosquito    = -1;
     public volatile byte currentGatorHead   = -1;
@@ -53,20 +55,23 @@ public class Dockers extends SpriteCollection {
     @Override
     public void update(long frametime) {
         if (!this.stopped) {
-            this.framecounter += frametime;
+            this.framecounter   += frametime;
+            this.framecounterG  += frametime;
 
-            //TODO: SEPARE MOSQUITO & GATOR-HEAD
-            if (this.framecounter >= 5_000_000_000L) {
-                if (this.mosquito.isSorting()) {
-                    this.framecounter = 0;
-                }
-                
-                if (this.gatorHead.isSorting()) {
-                    this.framecounter = 0;
-                }
-
+            //appearence
+            if (this.framecounter >= (Stages.MOSQUITO_CONFIG[Stages.CURRENT_STAGE][0] * 1_000_000_000L)) {
                 this.mosquito.update(frametime);
+                if (this.mosquito.appearenceFinished()) {
+                    this.framecounter = 0;
+                }
+            } 
+            
+            if (Stages.GATOR_HEAD_CONFIG[Stages.CURRENT_STAGE][0] != -1 &&
+                this.framecounterG >= (Stages.GATOR_HEAD_CONFIG[Stages.CURRENT_STAGE][0] * 1_000_000_000L)) {
                 this.gatorHead.update(frametime);
+                if (this.gatorHead.appearenceFinished()) {
+                    this.framecounterG = 0;
+                }
             }
         }
     }
@@ -135,9 +140,9 @@ public class Dockers extends SpriteCollection {
 
     //Accessors
     public void setCurrentMosquito(byte pos)    {   this.currentMosquito = pos;     }
-    public void setCurrentGatorHead(byte pos)   {   this.currentGatorHead   = pos;  }
-    public byte getCurrentMosquito()            {   return(this.currentMosquito);   }
-    public byte getCurrentGatorHead()           {   return(this.currentGatorHead);  }
+    public void setCurrentGatorHead(byte pos)   {   this.currentGatorHead = pos;    }
+    public byte getCurrentMosquito()            {   return (this.currentMosquito);  }
+    public byte getCurrentGatorHead()           {   return (this.currentGatorHead); }
     public Mosquito getMosquito()               {   return (this.mosquito);         }
     public GatorHead getGatorHead()             {   return (this.gatorHead);        }
     public boolean [] getIsInDock()             {   return (this.isInDock);         }
