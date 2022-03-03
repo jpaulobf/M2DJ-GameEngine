@@ -330,6 +330,7 @@ public class Frog extends SpriteImpl {
             //colision detection or dead animation
             int colliding               = -1;
             boolean mosquitoColiding    = false;
+            boolean gatorHeadColiding   = false;
             if (!this.isDead) {
                 //this line test the colisions only with the cars, in the lanes.
                 if (this.positionY > Lanes.streetLanes[0]) {
@@ -416,8 +417,16 @@ public class Frog extends SpriteImpl {
                             this.scenario.getDockers().getMosquito().setInvisible();
                             this.gameReference.getScore().addScore(Score.MOSQUITO);
                         }
+
+                        gatorHeadColiding = this.scenario.getDockers().getGatorHead().isInTheDocker(colliding);
+                        if (gatorHeadColiding) {
+                            this.canMove    = false;
+                            this.isDead     = true;
+                            this.animating  = false;
+                        }
+
                         //docker filled or docker complete (end of stage)
-                        if (!this.scenario.getDockers().getIsInDock()[colliding]) {
+                        if (!this.isDead && !this.scenario.getDockers().getIsInDock()[colliding]) {
                             this.scenario.getDockers().setIsInDock(colliding);
                             if (this.scenario.getDockers().getDockersComplete()) {
                                 this.gameReference.getScore().addScore(Score.FULLDOCKER);
