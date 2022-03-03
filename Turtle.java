@@ -66,7 +66,6 @@ public class Turtle extends SpriteImpl {
 
     @Override
     public void update(long frametime) {
-
         this.framecounter += frametime;
         if (dive == 0) {
             if (this.framecounter > 300_000_000) {
