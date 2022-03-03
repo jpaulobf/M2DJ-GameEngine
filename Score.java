@@ -5,6 +5,9 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Color;
 import java.io.File;
 import java.util.Scanner;
+
+import interfaces.Stages;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.io.BufferedWriter;
@@ -106,8 +109,7 @@ public class Score {
                                         0, 0, temp.getWidth(), temp.getHeight(),
                                         null);
             this.currentScoreX += temp.getWidth();
-
-            temp = this.numbers[Byte.parseByte(sHiscore.charAt(i)+"")];
+            temp = this.numbers[Byte.parseByte(this.sHiscore.charAt(i)+"")];
             this.bg2d.drawImage(temp, this.currentHiscoreX, this.initialScoreY, this.currentHiscoreX + temp.getWidth(), this.initialScoreY + temp.getHeight(),
                                         0, 0, temp.getWidth(), temp.getHeight(),
                                         null);
@@ -152,7 +154,10 @@ public class Score {
                     scanner.close();
                 }
             }
-        }   
+        } else {
+            this.sScore = String.format("%07d", this.score);
+            this.sHiscore = String.format("%07d", this.hiscore);
+        }  
     }
 
     /**
@@ -190,6 +195,9 @@ public class Score {
             } catch (IOException e) {
                 System.err.println(e.getMessage());
             } finally {
+                if (this.sHiscore != null) {
+                    this.sHiscore = String.format("%07d", this.hiscore);
+                }
                 try {
                     writer.close();
                 } catch (IOException e) {
@@ -240,35 +248,35 @@ public class Score {
      *  Add road points
      */    
     private void addRoadStepScore() {
-        this.score += 10;
+        this.score += Stages.STAGE_POINTS[Stages.CURRENT_STAGE][0];
     }
 
     /**
      * Add river points
      */
     private void addRiverStepScore() {
-        this.score += 20;
+        this.score += Stages.STAGE_POINTS[Stages.CURRENT_STAGE][1];
     }
 
     /**
      * Add docker points
      */
     private void addDockerScore() {
-        this.score += 50;
+        this.score += Stages.STAGE_POINTS[Stages.CURRENT_STAGE][2];
     }
 
     /**
      * Add full docker points
      */
     private void addFullDockersScore() {
-        this.score += 100;
+        this.score += Stages.STAGE_POINTS[Stages.CURRENT_STAGE][3];
     }
 
     /**
      * Add mosquito points
      */
     private void addMosquitoScore() {
-        this.score += 200;
+        this.score += Stages.STAGE_POINTS[Stages.CURRENT_STAGE][4];
     }
 
     /**
