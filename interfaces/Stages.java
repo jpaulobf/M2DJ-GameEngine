@@ -20,8 +20,8 @@ public interface Stages extends Directions {
     public static final int [][] S1_TURTLES_POSITION_X    = {{50_000, 390_000, 730_000, 1_070_000}, {0_000, 300_000, 600_000, 900_000}};
     public static final int [][] S2_TURTLES_POSITION_X    = {{50_000, 450_000, 850_000}, {0_000, 320_000, 640_000, 960_000}};
 
-    public static final short [][] S1_TRUNKS_VELOCITIES   = {{70}, {230}, {90}};
-    public static final short [][] S2_TRUNKS_VELOCITIES   = {{90}, {200}, {120}};
+    public static final short [][] S1_TRUNKS_VELOCITIES   = {{70}, {140}, {100}};
+    public static final short [][] S2_TRUNKS_VELOCITIES   = {{90}, {180}, {120}};
     
     public static final short [][] S1_TURTLES_VELOCITIES  = {{100}, {50}};
     public static final short [][] S2_TURTLES_VELOCITIES  = {{120}, {70}};
@@ -31,8 +31,8 @@ public interface Stages extends Directions {
     public static final int [][] GATOR_HEAD_CONFIG        = {{}, {-1, -1}, {6, 5}, {5, 5}, {5, 5}, {4, 5}};
     public static final int [][] MOSQUITO_CONFIG          = {{}, {5, 5}, {5, 5}, {5, 5}, {6, 4}, {6, 4}};
 
-    //snake speed - ignore item/stage 0
-    public static final short [][] SNAKE_SPEED            = {{}, {-1}, {150}, {200}, {200}, {300}, {300}};
+    //snake speed - ignore item/stage 0 - [2nd snake - max 100]
+    public static final short [][] SNAKE_SPEED            = {{}, {-1, -1}, {150, 50}, {200, 60}, {200, 60}, {300, 60}, {300, 70}};
 
     //cars & trunks in each stage (ignore item 0)
     public static final int [] CURRENT_STAGE_CARS         = {0, 12, 16, 0, 0, 0, 24};
@@ -73,7 +73,8 @@ public interface Stages extends Directions {
 
     //for each lane, each trunk parameter:
     //direction, velocity, type, then for each trunk: start-position-x
-    public static int [][][][] TRUNKS       =  { {
+    public static int [][][][] TRUNKS       =  { 
+                                                 {
                                                  }, //stage 0
                                                  { { {RIGHT}, {S1_TRUNKS_VELOCITIES[2][0]}, {1}, { S1_TRUNKS_POSITION_X[2][0], S1_TRUNKS_POSITION_X[2][1], S1_TRUNKS_POSITION_X[2][2] }},
                                                    {},
