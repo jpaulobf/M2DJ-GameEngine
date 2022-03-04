@@ -29,30 +29,12 @@ public abstract class SpriteImpl implements Sprite, Directions {
      * Accessor Method
      * @return
      */
-    public short getWidth() {
-        return (this.width);
-    }
-
-    /**
-     * Accessor Method
-     */
-    public double getCalculatedStep() {
-        return (this.calculatedStep);
-    }
-
-    /**
-     * Setter
-     */
-    public void setScenarioOffsetX(int offsetX) {
-        this.scenarioOffsetX = offsetX;
-    }
-
-    /**
-     * Setter
-     */
-    public void setScenarioOffsetY(int offsetY) {
-        this.scenarioOffsetY = offsetY;
-    }
+    public short getWidth()                     {   return (this.width);            }
+    public byte getDirection()                  {   return (this.direction);        }
+    public double getPositionX()                {   return (this.positionX);        }
+    public double getCalculatedStep()           {   return (this.calculatedStep);   }
+    public void setScenarioOffsetX(int offsetX) {   this.scenarioOffsetX = offsetX; }
+    public void setScenarioOffsetY(int offsetY) {   this.scenarioOffsetY = offsetY; }
     
     /**
      * Abstract methods
