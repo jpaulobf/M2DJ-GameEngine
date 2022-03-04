@@ -23,20 +23,18 @@ public class SidewalkSnake extends Snake {
     public void update(long frametime) {
         if (!this.stopped) {
             if (Stages.SNAKE_SPEED[Stages.CURRENT_STAGE][0] > -1) {
+                
+                //add the framecounter
                 this.framecounter += frametime;
-                if (this.framecounter >= 0 && this.framecounter < 150_000_000) {
-                    this.positionXSource = 0;
-                } else if (this.framecounter >= 150_000_000 && this.framecounter < 300_000_000) {
-                    this.positionXSource = this.width;
-                } else if (this.framecounter >= 300_000_000 && this.framecounter < 450_000_000) {
-                    this.positionXSource = 2 * this.width;
-                } else if (this.framecounter >= 450_000_000 && this.framecounter < 600_000_000) {
-                    this.positionXSource = 3 * this.width;
-                } else if (this.framecounter >= 600_000_000 && this.framecounter < 750_000_000) {
-                    this.positionXSource = 4 * this.width;
-                } else {
+                if (this.framecounter >= 150_000_000) {
+                    this.positionXFrame = (byte)((this.positionXFrame + 1)%4);
                     this.framecounter = 0;
                 }
+
+                //calc the tile frame
+                this.positionXSource = this.positionXFrame * this.width;
+
+                //sort what to do, when reach the outerscreen
                 if (this.positionX < -2*this.width || this.positionX > this.windowWidth + this.width) {
                     if (!this.sorted) {
                         this.sortDirection();
