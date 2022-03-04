@@ -328,9 +328,10 @@ public class Frog extends SpriteImpl {
             }
 
             //colision detection or dead animation
-            int colliding               = -1;
-            boolean mosquitoColiding    = false;
-            boolean gatorHeadColiding   = false;
+            int colliding                   = -1;
+            boolean mosquitoColiding        = false;
+            boolean gatorHeadColiding       = false;
+
             if (!this.isDead) {
                 //this line test the colisions only with the cars, in the lanes.
                 if (this.positionY > Lanes.streetLanes[0]) {
@@ -381,6 +382,13 @@ public class Frog extends SpriteImpl {
                         } else if (this.direction == DOWN && !this.animating) {
                             this.gameReference.getScore().skipPoint();
                         }
+                    }
+                    //verify if was bite by the snake
+                    if (this.gameReference.getSidewalkSnake().isColliding(this)) {
+                        this.canMove    = false;
+                        this.isDead     = true;
+                        this.animating  = false;
+                        this.squashAudio.play();
                     }
                 } else if ((this.positionY > Lanes.riverLanes[4]) && (this.positionY <= (Lanes.riverLanes[4] + this.tileY)) ||
                            (this.positionY > Lanes.riverLanes[1]) && (this.positionY <= (Lanes.riverLanes[2]))) {
