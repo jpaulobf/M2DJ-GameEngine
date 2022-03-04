@@ -16,6 +16,7 @@ public abstract class Snake extends SpriteImpl {
     protected volatile boolean visible          = true;
     protected int windowWidth                   = 0;
     protected double calcPosition               = 0D;
+    protected volatile byte positionXFrame      = 0; //0 - 4
 
     /**
      * Class constructor
