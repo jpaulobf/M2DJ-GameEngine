@@ -26,6 +26,7 @@ public class Game implements IGame {
     private Score score                     = null;
     private Scenario scenario               = null;
     private HUD hud                         = null;
+    private SidewalkSnake sidewalkSnake     = null;
     private Frog frog                       = null;
     private GameOver gameOver               = null;
     private Message message                 = null;
@@ -63,6 +64,7 @@ public class Game implements IGame {
         this.gameState      = new StateMachine(this);
         this.score          = new Score(this, this.wwm, this.scoreHeight);
         this.scenario       = new Scenario(this, this.wwm, this.whm, this.scoreHeight);
+        this.sidewalkSnake  = new SidewalkSnake(this, this.wwm);
         this.frog           = new Frog(this);
         this.hud            = new HUD(this, this.wwm, this.scoreHeight + this.whm, this.HUDHeight);
         this.gameOver       = new GameOver(this, this.wwm, this.completeWhm);
@@ -94,7 +96,7 @@ public class Game implements IGame {
             this.framecounter += frametime;
             if (this.framecounter == frametime) {
                 this.scenario.update(frametime);
-                this.frog.update(frametime);
+                this.message.update(frametime);
                 this.hud.update(frametime);
                 this.timer.update(frametime);
             } else {
@@ -116,6 +118,7 @@ public class Game implements IGame {
 
             this.score.update(frametime);
             this.scenario.update(frametime);
+            this.sidewalkSnake.update(frametime);
             this.frog.update(frametime);
             this.hud.update(frametime);
             this.timer.update(frametime);
@@ -162,6 +165,7 @@ public class Game implements IGame {
         } else if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
             this.score.draw(frametime);
             this.scenario.draw(frametime);
+            this.sidewalkSnake.draw(frametime);
             this.frog.draw(frametime);
             this.hud.draw(frametime);
             this.message.draw(frametime);
@@ -236,6 +240,7 @@ public class Game implements IGame {
     public void tooglePause() {
         this.toogleMuteTheme();
         this.frog.tooglePause();
+        this.sidewalkSnake.tooglePause();
         this.scenario.tooglePause();
         this.timer.tooglePause();
     }
@@ -249,6 +254,7 @@ public class Game implements IGame {
         this.scenario.getTrunks().reset();
         this.scenario.getTurtles().reset();
         this.scenario.getDockers().reset();
+        this.sidewalkSnake.reset();
         this.hud.reset();
         this.timer.reset();
         this.frog.frogReset();
@@ -278,14 +284,15 @@ public class Game implements IGame {
      * Accessor methods
      * @return
      */
-    public Score getScore()             {   return (this.score);    }
-    public Scenario getScenario()       {   return (this.scenario); }
-    public HUD getHud()                 {   return this.hud;        }
-    public Frog getFrog()               {   return this.frog;       }
-    public GameOver getGameOver()       {   return this.gameOver;   }
-    public StateMachine getGameState()  {   return this.gameState;  }
-    public Message getMessages()        {   return this.message;    }
-    public Timer getTimer()             {   return this.timer;      }
+    public Score getScore()                 {   return (this.score);        }
+    public Scenario getScenario()           {   return (this.scenario);     }
+    public HUD getHud()                     {   return this.hud;            }
+    public Frog getFrog()                   {   return this.frog;           }
+    public GameOver getGameOver()           {   return this.gameOver;       }
+    public StateMachine getGameState()      {   return this.gameState;      }
+    public Message getMessages()            {   return this.message;        }
+    public Timer getTimer()                 {   return this.timer;          }
+    public SidewalkSnake getSidewalkSnake() {   return this.sidewalkSnake;  }
 
     @Override
     public int getInternalResolutionWidth() {
