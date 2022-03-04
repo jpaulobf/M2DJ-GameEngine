@@ -21,6 +21,8 @@ public class Trunks extends SpriteCollection {
     private int windowWidth1000         =  0;
     private volatile boolean stopped    = false;
     private Scenario scenarioRef        = null;
+    private TrunkSnake trunkSnake       = null;
+    private boolean hasTrunkInThirdLine = false;
 
     /**
      * Trunks constructor
@@ -33,6 +35,10 @@ public class Trunks extends SpriteCollection {
         this.windowWidth        = windowWidth;
         this.windowHeight       = windowHeight;
         this.windowWidth1000    = this.windowWidth * 1_000;
+        this.trunkSnake         = new TrunkSnake(this.scenarioRef.getGameRef(), windowWidth);
+
+        //set the scenario offsetY
+        this.trunkSnake.setScenarioOffsetY(this.scenarioRef.getScoreHeight());
 
         //instantiate the trunks objects and the offset trunks
         for (byte i = 0; i < trunks.length; i++) {
@@ -47,6 +53,9 @@ public class Trunks extends SpriteCollection {
 
         for (int i = 0, index = 0; i < Stages.TRUNKS[Stages.CURRENT_STAGE].length; i++) {
             if (Stages.TRUNKS[Stages.CURRENT_STAGE][i].length != 0) {
+                if (i == 2) { //0, 1, .... 2 is the third line
+                    this.hasTrunkInThirdLine = true;
+                }
                 for (int j = 0; j < Stages.TRUNKS[Stages.CURRENT_STAGE][i][3].length; j++) {
                     this.trunks[index++].ogPositionX = Stages.TRUNKS[Stages.CURRENT_STAGE][i][3][j];
                 }
@@ -120,12 +129,27 @@ public class Trunks extends SpriteCollection {
                         }
 
                         //store the new X position in the array
-                        Stages.TRUNKS[Stages.CURRENT_STAGE][i][3][j]   = (int)Math.round(calcPos);
+                        Stages.TRUNKS[Stages.CURRENT_STAGE][i][3][j] = (int)Math.round(calcPos);
 
                         //set the trunk parameters
                         this.trunks[index].direction    = direction;
                         this.trunks[index].positionX    = (short)(position/1_000);
                         this.trunks[index].positionY    = (short)Lanes.riverLanes[i] + positionYOffset; //incrementa o index ao final
+
+                        if (i == 2 && this.hasTrunkInThirdLine && j == 0) {
+                            if (this.trunkSnake.getPositionX() > this.windowWidth) {
+                                this.trunkSnake.reset();
+                            }
+                            if ((this.trunkSnake.getDirection() == RIGHT) &&
+                                (this.trunks[index].positionX + this.trunks[index].width) < this.trunkSnake.getPositionX() + this.trunkSnake.getWidth()) {
+                                this.trunkSnake.toogleDirection();
+                            } else if ((this.trunkSnake.getDirection() == LEFT) &&
+                                       (this.trunks[index].positionX > this.trunkSnake.getPositionX())) {
+                                this.trunkSnake.toogleDirection();
+                            }
+                            this.trunkSnake.setAditionalStep(step);
+                            this.trunkSnake.update(frametime);
+                        }
                     }
 
                     indexLines++;
@@ -144,12 +168,18 @@ public class Trunks extends SpriteCollection {
         for (byte i = 0; i < Stages.TRUNKS[Stages.CURRENT_STAGE].length; i++) {
             for (byte j = 0; Stages.TRUNKS[Stages.CURRENT_STAGE][i].length != 0 && j < Stages.TRUNKS[Stages.CURRENT_STAGE][i][3].length; j++, index++) {
                 trunks[index].draw(frametime);
+                if (i == 2 && this.hasTrunkInThirdLine && j == 0) {
+                    this.trunkSnake.draw(frametime);
+                }
             }
         }
         //draw the offset trunks (when necessary)
         for (byte j = 0; j < offsetTrunks.length; j++) {
             if (offsetTrunks[j].positionX > far) {
                 offsetTrunks[j].draw(frametime);
+                if (j == 1) {
+                    this.trunkSnake.draw(frametime);
+                }
             }
         }
     }
@@ -187,4 +217,7 @@ public class Trunks extends SpriteCollection {
     public Graphics2D getG2D() {
         return (this.scenarioRef.getGameRef().getG2D());
     }
+
+    //getter
+    public TrunkSnake getTrunkSnake()   { return (this.trunkSnake); }
 }
