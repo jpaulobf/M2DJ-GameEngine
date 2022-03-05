@@ -17,13 +17,20 @@ public class TrunkSnake extends Snake {
      * Class constructor
      */
     public TrunkSnake(IGame game, int windowWidth) {
+        //call super constructor
         super(game, windowWidth);
-        if (Stages.TRUNKS[Stages.CURRENT_STAGE].length != 0 && 
-            Stages.TRUNKS[Stages.CURRENT_STAGE][2].length != 0 && 
-            Stages.TRUNKS[Stages.CURRENT_STAGE][3].length != 0) {
+        
+        //recover the speed (if -1 - no snake)
+        this.velocity = Stages.SNAKE_SPEED[Stages.CURRENT_STAGE][1];
+
+        //then recover position
+        if (this.velocity > -1) {
+            //pixels to center in the trunk
+            byte offsetY = 10; 
+
+            //if velocity != -1, this parameter must exist (otherwise, it's a definition error)
             this.positionX      = Stages.TRUNKS[Stages.CURRENT_STAGE][2][3][0];
-            this.positionY      = Lanes.riverLanes[3] - 60;
-            this.velocity       = Stages.SNAKE_SPEED[Stages.CURRENT_STAGE][1];
+            this.positionY      = Lanes.riverLanes[2] + offsetY;
             this.calcPosition   = positionX;
             this.direction      = RIGHT;
             this.visible        = true;
@@ -31,10 +38,7 @@ public class TrunkSnake extends Snake {
         } else {
             this.visible        = false;
             this.positionX      = -1_000;
-        }
-        if (this.velocity == -1) {
-            this.visible        = false;
-            this.positionX      = -1_000;
+            this.enabled        = false;
         }
     }
 
@@ -52,10 +56,6 @@ public class TrunkSnake extends Snake {
             //calc step times direction
             this.calcPosition += (((double)velocity / (double)(1_000_000D / (double)frametime) * this.direction) + (this.additionalStep));
             this.positionX = (short)(this.calcPosition/1000);
-
-        } else {
-            this.positionX = -1_000;
-            this.visible = false;
         }
     }
 
@@ -63,9 +63,16 @@ public class TrunkSnake extends Snake {
      * Trunk snake reset method
      */
     public void reset() {
-        this.positionX      = -50;
-        this.direction      = RIGHT;
-        this.calcPosition   = positionX * 1_000;
+        if ((this.velocity = Stages.SNAKE_SPEED[Stages.CURRENT_STAGE][1]) != -1) {
+            this.positionX      = -50_000;
+            this.calcPosition   = positionX;
+            this.direction      = RIGHT;
+            this.enabled        = true;
+        } else {
+            this.visible        = false;
+            this.positionX      = -1_000;
+            this.enabled        = false;
+        }
     }
 
     /**
