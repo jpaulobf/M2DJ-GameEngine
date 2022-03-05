@@ -367,6 +367,17 @@ public class Frog extends SpriteImpl {
                                 this.gameReference.getScore().skipPoint();
                             }
                         }
+                        
+                        //test if coliding with snake in the trunk
+                        if (this.positionY > Lanes.riverLanes[2] && this.positionY <= (Lanes.riverLanes[3])) {
+                            if (this.scenario.getTrunks().getTrunkSnake().isEnabled() && 
+                                this.scenario.getTrunks().getTrunkSnake().isColliding(this)) {
+                                this.canMove    = false;
+                                this.isDead     = true;
+                                this.animating  = false;
+                                this.squashAudio.play();
+                            }
+                        }
                     } else {
                         if (!animating) {
                             this.canMove    = false;
