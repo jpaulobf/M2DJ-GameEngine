@@ -58,7 +58,7 @@ public class Frogger implements Runnable {
         private boolean showFPS                     = true;
 
         //control and fullscreen controller
-        private boolean fullscreen                  = false;
+        private boolean fullscreen                  = true;
         private boolean isFullScreenAvailable       = false;
 
         /**
@@ -319,19 +319,6 @@ public class Frogger implements Runnable {
                 Thread.sleep(500);
             } catch(InterruptedException ex){}
             this.bufferStrategy = super.getBufferStrategy();
-/*
-            try {
-                EventQueue.invokeAndWait(new Runnable() {
-                    public void run() { 
-                        createBufferStrategy(3); 
-                    }});
-            } catch (Exception e) {
-                System.exit(0);
-            }
-            try {     
-                Thread.sleep(500);
-            } catch(InterruptedException ex){}
-            this.bufferStrategy = super.getBufferStrategy();*/
         }
     }
 
