@@ -252,6 +252,7 @@ public class Game implements IGame {
     public void softReset() {
         this.scenario.getVehicles().reset();
         this.scenario.getTrunks().reset();
+        this.scenario.getTrunks().getTrunkSnake().reset();
         this.scenario.getTurtles().reset();
         this.scenario.getDockers().reset();
         this.sidewalkSnake.reset();
