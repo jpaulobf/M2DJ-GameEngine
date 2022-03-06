@@ -14,8 +14,8 @@ public class Trunks extends SpriteCollection {
     protected int windowHeight          = 0;
 
     //define the trunks array
-    private TreeTrunk[] trunks          = new TreeTrunk[Stages.CURRENT_STAGE_TRUNKS[Stages.CURRENT_STAGE]];
-    private TreeTrunk[] offsetTrunks    = new TreeTrunk[5];
+    private Trunk[] trunks          = new Trunk[Stages.CURRENT_STAGE_TRUNKS[Stages.CURRENT_STAGE]];
+    private Trunk[] offsetTrunks    = new Trunk[5];
     private double[] offsetPosX         = new double[offsetTrunks.length];
     private final short far             = -10_000;
     private int windowWidth1000         =  0;
@@ -42,11 +42,11 @@ public class Trunks extends SpriteCollection {
 
         //instantiate the trunks objects and the offset trunks
         for (byte i = 0; i < trunks.length; i++) {
-            trunks[i] = new TreeTrunk(this);
+            trunks[i] = new Trunk(this);
             trunks[i].setScenarioOffsetY(this.scenarioRef.getScoreHeight());
         } 
         for (byte i = 0; i < offsetTrunks.length; i++) {
-            offsetTrunks[i]             = new TreeTrunk(this);
+            offsetTrunks[i]             = new Trunk(this);
             offsetTrunks[i].positionX   = far;
             offsetTrunks[i].setScenarioOffsetY(this.scenarioRef.getScoreHeight());
         }
