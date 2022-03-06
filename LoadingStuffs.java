@@ -125,6 +125,9 @@ public class LoadingStuffs {
             image = ImageIO.read(new File("images\\snakestiles.png"));
             stuffs.put("snake-tile", image);
 
+            image = ImageIO.read(new File("images\\gator.png"));
+            stuffs.put("gator", image);
+
             Logger.INFO("read all images...", this);
 
 
