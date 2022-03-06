@@ -34,6 +34,7 @@ public class Trunk  extends SpriteImpl {
     private final short mediumWidth         = trunkLeftSideW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW + trunkRightSideW;
     private final short largeWidth          = trunkLeftSideW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW + trunkFirstPartW + trunkSecondPartW + trunkRightSideW;
     private SpriteCollection spriteColRef   = null;
+    private volatile long framecounter      = 0;
 
     /**
      * constructor
@@ -63,6 +64,7 @@ public class Trunk  extends SpriteImpl {
 
     @Override
     public void update(long frametime) {
+        this.framecounter += frametime;
         //draw the selected image
         this.height = 32;
         switch(this.type) {
@@ -79,10 +81,13 @@ public class Trunk  extends SpriteImpl {
                 this.width = this.largeWidth;
                 break;
             case 3:
-                if (true) {
+                if (this.framecounter < 1_000_000_000L) {
                     this.placeHolder = this.gatorA;
                 } else {
                     this.placeHolder = this.gatorB;
+                    if (this.framecounter + frametime > 2_000_000_000L) {
+                        this.framecounter = 0;
+                    }
                 }
                 this.width = (short)(this.gatorBodyW + this.gatorHeadW);
                 this.height = this.gatorH;
@@ -126,7 +131,7 @@ public class Trunk  extends SpriteImpl {
 
         //second part
         this.bgd2.drawImage(this.gatorSprite, this.gatorBodyW, 0, this.gatorBodyW + this.gatorHeadW, this.height, //dest w1, h1, w2, h2
-                                              this.gatorBodyW, 0, (this.gatorBodyW + this.gatorHeadW + this.gatorHeadW), this.gatorH, //source w1, h1, w2, h2
+                                              this.gatorBodyW + this.gatorHeadW, 0, (this.gatorBodyW + this.gatorHeadW + this.gatorHeadW), this.gatorH, //source w1, h1, w2, h2
                                               null);
                                 
         //first, construct the small trunk
