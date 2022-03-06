@@ -82,7 +82,7 @@ public interface Stages extends Directions {
                                                    { {RIGHT}, {S1_TRUNKS_VELOCITIES[0][0]}, {0}, { S1_TRUNKS_POSITION_X[0][0], S1_TRUNKS_POSITION_X[0][1], S1_TRUNKS_POSITION_X[0][2] }},
                                                    {}
                                                  }, //stage 1
-                                                 { { {RIGHT}, {S2_TRUNKS_VELOCITIES[2][0]}, {1}, { S2_TRUNKS_POSITION_X[2][0], S2_TRUNKS_POSITION_X[2][1], S2_TRUNKS_POSITION_X[2][2] }},
+                                                 { { {RIGHT}, {S2_TRUNKS_VELOCITIES[2][0]}, {3}, { S2_TRUNKS_POSITION_X[2][0], S2_TRUNKS_POSITION_X[2][1], S2_TRUNKS_POSITION_X[2][2] }},
                                                    {},
                                                    { {RIGHT}, {S2_TRUNKS_VELOCITIES[1][0]}, {2}, { S2_TRUNKS_POSITION_X[1][0], S2_TRUNKS_POSITION_X[1][1] }}, 
                                                    { {RIGHT}, {S2_TRUNKS_VELOCITIES[0][0]}, {0}, { S2_TRUNKS_POSITION_X[0][0], S2_TRUNKS_POSITION_X[0][1] }},
