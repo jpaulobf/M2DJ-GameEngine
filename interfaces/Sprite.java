@@ -10,7 +10,9 @@ public interface Sprite {
     public void draw(long frametime);
     public void update(long frametime);
     public boolean isColliding(Sprite sprite);
+    public boolean isColliding(Sprite sprite, double additionalPositionX, double additionalPositionY);
     public double getCalculatedStep();
     public void setScenarioOffsetX(int offsetX);
     public void setScenarioOffsetY(int offsetY);
+    public int getType();
 }
