@@ -12,7 +12,7 @@ public abstract class SpriteCollection implements Directions {
      * @param sprite
      * @return
      */
-    public int testColision(Sprite sprite) {
+    public int testCollision(Sprite sprite) {
         //gate check
         if (sprite == null) return -1;
         if (this.getSpriteCollection() != null) {
