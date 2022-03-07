@@ -89,7 +89,7 @@ public class Trunks extends SpriteCollection {
                         double position                 = Stages.TRUNKS[Stages.CURRENT_STAGE][i][3][j];
                         double calcPos                  = position + step;
                         trunks[index].calculatedStep    = step;
-                        trunks[index].type              = (byte)Stages.TRUNKS[Stages.CURRENT_STAGE][i][2][0];
+                        trunks[index].type              = (byte)Stages.TRUNKS[Stages.CURRENT_STAGE][i][2][j];
 
                         //update the trunk
                         trunks[index].update(frametime);
@@ -195,6 +195,27 @@ public class Trunks extends SpriteCollection {
      */
     public void toogleStop() {
         this.stopped = !this.stopped;
+    }
+
+    /**
+     * test the colision
+     */
+    @Override
+    public int testCollision(Sprite sprite) {
+        int colliding = super.testCollision(sprite);
+        if (colliding == -1) {
+            return (colliding);
+        } else {
+            if (this.getSpriteCollection()[colliding].getType() == 3) {
+                Sprite temp = this.getSpriteCollection()[colliding];
+                if (temp.isColliding(sprite, 98, 0)) {
+                    return (-2);
+                } else {
+                    return (colliding);
+                }
+            }
+        }
+        return (colliding);
     }
 
     /**
