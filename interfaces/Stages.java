@@ -71,24 +71,22 @@ public interface Stages extends Directions {
                                                  } //stage 6
                                                };
 
-    //for each lane, each trunk parameter:
-    //direction, velocity, type, then for each trunk: start-position-x
     public static int [][][][] TRUNKS       =  { 
-                                                 {
-                                                 }, //stage 0
-                                                 { { {RIGHT}, {S1_TRUNKS_VELOCITIES[2][0]}, {1}, { S1_TRUNKS_POSITION_X[2][0], S1_TRUNKS_POSITION_X[2][1], S1_TRUNKS_POSITION_X[2][2] }},
-                                                   {},
-                                                   { {RIGHT}, {S1_TRUNKS_VELOCITIES[1][0]}, {2}, { S1_TRUNKS_POSITION_X[1][0], S1_TRUNKS_POSITION_X[1][1] }}, 
-                                                   { {RIGHT}, {S1_TRUNKS_VELOCITIES[0][0]}, {0}, { S1_TRUNKS_POSITION_X[0][0], S1_TRUNKS_POSITION_X[0][1], S1_TRUNKS_POSITION_X[0][2] }},
-                                                   {}
-                                                 }, //stage 1
-                                                 { { {RIGHT}, {S2_TRUNKS_VELOCITIES[2][0]}, {3}, { S2_TRUNKS_POSITION_X[2][0], S2_TRUNKS_POSITION_X[2][1], S2_TRUNKS_POSITION_X[2][2] }},
-                                                   {},
-                                                   { {RIGHT}, {S2_TRUNKS_VELOCITIES[1][0]}, {2}, { S2_TRUNKS_POSITION_X[1][0], S2_TRUNKS_POSITION_X[1][1] }}, 
-                                                   { {RIGHT}, {S2_TRUNKS_VELOCITIES[0][0]}, {0}, { S2_TRUNKS_POSITION_X[0][0], S2_TRUNKS_POSITION_X[0][1] }},
-                                                   {}
-                                                 } //stage 2 
-                                               };
+                                                {
+                                                }, //stage 0
+                                                { { {RIGHT}, {S1_TRUNKS_VELOCITIES[2][0]}, {1, 1, 1}, { S1_TRUNKS_POSITION_X[2][0], S1_TRUNKS_POSITION_X[2][1], S1_TRUNKS_POSITION_X[2][2] }},
+                                                  {},
+                                                  { {RIGHT}, {S1_TRUNKS_VELOCITIES[1][0]}, {2, 2}, { S1_TRUNKS_POSITION_X[1][0], S1_TRUNKS_POSITION_X[1][1] }}, 
+                                                  { {RIGHT}, {S1_TRUNKS_VELOCITIES[0][0]}, {0, 0, 0}, { S1_TRUNKS_POSITION_X[0][0], S1_TRUNKS_POSITION_X[0][1], S1_TRUNKS_POSITION_X[0][2] }},
+                                                  {}
+                                                }, //stage 1
+                                                { { {RIGHT}, {S2_TRUNKS_VELOCITIES[2][0]}, {1, 1, 3}, { S2_TRUNKS_POSITION_X[2][0], S2_TRUNKS_POSITION_X[2][1], S2_TRUNKS_POSITION_X[2][2] }},
+                                                  {},
+                                                  { {RIGHT}, {S2_TRUNKS_VELOCITIES[1][0]}, {2, 2}, { S2_TRUNKS_POSITION_X[1][0], S2_TRUNKS_POSITION_X[1][1] }}, 
+                                                  { {RIGHT}, {S2_TRUNKS_VELOCITIES[0][0]}, {0, 0}, { S2_TRUNKS_POSITION_X[0][0], S2_TRUNKS_POSITION_X[0][1] }},
+                                                  {}
+                                                } //stage 2 
+                                              };
 
     //for each lane, each turtle (set) parameter:
     //direction, velocity, type, diver, then for each trunk: start-position-x
