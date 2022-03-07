@@ -35,6 +35,7 @@ public abstract class SpriteImpl implements Sprite, Directions {
     public double getCalculatedStep()           {   return (this.calculatedStep);   }
     public void setScenarioOffsetX(int offsetX) {   this.scenarioOffsetX = offsetX; }
     public void setScenarioOffsetY(int offsetY) {   this.scenarioOffsetY = offsetY; }
+    public int getType()                        {   return (this.type);             }
     
     /**
      * Abstract methods
@@ -81,5 +82,16 @@ public abstract class SpriteImpl implements Sprite, Directions {
         }
 
         return (isColliding(sprite));
+    }
+
+    /**
+     * Verbose sprite colision detection
+     * @param sprite
+     * @param additionalPositionX
+     * @param additionalPositionY
+     * @return is colliding
+     */
+    public boolean isColliding(Sprite sprite, double additionalPositionX, double additionalPositionY) {
+        return ((new Rectangle2D.Double(this.positionX + additionalPositionX, this.positionY + additionalPositionY, this.width, this.height)).intersects(sprite.calcMyRect()));
     }
 }
