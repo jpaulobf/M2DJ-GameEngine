@@ -335,7 +335,7 @@ public class Frog extends SpriteImpl {
             if (!this.isDead) {
                 //this line test the colisions only with the cars, in the lanes.
                 if (this.positionY > Lanes.streetLanes[0]) {
-                    colliding = this.scenario.getVehicles().testColision(this);
+                    colliding = this.scenario.getVehicles().testCollision(this);
                     if (colliding != -1) {
                         this.canMove    = false;
                         this.isDead     = true;
@@ -354,8 +354,8 @@ public class Frog extends SpriteImpl {
                 } else if ((this.positionY  > Lanes.riverLanes[3] && this.positionY <= (Lanes.riverLanes[4])) ||
                             (this.positionY > Lanes.riverLanes[2] && this.positionY <= (Lanes.riverLanes[3])) ||
                             (this.positionY > Lanes.riverLanes[0] && this.positionY <= (Lanes.riverLanes[1]))) {
-                    colliding = this.scenario.getTrunks().testColision(this);
-                    if (colliding != -1) {
+                    colliding = this.scenario.getTrunks().testCollision(this);
+                    if (colliding != -1 && colliding != -2) {
                         if (!this.animating) {
                             this.positionX += (this.scenario.getTrunks().getCalculatedStep(colliding) / 1_000);
                         }
@@ -383,7 +383,11 @@ public class Frog extends SpriteImpl {
                             this.canMove    = false;
                             this.isDead     = true;
                             this.animating  = false;
-                            this.plunkAudio.play();
+                            if (colliding == -1) {
+                                this.plunkAudio.play();
+                            } else {
+                                this.squashAudio.play();
+                            }
                         }
                     }
                 }  else if (this.positionY > (Lanes.riverLanes[4] + this.tileY) && this.positionY < Lanes.streetLanes[0]) {
@@ -404,7 +408,7 @@ public class Frog extends SpriteImpl {
                 } else if ((this.positionY > Lanes.riverLanes[4]) && (this.positionY <= (Lanes.riverLanes[4] + this.tileY)) ||
                            (this.positionY > Lanes.riverLanes[1]) && (this.positionY <= (Lanes.riverLanes[2]))) {
                     //test colision with turtles
-                    colliding = this.scenario.getTurtles().testColision(this);
+                    colliding = this.scenario.getTurtles().testCollision(this);
                     if (colliding != -1) {
                         if (!this.animating) {
                             this.positionX += (this.scenario.getTurtles().getCalculatedStep(colliding) / 1_000);
@@ -427,7 +431,7 @@ public class Frog extends SpriteImpl {
                     }
                 } else if (this.positionY >= Lanes.docksLanes[0] && this.positionY < Lanes.docksLanes[1]) {
                     //test colision against the docker
-                    colliding = this.scenario.getDockers().testColision(this);
+                    colliding = this.scenario.getDockers().testCollision(this);
                     if (colliding != -1) {
                         //test colision agains the mosquito
                         mosquitoColiding = this.scenario.getDockers().getMosquito().isInTheDocker(colliding);
