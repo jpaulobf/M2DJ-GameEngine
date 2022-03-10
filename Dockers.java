@@ -114,7 +114,6 @@ public class Dockers extends SpriteCollection {
 
     @Override
     public void nextStage() {
-
         //stop update
         this.stopped = true;
 
