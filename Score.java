@@ -5,9 +5,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Color;
 import java.io.File;
 import java.util.Scanner;
-
 import interfaces.Stages;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.io.BufferedWriter;
