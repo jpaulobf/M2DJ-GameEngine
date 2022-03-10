@@ -2,6 +2,8 @@ import util.Audio;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import interfaces.IGame;
+import interfaces.Stages;
+
 import java.awt.image.VolatileImage;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -36,6 +38,7 @@ public class Game implements IGame {
     private volatile long framecounter      = 0;
     private volatile boolean mute           = false;
     private volatile boolean canContinue    = true;
+    private volatile boolean reseting       = false;
 
     //width and height of window for base metrics of the game (minus HUD)
     private final int wwm                   = 1344;
@@ -89,58 +92,61 @@ public class Game implements IGame {
         //double movementPerSecond = 100D;
         //double step = movementPerSecond / (double)(1_000_000_000D / (double)frametime);
 
-        //////////////////////////////////////////////////////////////////////
-        // ->>>  update the game elements
-        //////////////////////////////////////////////////////////////////////
-        if (this.gameState.getCurrentState() == StateMachine.STAGING) {
-            this.framecounter += frametime;
-            if (this.framecounter == frametime) {
+        if (!this.reseting) {
+            //////////////////////////////////////////////////////////////////////
+            // ->>>  update the game elements
+            //////////////////////////////////////////////////////////////////////
+            if (this.gameState.getCurrentState() == StateMachine.STAGING) {
+                this.framecounter += frametime;
+                
+                if (this.framecounter == frametime) { //update just one time
+                    this.scenario.update(frametime);
+                    this.message.update(frametime);
+                    this.hud.update(frametime);
+                    this.timer.update(frametime);
+                } else {
+                    this.message.update(frametime);
+                    if (!this.message.finished()) {
+                        this.message.showStageAnnouncement();
+                    } else {
+                        this.framecounter = 0;
+                        this.message.showing(false);
+                        this.message.toogleStageAnnouncement();
+                        this.gameState.setCurrentState(StateMachine.IN_GAME);
+                    }
+                }
+            } else if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
+                this.framecounter += frametime;
+                if (this.framecounter == frametime) {
+                    this.theme.playContinuously();
+                }
+
+                this.score.update(frametime);
                 this.scenario.update(frametime);
-                this.message.update(frametime);
+                this.sidewalkSnake.update(frametime);
+                this.frog.update(frametime);
                 this.hud.update(frametime);
                 this.timer.update(frametime);
-            } else {
                 this.message.update(frametime);
-                if (!this.message.finished()) {
-                    this.message.showStageAnnouncement();
-                } else {
+                
+                if (this.frog.getLives() == 0) { //after possible colision, check lives.
+                    this.gameState.setCurrentState(StateMachine.GAME_OVER);
+                    this.score.storeNewHighScore();
+                    this.score.reset();
                     this.framecounter = 0;
-                    this.message.showing(false);
-                    this.message.toogleStageAnnouncement();
-                    this.gameState.setCurrentState(StateMachine.IN_GAME);
                 }
-            }
-        } else if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
-            this.framecounter += frametime;
-            if (this.framecounter == frametime) {
-                this.theme.playContinuously();
-            }
-
-            this.score.update(frametime);
-            this.scenario.update(frametime);
-            this.sidewalkSnake.update(frametime);
-            this.frog.update(frametime);
-            this.hud.update(frametime);
-            this.timer.update(frametime);
-            this.message.update(frametime);
-            
-            if (this.frog.getLives() == 0) { //after possible colision, check lives.
-                this.gameState.setCurrentState(StateMachine.GAME_OVER);
-                this.score.storeNewHighScore();
-                this.score.reset();
-                this.framecounter = 0;
-            }
-        } else if (this.gameState.getCurrentState() == StateMachine.GAME_OVER) {
-            this.framecounter += frametime;
-            if (this.framecounter >= 7_000_000_000L) {
-                this.framecounter = 0;
-                this.frog.resetLives();
-                this.softReset();
-                this.theme.playContinuously();
-                this.gameState.setCurrentState(StateMachine.IN_GAME);
-            } else if (this.framecounter == frametime) { //run just once
-                this.theme.stop();
-                this.gameoverTheme.play();
+            } else if (this.gameState.getCurrentState() == StateMachine.GAME_OVER) {
+                this.framecounter += frametime;
+                if (this.framecounter >= 7_000_000_000L) {
+                    this.framecounter = 0;
+                    this.frog.resetLives();
+                    this.softReset();
+                    this.theme.playContinuously();
+                    this.gameState.setCurrentState(StateMachine.IN_GAME);
+                } else if (this.framecounter == frametime) { //run just once
+                    this.theme.stop();
+                    this.gameoverTheme.play();
+                }
             }
         }
     }
@@ -157,21 +163,23 @@ public class Game implements IGame {
         this.g2d.setBackground(Color.BLACK);
         this.g2d.clearRect(0, 0, this.wwm, this.whm + this.HUDHeight);
 
-        //////////////////////////////////////////////////////////////////////
-        // ->>>  draw the game elements
-        //////////////////////////////////////////////////////////////////////
-        if (this.gameState.getCurrentState() == StateMachine.STAGING) {
-            this.message.draw(frametime);
-        } else if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
-            this.score.draw(frametime);
-            this.scenario.draw(frametime);
-            this.sidewalkSnake.draw(frametime);
-            this.frog.draw(frametime);
-            this.hud.draw(frametime);
-            this.message.draw(frametime);
-            this.timer.draw(frametime);
-        } else if (this.gameState.getCurrentState() == StateMachine.GAME_OVER) {
-            this.gameOver.draw(frametime);
+        if (!this.reseting) {
+            //////////////////////////////////////////////////////////////////////
+            // ->>>  draw the game elements
+            //////////////////////////////////////////////////////////////////////
+            if (this.gameState.getCurrentState() == StateMachine.STAGING) {
+                this.message.draw(frametime);
+            } else if (this.gameState.getCurrentState() == StateMachine.IN_GAME) {
+                this.score.draw(frametime);
+                this.scenario.draw(frametime);
+                this.sidewalkSnake.draw(frametime);
+                this.frog.draw(frametime);
+                this.hud.draw(frametime);
+                this.message.draw(frametime);
+                this.timer.draw(frametime);
+            } else if (this.gameState.getCurrentState() == StateMachine.GAME_OVER) {
+                this.gameOver.draw(frametime);
+            }
         }
     }
 
@@ -256,9 +264,29 @@ public class Game implements IGame {
         this.scenario.getTurtles().reset();
         this.scenario.getDockers().reset();
         this.sidewalkSnake.reset();
-        this.hud.reset();
         this.timer.reset();
         this.frog.frogReset();
+    }
+
+    /** 
+     * go to the next stage 
+     */
+    public void nextStage() {
+        //disable elements update
+        this.toogleReseting();
+
+        this.scenario.getDockers().reset();
+        this.scenario.getTrunks().getTrunkSnake().reset();
+        this.timer.reset();
+        this.frog.frogReset();
+
+        Stages.CURRENT_STAGE[0]++;
+        this.scenario.nextStage();
+        this.sidewalkSnake.nextStage();
+
+        //enable elements update
+        this.toogleReseting();
+
     }
 
     /**
@@ -267,7 +295,9 @@ public class Game implements IGame {
     public void keyPressed(int keyCode) {
         if (this.canContinue) {
             this.canContinue = false;
-            this.movement(keyCode);
+            if (!this.reseting) {
+                this.movement(keyCode);
+            }
         }
     }
 
@@ -276,42 +306,36 @@ public class Game implements IGame {
      */
     public void keyReleased(int keyCode) {
         this.canContinue = true;
-        if (keyCode == 77) {this.toogleMuteTheme();}
-        if (keyCode == 80) {this.tooglePause();}
-        if (keyCode == 82) {this.softReset();}
+        if (!this.reseting) {
+            if (keyCode == 77) {this.toogleMuteTheme();}
+            if (keyCode == 80) {this.tooglePause();}
+            if (keyCode == 82) {this.softReset();}
+            if (keyCode == 84) {this.nextStage();}
+        }
     }
 
     /**
      * Accessor methods
      * @return
      */
-    public Score getScore()                 {   return (this.score);        }
-    public Scenario getScenario()           {   return (this.scenario);     }
-    public HUD getHud()                     {   return this.hud;            }
-    public Frog getFrog()                   {   return this.frog;           }
-    public GameOver getGameOver()           {   return this.gameOver;       }
-    public StateMachine getGameState()      {   return this.gameState;      }
-    public Message getMessages()            {   return this.message;        }
-    public Timer getTimer()                 {   return this.timer;          }
-    public SidewalkSnake getSidewalkSnake() {   return this.sidewalkSnake;  }
-
-    @Override
-    public int getInternalResolutionWidth() {
-        return (this.wwm);
-    }
-
-    @Override
-    public int getInternalResolutionHeight() {
-        return (this.completeWhm);
-    }
-
-    @Override
-    public VolatileImage getBufferedImage() {
-        return (this.bufferImage);
-    }
-
-    @Override
-    public int getScenarioOffsetY() {
-        return (this.scoreHeight);
+    public Score getScore()                     {   return (this.score);        }
+    public Scenario getScenario()               {   return (this.scenario);     }
+    public HUD getHud()                         {   return this.hud;            }
+    public Frog getFrog()                       {   return this.frog;           }
+    public GameOver getGameOver()               {   return this.gameOver;       }
+    public StateMachine getGameState()          {   return this.gameState;      }
+    public Message getMessages()                {   return this.message;        }
+    public Timer getTimer()                     {   return this.timer;          }
+    public SidewalkSnake getSidewalkSnake()     {   return this.sidewalkSnake;  }
+    public int getInternalResolutionWidth()     {   return (this.wwm);          }
+    public int getInternalResolutionHeight()    {   return (this.completeWhm);  }
+    public VolatileImage getBufferedImage()     {   return (this.bufferImage);  }
+    public int getScenarioOffsetY()             {   return (this.scoreHeight);  }
+    
+    /**
+     * Toogle reseting
+     */
+    public synchronized void toogleReseting() {
+        this.reseting = !this.reseting;
     }
 }
