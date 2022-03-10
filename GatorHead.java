@@ -60,7 +60,7 @@ public class GatorHead extends SpriteImpl {
                 this.isVisible = true;
 
                 //duration
-                if (this.framecounter >= (Stages.GATOR_HEAD_CONFIG[Stages.CURRENT_STAGE][1] * 1_000_000_000L)) {
+                if (this.framecounter >= (Stages.GATOR_HEAD_CONFIG[Stages.CURRENT_STAGE[0]][1] * 1_000_000_000L)) {
                     this.setInvisible();
                     this.dockers.setCurrentGatorHead((byte)-1);
                     this.finished = true;
