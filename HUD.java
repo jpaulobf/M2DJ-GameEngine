@@ -73,10 +73,4 @@ public class HUD {
                                                     0, 0, this.hudBG.getWidth(), this.hudBG.getHeight(),  //source w1, h1, w2, h2
                                                     null);
     }
-
-    /**
-     * 
-     */
-    public void reset() {
-    }
 }
