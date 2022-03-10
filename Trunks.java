@@ -14,15 +14,16 @@ public class Trunks extends SpriteCollection {
     protected int windowHeight          = 0;
 
     //define the trunks array
-    private Trunk[] trunks          = new Trunk[Stages.CURRENT_STAGE_TRUNKS[Stages.CURRENT_STAGE]];
-    private Trunk[] offsetTrunks    = new Trunk[5];
-    private double[] offsetPosX         = new double[offsetTrunks.length];
+    private Trunk[] trunks              = null;
+    private Trunk[] offsetTrunks        = null;
+    private double[] offsetPosX         = null;
     private final short far             = -10_000;
     private int windowWidth1000         =  0;
     private volatile boolean stopped    = false;
     private Scenario scenarioRef        = null;
     private TrunkSnake trunkSnake       = null;
     private boolean hasTrunkInThirdLine = false;
+    private volatile boolean reseting   = false;
 
     /**
      * Trunks constructor
@@ -35,39 +36,20 @@ public class Trunks extends SpriteCollection {
         this.windowWidth        = windowWidth;
         this.windowHeight       = windowHeight;
         this.windowWidth1000    = this.windowWidth * 1_000;
-        this.trunkSnake         = new TrunkSnake(this.scenarioRef.getGameRef(), windowWidth);
 
-        //set the scenario offsetY
+        //create the snake in the trunk object
+        this.trunkSnake         = new TrunkSnake(this.scenarioRef.getGameRef(), windowWidth);
         this.trunkSnake.setScenarioOffsetY(this.scenarioRef.getScoreHeight());
 
-        //instantiate the trunks objects and the offset trunks
-        for (byte i = 0; i < trunks.length; i++) {
-            trunks[i] = new Trunk(this);
-            trunks[i].setScenarioOffsetY(this.scenarioRef.getScoreHeight());
-        } 
-        for (byte i = 0; i < offsetTrunks.length; i++) {
-            offsetTrunks[i]             = new Trunk(this);
-            offsetTrunks[i].positionX   = far;
-            offsetTrunks[i].setScenarioOffsetY(this.scenarioRef.getScoreHeight());
-        }
-
-        for (int i = 0, index = 0; i < Stages.TRUNKS[Stages.CURRENT_STAGE].length; i++) {
-            if (Stages.TRUNKS[Stages.CURRENT_STAGE][i].length != 0) {
-                if (i == 2) { //0, 1, .... 2 is the third line
-                    this.hasTrunkInThirdLine = true;
-                }
-                for (int j = 0; j < Stages.TRUNKS[Stages.CURRENT_STAGE][i][3].length; j++) {
-                    this.trunks[index++].ogPositionX = Stages.TRUNKS[Stages.CURRENT_STAGE][i][3][j];
-                }
-            }
-        }
+        //create objects of the stage
+        this.nextStage();
     }
 
     /**
      * Updates the elements on the screen
      */
     @Override
-    public void update(long frametime) {
+    public synchronized void update(long frametime) {
 
         byte index              = 0;
         byte indexLines         = 0;
@@ -75,21 +57,21 @@ public class Trunks extends SpriteCollection {
 
         if (!this.stopped) {
 
-            for (int i = 0; i < Stages.TRUNKS[Stages.CURRENT_STAGE].length; i++) {
+            for (int i = 0; i < Stages.TRUNKS[Stages.CURRENT_STAGE[0]].length; i++) {
 
-                if (Stages.TRUNKS[Stages.CURRENT_STAGE][i].length != 0) {
+                if (Stages.TRUNKS[Stages.CURRENT_STAGE[0]][i].length != 0) {
 
-                    byte direction = (byte)Stages.TRUNKS[Stages.CURRENT_STAGE][i][0][0];
-                    short velocity = (short)Stages.TRUNKS[Stages.CURRENT_STAGE][i][1][0];
+                    byte direction = (byte)Stages.TRUNKS[Stages.CURRENT_STAGE[0]][i][0][0];
+                    short velocity = (short)Stages.TRUNKS[Stages.CURRENT_STAGE[0]][i][1][0];
                     
-                    for (int j = 0; j < Stages.TRUNKS[Stages.CURRENT_STAGE][i][3].length; j++, index++) {
+                    for (int j = 0; j < Stages.TRUNKS[Stages.CURRENT_STAGE[0]][i][3].length; j++, index++) {
 
                         //read & set the trunk parameters
                         double step                     = (double)velocity / (double)(1_000_000D / (double)frametime);
-                        double position                 = Stages.TRUNKS[Stages.CURRENT_STAGE][i][3][j];
+                        double position                 = Stages.TRUNKS[Stages.CURRENT_STAGE[0]][i][3][j];
                         double calcPos                  = position + step;
                         trunks[index].calculatedStep    = step;
-                        trunks[index].type              = (byte)Stages.TRUNKS[Stages.CURRENT_STAGE][i][2][j];
+                        trunks[index].type              = (byte)Stages.TRUNKS[Stages.CURRENT_STAGE[0]][i][2][j];
 
                         //update the trunk
                         trunks[index].update(frametime);
@@ -129,7 +111,7 @@ public class Trunks extends SpriteCollection {
                         }
 
                         //store the new X position in the array
-                        Stages.TRUNKS[Stages.CURRENT_STAGE][i][3][j] = (int)Math.round(calcPos);
+                        Stages.TRUNKS[Stages.CURRENT_STAGE[0]][i][3][j] = (int)Math.round(calcPos);
 
                         //set the trunk parameters
                         this.trunks[index].direction    = direction;
@@ -162,11 +144,11 @@ public class Trunks extends SpriteCollection {
      * Draw the graphical vehicles elements
      */
     @Override
-    public void draw(long frametime) {
+    public synchronized void draw(long frametime) {
         int index = 0;
         //draw the main trunks
-        for (byte i = 0; i < Stages.TRUNKS[Stages.CURRENT_STAGE].length; i++) {
-            for (byte j = 0; Stages.TRUNKS[Stages.CURRENT_STAGE][i].length != 0 && j < Stages.TRUNKS[Stages.CURRENT_STAGE][i][3].length; j++, index++) {
+        for (byte i = 0; i < Stages.TRUNKS[Stages.CURRENT_STAGE[0]].length; i++) {
+            for (byte j = 0; Stages.TRUNKS[Stages.CURRENT_STAGE[0]][i].length != 0 && j < Stages.TRUNKS[Stages.CURRENT_STAGE[0]][i][3].length; j++, index++) {
                 trunks[index].draw(frametime);
                 if (i == 2 && this.hasTrunkInThirdLine && j == 0) {
                     this.trunkSnake.draw(frametime);
@@ -184,19 +166,64 @@ public class Trunks extends SpriteCollection {
         }
     }
 
+    /**
+     * Set the stage
+     */
+    @Override
+    public void nextStage() {
+        //stop update
+        this.stopped = true;
+        this.reseting = true;
+
+        //clean the current trunks array
+        for (int i = 0; this.trunks != null && i < this.trunks.length; i++) {
+            this.trunks[i] = null;
+        } for (int i = 0; this.offsetTrunks != null && i < this.offsetTrunks.length; i++) {
+            this.offsetTrunks[i] = null;
+        }
+
+        //create new array with the trunks of this stage
+        this.trunks         = new Trunk[Stages.CURRENT_STAGE_TRUNKS[Stages.CURRENT_STAGE[0]]];
+        this.offsetTrunks   = new Trunk[5];
+        this.offsetPosX     = new double[offsetTrunks.length];
+
+        //instantiate the trunks objects and the offset trunks
+        for (byte i = 0; i < trunks.length; i++) {
+            trunks[i] = new Trunk(this);
+            trunks[i].setScenarioOffsetY(this.scenarioRef.getScoreHeight());
+        } 
+        for (byte i = 0; i < offsetTrunks.length; i++) {
+            offsetTrunks[i]             = new Trunk(this);
+            offsetTrunks[i].positionX   = far;
+            offsetTrunks[i].setScenarioOffsetY(this.scenarioRef.getScoreHeight());
+        }
+
+        //save og pos for reset
+        for (int i = 0, index = 0; i < Stages.TRUNKS[Stages.CURRENT_STAGE[0]].length; i++) {
+            if (Stages.TRUNKS[Stages.CURRENT_STAGE[0]][i].length != 0) {
+                if (i == 2) {
+                    this.hasTrunkInThirdLine = true;
+                }
+                for (int j = 0; j < Stages.TRUNKS[Stages.CURRENT_STAGE[0]][i][3].length; j++) {
+                    this.trunks[index++].ogPositionX = Stages.TRUNKS[Stages.CURRENT_STAGE[0]][i][3][j];
+                }
+            }
+        }
+
+        //set new object to the snake in the trunk 
+        this.trunkSnake.nextStage();
+
+        //start the update
+        this.stopped = false;
+        this.reseting = false;
+    }
+
     @Override
     protected Sprite[] getSpriteCollection() {
         return (java.util.stream.Stream.concat(java.util.Arrays.stream(this.trunks), 
                                                java.util.Arrays.stream(this.offsetTrunks)).toArray(Sprite[]::new));
     }
     
-    /**
-     * Toogle the stop control
-     */
-    public void toogleStop() {
-        this.stopped = !this.stopped;
-    }
-
     /**
      * test the colision
      */
@@ -219,13 +246,20 @@ public class Trunks extends SpriteCollection {
     }
 
     /**
+     * Toogle the stop control
+     */
+    public void toogleStop() {
+        this.stopped = !this.stopped;
+    }
+
+    /**
      * Reset the current trucks state
      */
     public void reset() {
-        for (int i = 0, index = 0; i < Stages.TRUNKS[Stages.CURRENT_STAGE].length; i++) {
-            if (Stages.TRUNKS[Stages.CURRENT_STAGE][i].length != 0) {
-                for (int j = 0; j < Stages.TRUNKS[Stages.CURRENT_STAGE][i][3].length; j++) {
-                    Stages.TRUNKS[Stages.CURRENT_STAGE][i][3][j] = this.trunks[index++].ogPositionX;
+        for (int i = 0, index = 0; i < Stages.TRUNKS[Stages.CURRENT_STAGE[0]].length; i++) {
+            if (Stages.TRUNKS[Stages.CURRENT_STAGE[0]][i].length != 0) {
+                for (int j = 0; j < Stages.TRUNKS[Stages.CURRENT_STAGE[0]][i][3].length; j++) {
+                    Stages.TRUNKS[Stages.CURRENT_STAGE[0]][i][3][j] = this.trunks[index++].ogPositionX;
                 }
             }
         }
@@ -234,11 +268,8 @@ public class Trunks extends SpriteCollection {
         }
     }
 
+    //getters
     @Override
-    public Graphics2D getG2D() {
-        return (this.scenarioRef.getGameRef().getG2D());
-    }
-
-    //getter
+    public Graphics2D getG2D() {return (this.scenarioRef.getGameRef().getG2D());}
     public TrunkSnake getTrunkSnake()   { return (this.trunkSnake); }
 }
