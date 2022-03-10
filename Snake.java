@@ -36,12 +36,12 @@ public abstract class Snake extends SpriteImpl {
         if (this.visible) {
             if (direction == RIGHT) {
                 this.gRef.getG2D().drawImage(this.snakeTile, (int)this.positionX, ((int)this.positionY + this.scenarioOffsetY), ((int)(this.positionX + this.width)), ((int)(this.positionY + this.height + this.scenarioOffsetY)), //dest w1, h1, w2, h2
-                                                            ((int)this.positionXSource), (0), ((int)this.positionXSource + this.width), this.height, //source w1, h1, w2, h2
-                                                            (null));
+                                                             ((int)this.positionXSource), (0), ((int)this.positionXSource + this.width), this.height, //source w1, h1, w2, h2
+                                                             (null));
             } else {
                 this.gRef.getG2D().drawImage(this.snakeTile, ((int)this.positionX + this.width), ((int)this.positionY + this.scenarioOffsetY), ((int)this.positionX), ((int)(this.positionY + this.height + this.scenarioOffsetY)), //dest w1, h1, w2, h2
-                                                            ((int)this.positionXSource), (0), ((int)this.positionXSource + this.width), this.height, //source w1, h1, w2, h2
-                                                            (null));
+                                                             ((int)this.positionXSource), (0), ((int)this.positionXSource + this.width), this.height, //source w1, h1, w2, h2
+                                                             (null));
             }
         }
     }
