@@ -8,8 +8,8 @@ import interfaces.Stages;
  */
 public class Dockers extends SpriteCollection {
 
-    private Docker[] dockers                = new Docker[5];
-    private boolean [] isInDock             = new boolean[dockers.length];
+    private Docker[] dockers                = null;
+    private boolean [] isInDock             = null;
     private Scenario scenarioRef            = null;
     private Mosquito mosquito               = null;
     private GatorHead gatorHead             = null;
@@ -26,30 +26,23 @@ public class Dockers extends SpriteCollection {
         this.scenarioRef        = scenarioRef;
         this.mosquito           = new Mosquito(this);
         this.gatorHead          = new GatorHead(this);
-        double [] positionX     = {102, 378, 654, 930, 1206};
-        double [] positionY     = {14, 14, 14, 14, 14};
-        short  [] width         = {36, 36, 36, 36, 36};
-        byte   [] height        = {50, 50, 50, 50, 50};
-
-        for (int i = 0; i < dockers.length; i++) {
-            dockers[i] = new Docker(this);
-            dockers[i].config(positionX[i], positionY[i], width[i], height[i]);
-            dockers[i].setScenarioOffsetY(this.scenarioRef.getScoreHeight());
-        }
-
-        //initialize the dockers
-        for (int i = 0; i < this.isInDock.length; i++) {
-            isInDock[i] = false;
-        }
 
         //update scenario offset
         this.mosquito.setScenarioOffsetY(this.scenarioRef.getScoreHeight());
         this.gatorHead.setScenarioOffsetY(this.scenarioRef.getScoreHeight());
 
-        // isInDock[0] = true;
-        // isInDock[1] = true;
-        // isInDock[2] = true;
-        // isInDock[4] = true;
+        //set the stage
+        this.nextStage();
+
+        // this.dummy();
+    }
+
+    @SuppressWarnings("unused")
+    private void dummy() {
+        isInDock[0] = true;
+        isInDock[1] = true;
+        isInDock[2] = true;
+        isInDock[4] = true;
     }
     
     @Override
@@ -59,15 +52,15 @@ public class Dockers extends SpriteCollection {
             this.framecounterG  += frametime;
 
             //appearence
-            if (this.framecounter >= (Stages.MOSQUITO_CONFIG[Stages.CURRENT_STAGE][0] * 1_000_000_000L)) {
+            if (this.framecounter >= (Stages.MOSQUITO_CONFIG[Stages.CURRENT_STAGE[0]][0] * 1_000_000_000L)) {
                 this.mosquito.update(frametime);
                 if (this.mosquito.appearenceFinished()) {
                     this.framecounter = 0;
                 }
             } 
             
-            if (Stages.GATOR_HEAD_CONFIG[Stages.CURRENT_STAGE][0] != -1 &&
-                this.framecounterG >= (Stages.GATOR_HEAD_CONFIG[Stages.CURRENT_STAGE][0] * 1_000_000_000L)) {
+            if (Stages.GATOR_HEAD_CONFIG[Stages.CURRENT_STAGE[0]][0] != -1 &&
+                this.framecounterG >= (Stages.GATOR_HEAD_CONFIG[Stages.CURRENT_STAGE[0]][0] * 1_000_000_000L)) {
                 this.gatorHead.update(frametime);
                 if (this.gatorHead.appearenceFinished()) {
                     this.framecounterG = 0;
@@ -119,6 +112,40 @@ public class Dockers extends SpriteCollection {
         return (complete);
     }
 
+    @Override
+    public void nextStage() {
+
+        //stop update
+        this.stopped = true;
+
+        //dockers parameters
+        double [] positionX     = {102, 378, 654, 930, 1206};
+        double [] positionY     = {14, 14, 14, 14, 14};
+        short  [] width         = {36, 36, 36, 36, 36};
+        byte   [] height        = {50, 50, 50, 50, 50};
+        
+        //clean the current turtles array
+        for (int i = 0; this.dockers != null && i < this.dockers.length; i++) {
+            this.dockers[i] = null;
+        }
+
+        //create new array with the turtles of this stage
+        this.dockers    = new Docker[5];
+        this.isInDock   = new boolean[dockers.length];
+
+        //instantiate the dockers objects
+        for (int i = 0; i < dockers.length; i++) {
+            dockers[i] = new Docker(this);
+            dockers[i].config(positionX[i], positionY[i], width[i], height[i]);
+            dockers[i].setScenarioOffsetY(this.scenarioRef.getScoreHeight());
+        } for (int i = 0; i < this.isInDock.length; i++) {
+            isInDock[i] = false;
+        }
+        
+        //start the update
+        this.stopped = false;
+    }
+
     /**
      * Reset dockers
      */
@@ -127,6 +154,9 @@ public class Dockers extends SpriteCollection {
         for (int i = 0; i < this.isInDock.length; i++) {
             isInDock[i] = false;
         }
+
+        this.framecounter   = 0;
+        this.framecounterG  = 0;
         this.mosquito.reset();
         this.gatorHead.reset();
     }
