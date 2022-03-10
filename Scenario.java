@@ -27,6 +27,7 @@ public class Scenario {
     private BufferedImage subgrass          = null;
     private BufferedImage frogHome          = null;
     private volatile boolean showElements   = true;
+    private volatile boolean reseting       = false;
     private IGame gameRef                   = null;
 
     //how many tiles in x and in y
@@ -41,6 +42,29 @@ public class Scenario {
 
     public int getScoreHeight() {
         return (this.scoreHeight);
+    }
+
+    /**
+     * Set to the next stage
+     */
+    public synchronized void nextStage() {
+        //disable elements drawing
+        this.toogleElements();
+
+        //disable elements update
+        this.toogleReseting();
+
+        //recreate all elements
+        this.vehicles.nextStage();
+        this.trunks.nextStage();
+        this.turtles.nextStage();
+        this.dockers.nextStage();
+
+        //enable elements drawing
+        this.toogleElements();
+
+        //enable elements update
+        this.toogleReseting();
     }
 
     /**
@@ -64,8 +88,8 @@ public class Scenario {
         this.dockers        = new Dockers(this);
         this.drawBackgroundInBuffer();
 
-        int imagePosX = 1;
-        int imagePosY = 34;
+        final int imagePosX = 1;
+        final int imagePosY = 34;
 
         BufferedImage animals   = (BufferedImage)LoadingStuffs.getInstance().getStuff("animalTiles");
         this.frogHome           = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().createCompatibleImage(43, 45, Transparency.BITMASK);
@@ -206,11 +230,12 @@ public class Scenario {
      * @param frametime
      */
     public void update(long frametime) {
-        //update the vehicles
-        this.vehicles.update(frametime);
-        this.trunks.update(frametime);
-        this.turtles.update(frametime);
-        this.dockers.update(frametime);
+        if (!this.reseting) {
+            this.vehicles.update(frametime);
+            this.trunks.update(frametime);
+            this.turtles.update(frametime);
+            this.dockers.update(frametime);
+        }
     }
 
     /**
@@ -260,8 +285,12 @@ public class Scenario {
         this.dockers.toogleStop();
     }
 
-    public void toogleElements() {
+    public synchronized void toogleElements() {
         this.showElements = !this.showElements;
+    }
+
+    public synchronized void toogleReseting() {
+        this.reseting = !this.reseting;
     }
 
     public IGame getGameRef() {
