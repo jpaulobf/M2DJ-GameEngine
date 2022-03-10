@@ -248,35 +248,35 @@ public class Score {
      *  Add road points
      */    
     private void addRoadStepScore() {
-        this.score += Stages.STAGE_POINTS[Stages.CURRENT_STAGE][0];
+        this.score += Stages.STAGE_POINTS[Stages.CURRENT_STAGE[0]][0];
     }
 
     /**
      * Add river points
      */
     private void addRiverStepScore() {
-        this.score += Stages.STAGE_POINTS[Stages.CURRENT_STAGE][1];
+        this.score += Stages.STAGE_POINTS[Stages.CURRENT_STAGE[0]][1];
     }
 
     /**
      * Add docker points
      */
     private void addDockerScore() {
-        this.score += Stages.STAGE_POINTS[Stages.CURRENT_STAGE][2];
+        this.score += Stages.STAGE_POINTS[Stages.CURRENT_STAGE[0]][2];
     }
 
     /**
      * Add full docker points
      */
     private void addFullDockersScore() {
-        this.score += Stages.STAGE_POINTS[Stages.CURRENT_STAGE][3];
+        this.score += Stages.STAGE_POINTS[Stages.CURRENT_STAGE[0]][3];
     }
 
     /**
      * Add mosquito points
      */
     private void addMosquitoScore() {
-        this.score += Stages.STAGE_POINTS[Stages.CURRENT_STAGE][4];
+        this.score += Stages.STAGE_POINTS[Stages.CURRENT_STAGE[0]][4];
     }
 
     /**
