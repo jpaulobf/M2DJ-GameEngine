@@ -21,7 +21,7 @@ public class TrunkSnake extends Snake {
         super(game, windowWidth);
         
         //recover the speed (if -1 - no snake)
-        this.velocity = Stages.SNAKE_SPEED[Stages.CURRENT_STAGE][1];
+        this.velocity = Stages.SNAKE_SPEED[Stages.CURRENT_STAGE[0]][1];
 
         //then recover position
         if (this.velocity > -1) {
@@ -29,7 +29,7 @@ public class TrunkSnake extends Snake {
             byte offsetY = 10; 
 
             //if velocity != -1, this parameter must exist (otherwise, it's a definition error)
-            this.positionX      = Stages.TRUNKS[Stages.CURRENT_STAGE][2][3][0];
+            this.positionX      = Stages.TRUNKS[Stages.CURRENT_STAGE[0]][2][3][0];
             this.positionY      = Lanes.riverLanes[2] + offsetY;
             this.calcPosition   = positionX;
             this.direction      = RIGHT;
@@ -63,7 +63,7 @@ public class TrunkSnake extends Snake {
      * Trunk snake reset method
      */
     public void reset() {
-        if ((this.velocity = Stages.SNAKE_SPEED[Stages.CURRENT_STAGE][1]) != -1) {
+        if ((this.velocity = Stages.SNAKE_SPEED[Stages.CURRENT_STAGE[0]][1]) != -1) {
             this.positionX      = -50_000;
             this.calcPosition   = positionX;
             this.direction      = RIGHT;
