@@ -14,16 +14,13 @@ public class SidewalkSnake extends Snake {
      */
     public SidewalkSnake(IGame game, int windowWidth) {
         super(game, windowWidth);
-        this.positionY      = Lanes.streetLanes[0] - 64;
-        this.velocity       = Stages.SNAKE_SPEED[Stages.CURRENT_STAGE][0];
-        this.reset();
+        this.nextStage();
     }
 
     @Override
     public void update(long frametime) {
         if (!this.stopped) {
-            if (Stages.SNAKE_SPEED[Stages.CURRENT_STAGE][0] > -1) {
-                
+            if (Stages.SNAKE_SPEED[Stages.CURRENT_STAGE[0]][0] > -1) {
                 //add the framecounter
                 this.framecounter += frametime;
                 if (this.framecounter >= 150_000_000) {
@@ -47,8 +44,8 @@ public class SidewalkSnake extends Snake {
                 this.calcPosition += ((double)velocity / (double)(1_000_000D / (double)frametime) * direction);
                 this.positionX = (short)(this.calcPosition/1000);
             } else {
-                this.positionX = -1000;
-                this.visible = false;
+                this.positionX  = -1000;
+                this.visible    = false;
             }
         }
     }
@@ -75,12 +72,25 @@ public class SidewalkSnake extends Snake {
         this.sorted = true;
     }
 
+    /**
+     * Set the stage
+     */
+    public void nextStage() {
+        this.positionY      = Lanes.streetLanes[0] - 64;
+        this.velocity       = Stages.SNAKE_SPEED[Stages.CURRENT_STAGE[0]][0];
+        this.reset();
+    }
+
      /**
      * Reset the snake
      */
     public void reset() {
+        this.framecounter   = 0;
         this.direction      = RIGHT;
         this.positionX      = -2*this.width;
         this.calcPosition   = this.positionX * 1000;
+        if (Stages.SNAKE_SPEED[Stages.CURRENT_STAGE[0]][0] > -1) {
+            this.visible = true;
+        }
     }
 }
