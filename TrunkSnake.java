@@ -19,27 +19,7 @@ public class TrunkSnake extends Snake {
     public TrunkSnake(IGame game, int windowWidth) {
         //call super constructor
         super(game, windowWidth);
-        
-        //recover the speed (if -1 - no snake)
-        this.velocity = Stages.SNAKE_SPEED[Stages.CURRENT_STAGE[0]][1];
-
-        //then recover position
-        if (this.velocity > -1) {
-            //pixels to center in the trunk
-            byte offsetY = 10; 
-
-            //if velocity != -1, this parameter must exist (otherwise, it's a definition error)
-            this.positionX      = Stages.TRUNKS[Stages.CURRENT_STAGE[0]][2][3][0];
-            this.positionY      = Lanes.riverLanes[2] + offsetY;
-            this.calcPosition   = positionX;
-            this.direction      = RIGHT;
-            this.visible        = true;
-            this.enabled        = true;
-        } else {
-            this.visible        = false;
-            this.positionX      = -1_000;
-            this.enabled        = false;
-        }
+        this.nextStage();
     }
 
     @Override
@@ -56,6 +36,32 @@ public class TrunkSnake extends Snake {
             //calc step times direction
             this.calcPosition += (((double)velocity / (double)(1_000_000D / (double)frametime) * this.direction) + (this.additionalStep));
             this.positionX = (short)(this.calcPosition/1000);
+        }
+    }
+
+    /**
+     * Set the stage
+     */
+    public void nextStage() {
+        //recover the speed (if -1 - no snake)
+        this.velocity = Stages.SNAKE_SPEED[Stages.CURRENT_STAGE[0]][1];
+
+        //then recover position
+        if (this.velocity > -1) {
+            //pixels to center in the trunk
+            final byte offsetY = 10; 
+
+            //if velocity != -1, this parameter must exist (otherwise, it's a definition error)
+            this.positionX      = Stages.TRUNKS[Stages.CURRENT_STAGE[0]][2][3][0];
+            this.positionY      = Lanes.riverLanes[2] + offsetY;
+            this.calcPosition   = positionX;
+            this.direction      = RIGHT;
+            this.visible        = true;
+            this.enabled        = true;
+        } else {
+            this.visible        = false;
+            this.positionX      = -1_000;
+            this.enabled        = false;
         }
     }
 
