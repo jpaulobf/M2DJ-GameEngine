@@ -7,6 +7,11 @@ import java.awt.Graphics2D;
  */
 public abstract class SpriteCollection implements Directions {
 
+    /** 
+     * Set to the next stage
+     */
+    public abstract void nextStage();
+
     /**
      * Method to test colision of an sprite with the entire collection
      * @param sprite
