@@ -1,4 +1,3 @@
-import java.awt.Graphics2D;
 import interfaces.SpriteCollection;
 import interfaces.Stages;
 import java.awt.image.BufferedImage;
@@ -60,7 +59,7 @@ public class Mosquito extends SpriteImpl {
                 this.isVisible = true;
 
                 //duration
-                if (this.framecounter >= (Stages.MOSQUITO_CONFIG[Stages.CURRENT_STAGE][1] * 1_000_000_000L)) {
+                if (this.framecounter >= (Stages.MOSQUITO_CONFIG[Stages.CURRENT_STAGE[0]][1] * 1_000_000_000L)) {
                     this.setInvisible();
                     this.finished = true;
                 }
@@ -73,10 +72,9 @@ public class Mosquito extends SpriteImpl {
     @Override
     public synchronized void draw(long frametime) {
         if (this.isVisible) {
-            Graphics2D g2d = this.spriteColRef.getG2D();
-            g2d.drawImage(this.mosquitoSprite, (int)this.positionX, (int)this.positionY + this.scenarioOffsetY, (int)(this.positionX + this.width), (int)(this.positionY + this.height + this.scenarioOffsetY), //dest w1, h1, w2, h2
-                                                0, 0, this.width, this.height, //source w1, h1, w2, h2
-                                                null);
+            this.spriteColRef.getG2D().drawImage(this.mosquitoSprite, (int)this.positionX, (int)this.positionY + this.scenarioOffsetY, (int)(this.positionX + this.width), (int)(this.positionY + this.height + this.scenarioOffsetY), //dest w1, h1, w2, h2
+                                                                      0, 0, this.width, this.height, //source w1, h1, w2, h2
+                                                                      null);
         }
     }
 
@@ -110,6 +108,7 @@ public class Mosquito extends SpriteImpl {
      * Reset the mosquito
      */
     public void reset() {
+        this.finished = true;
         this.setInvisible();
     }
 }
