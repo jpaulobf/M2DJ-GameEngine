@@ -113,16 +113,16 @@ public interface Stages extends Directions {
     public static final int [][] S9_TRUNKS_POSITION_X     = {{200_000, 800_000}, {-100_000, 500_000}, {0_000, 700_000}};
     public static final int [][] S10_TRUNKS_POSITION_X    = {{200_000, 800_000}, {-100_000, 500_000}, {0_000, 700_000}};
     
-    public static final short [][] S1_TRUNKS_VELOCITIES   = {{70}, {140}, {100}};
-    public static final short [][] S2_TRUNKS_VELOCITIES   = {{90}, {180}, {120}};
-    public static final short [][] S3_TRUNKS_VELOCITIES   = {{120}, {100}, {150}};
-    public static final short [][] S4_TRUNKS_VELOCITIES   = {{140}, {120}, {180}};
-    public static final short [][] S5_TRUNKS_VELOCITIES   = {{160}, {120}, {180}};
-    public static final short [][] S6_TRUNKS_VELOCITIES   = {{170}, {120}, {190}};
-    public static final short [][] S7_TRUNKS_VELOCITIES   = {{180}, {120}, {190}};
-    public static final short [][] S8_TRUNKS_VELOCITIES   = {{180}, {120}, {200}};
-    public static final short [][] S9_TRUNKS_VELOCITIES   = {{180}, {100}, {210}};
-    public static final short [][] S10_TRUNKS_VELOCITIES   = {{180}, {100}, {210}};
+    public static final short [][] S1_TRUNKS_VELOCITIES   = {{50}, {140}, {100}};
+    public static final short [][] S2_TRUNKS_VELOCITIES   = {{70}, {180}, {120}};
+    public static final short [][] S3_TRUNKS_VELOCITIES   = {{70}, {180}, {150}};
+    public static final short [][] S4_TRUNKS_VELOCITIES   = {{80}, {200}, {180}};
+    public static final short [][] S5_TRUNKS_VELOCITIES   = {{110}, {210}, {180}};
+    public static final short [][] S6_TRUNKS_VELOCITIES   = {{130}, {220}, {190}};
+    public static final short [][] S7_TRUNKS_VELOCITIES   = {{140}, {230}, {190}};
+    public static final short [][] S8_TRUNKS_VELOCITIES   = {{150}, {240}, {200}};
+    public static final short [][] S9_TRUNKS_VELOCITIES   = {{160}, {250}, {210}};
+    public static final short [][] S10_TRUNKS_VELOCITIES   = {{180}, {260}, {210}};
 
     public static int [][][][] TRUNKS                     =  { 
                                                               {
@@ -177,21 +177,21 @@ public interface Stages extends Directions {
                                                               {
                                                                 { {RIGHT}, {S8_TRUNKS_VELOCITIES[2][0]}, {1, 3},    { S8_TRUNKS_POSITION_X[2][0], S8_TRUNKS_POSITION_X[2][1] }},
                                                                 {},
-                                                                { {RIGHT}, {S8_TRUNKS_VELOCITIES[1][0]}, {2, 2},    { S8_TRUNKS_POSITION_X[1][0], S8_TRUNKS_POSITION_X[1][1] }}, 
-                                                                { {RIGHT}, {S8_TRUNKS_VELOCITIES[0][0]}, {0, 0},    { S8_TRUNKS_POSITION_X[0][0], S8_TRUNKS_POSITION_X[0][1] }},
+                                                                { {RIGHT}, {S8_TRUNKS_VELOCITIES[1][0]}, {1, 1},    { S8_TRUNKS_POSITION_X[1][0], S8_TRUNKS_POSITION_X[1][1] }}, 
+                                                                { {RIGHT}, {S8_TRUNKS_VELOCITIES[0][0]}, {2, 2},    { S8_TRUNKS_POSITION_X[0][0], S8_TRUNKS_POSITION_X[0][1] }},
                                                                 {}
                                                               }, //stage 8
                                                               {
                                                                 { {RIGHT}, {S9_TRUNKS_VELOCITIES[2][0]}, {1, 3},    { S9_TRUNKS_POSITION_X[2][0], S9_TRUNKS_POSITION_X[2][1] }},
                                                                 {},
-                                                                { {RIGHT}, {S9_TRUNKS_VELOCITIES[1][0]}, {2, 2},    { S9_TRUNKS_POSITION_X[1][0], S9_TRUNKS_POSITION_X[1][1] }}, 
-                                                                { {RIGHT}, {S9_TRUNKS_VELOCITIES[0][0]}, {0, 0},    { S9_TRUNKS_POSITION_X[0][0], S9_TRUNKS_POSITION_X[0][1] }},
+                                                                { {RIGHT}, {S9_TRUNKS_VELOCITIES[1][0]}, {1, 1},    { S9_TRUNKS_POSITION_X[1][0], S9_TRUNKS_POSITION_X[1][1] }}, 
+                                                                { {RIGHT}, {S9_TRUNKS_VELOCITIES[0][0]}, {2, 2},    { S9_TRUNKS_POSITION_X[0][0], S9_TRUNKS_POSITION_X[0][1] }},
                                                                 {}
                                                               }, //stage 9
                                                               {
                                                                 { {RIGHT}, {S10_TRUNKS_VELOCITIES[2][0]}, {3, 3},    { S10_TRUNKS_POSITION_X[2][0], S10_TRUNKS_POSITION_X[2][1] }},
                                                                 {},
-                                                                { {RIGHT}, {S10_TRUNKS_VELOCITIES[1][0]}, {2, 2},    { S10_TRUNKS_POSITION_X[1][0], S10_TRUNKS_POSITION_X[1][1] }}, 
+                                                                { {RIGHT}, {S10_TRUNKS_VELOCITIES[1][0]}, {1, 1},    { S10_TRUNKS_POSITION_X[1][0], S10_TRUNKS_POSITION_X[1][1] }}, 
                                                                 { {RIGHT}, {S10_TRUNKS_VELOCITIES[0][0]}, {0, 0},    { S10_TRUNKS_POSITION_X[0][0], S10_TRUNKS_POSITION_X[0][1] }},
                                                                 {}
                                                               } //stage 10
