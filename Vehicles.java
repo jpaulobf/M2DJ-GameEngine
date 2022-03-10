@@ -15,13 +15,10 @@ public class Vehicles extends SpriteCollection {
     private Scenario scenarioRef        = null;
 
     //define the vehicules array
-    private Vehicle [] vehicles         = new Vehicle[Stages.CURRENT_STAGE_CARS[Stages.CURRENT_STAGE]];
-    private volatile boolean stopped    = false; 
-
-    public Scenario getScenarioRef() {
-        return (this.scenarioRef);
-    }
-
+    private Vehicle [] vehicles         = null;
+    private volatile boolean stopped    = false;
+    private volatile boolean reseting   = false;
+    
     /**
      * Vehicles constructor
      * @param game
@@ -32,17 +29,7 @@ public class Vehicles extends SpriteCollection {
         this.scenarioRef    = scenarioRef;
         this.windowWidth    = windowWidth;
         this.windowHeight   = windowHeight;
-        
-        for (byte i = 0; i < vehicles.length; i++) {
-            vehicles[i] = new Vehicle(this);
-            vehicles[i].setScenarioOffsetY(this.scenarioRef.getScoreHeight());
-        }
-
-        for (int i = 0, index = 0; i < Stages.CARS[Stages.CURRENT_STAGE].length; i++) {
-            for (int j = 0; j < Stages.CARS[Stages.CURRENT_STAGE][i][3].length; j++) {
-                vehicles[index++].ogPositionX = Stages.CARS[Stages.CURRENT_STAGE][i][3][j];
-            }
-        }
+        this.nextStage();
     }
         
     /**
@@ -58,17 +45,17 @@ public class Vehicles extends SpriteCollection {
         byte index      = 0;
 
         if (!this.stopped) {
-            for (int i = 0; i < Stages.CARS[Stages.CURRENT_STAGE].length; i++) {
+            for (int i = 0; i < Stages.CARS[Stages.CURRENT_STAGE[0]].length; i++) {
 
-                direction   = (byte)Stages.CARS[Stages.CURRENT_STAGE][i][0][0];
-                velocity    = (short)Stages.CARS[Stages.CURRENT_STAGE][i][1][0];
+                direction   = (byte)Stages.CARS[Stages.CURRENT_STAGE[0]][i][0][0];
+                velocity    = (short)Stages.CARS[Stages.CURRENT_STAGE[0]][i][1][0];
 
-                for (int j = 0; j < Stages.CARS[Stages.CURRENT_STAGE][i][3].length; j++) {
+                for (int j = 0; j < Stages.CARS[Stages.CURRENT_STAGE[0]][i][3].length; j++) {
 
-                    position             = Stages.CARS[Stages.CURRENT_STAGE][i][3][j];
+                    position             = Stages.CARS[Stages.CURRENT_STAGE[0]][i][3][j];
                     step                 = (double)velocity / (double)(1_000_000D / (double)frametime);
                     calcPos              = position + (step * direction);
-                    vehicles[index].type = (byte)Stages.CARS[Stages.CURRENT_STAGE][i][2][0];
+                    vehicles[index].type = (byte)Stages.CARS[Stages.CURRENT_STAGE[0]][i][2][0];
 
                     if (direction == RIGHT) {
                         if (calcPos > (this.windowWidth * 1000) + Vehicle.largerVehicule) {
@@ -80,7 +67,7 @@ public class Vehicles extends SpriteCollection {
                         }
                     }
                     //atualiza a posição do objeto na array
-                    Stages.CARS[Stages.CURRENT_STAGE][i][3][j] = (int)Math.round(calcPos);
+                    Stages.CARS[Stages.CURRENT_STAGE[0]][i][3][j] = (int)Math.round(calcPos);
 
                     //recupera e atualiza cada veículo
                     vehicles[index].direction    = direction;
@@ -100,16 +87,50 @@ public class Vehicles extends SpriteCollection {
     @Override
     public void draw(long frametime) {
         int index = 0;
-        for (byte i = 0; i < Stages.CARS[Stages.CURRENT_STAGE].length; i++) {
-            for (byte j = 0; j < Stages.CARS[Stages.CURRENT_STAGE][i][3].length; j++, index++) {
+        for (byte i = 0; i < Stages.CARS[Stages.CURRENT_STAGE[0]].length; i++) {
+            for (byte j = 0; j < Stages.CARS[Stages.CURRENT_STAGE[0]][i][3].length; j++, index++) {
                 this.vehicles[index].draw(frametime);
             }
         }
     }
 
+    /**
+     * Set the stage
+     */
     @Override
-    protected Sprite[] getSpriteCollection() {
-        return (this.vehicles);
+    public synchronized void nextStage() {
+        
+        //stop update
+        this.stopped = true;
+        this.reseting = true;
+
+        //clean the current vehicles array
+        for (int i = 0; this.vehicles != null && i < this.vehicles.length; i++) {
+            this.vehicles[i] = null;
+        }
+
+        //set the array to null
+        this.vehicles = null;
+        
+        //create new array with the vehicles of this stage
+        this.vehicles = new Vehicle[Stages.CURRENT_STAGE_CARS[Stages.CURRENT_STAGE[0]]];
+
+        //initialize the vehicles
+        for (byte i = 0; i < vehicles.length; i++) {
+            vehicles[i] = new Vehicle(this);
+            vehicles[i].setScenarioOffsetY(this.scenarioRef.getScoreHeight());
+        }
+
+        //save og pos for reset
+        for (int i = 0, index = 0; i < Stages.CARS[Stages.CURRENT_STAGE[0]].length; i++) {
+            for (int j = 0; j < Stages.CARS[Stages.CURRENT_STAGE[0]][i][3].length; j++) {
+                vehicles[index++].ogPositionX = Stages.CARS[Stages.CURRENT_STAGE[0]][i][3][j];
+            }
+        }
+
+        //start the update
+        this.stopped = false;
+        this.reseting = false;
     }
 
     /**
@@ -123,15 +144,16 @@ public class Vehicles extends SpriteCollection {
      * Reset the current Vehicles state
      */
     public void reset() {
-        for (int i = 0, index = 0; i < Stages.CARS[Stages.CURRENT_STAGE].length; i++) {
-            for (int j = 0; j < Stages.CARS[Stages.CURRENT_STAGE][i][3].length; j++) {
-                Stages.CARS[Stages.CURRENT_STAGE][i][3][j] = vehicles[index++].ogPositionX;
+        for (int i = 0, index = 0; i < Stages.CARS[Stages.CURRENT_STAGE[0]].length; i++) {
+            for (int j = 0; j < Stages.CARS[Stages.CURRENT_STAGE[0]][i][3].length; j++) {
+                Stages.CARS[Stages.CURRENT_STAGE[0]][i][3][j] = vehicles[index++].ogPositionX;
             }
         }
     }
 
+    //getters
     @Override
-    public Graphics2D getG2D() {
-        return (this.scenarioRef.getGameRef().getG2D());
-    }
+    public Graphics2D getG2D()                  {   return (this.scenarioRef.getGameRef().getG2D());    }
+    protected Sprite[] getSpriteCollection()    {  return (this.vehicles);                              }
+    public Scenario getScenarioRef()            {  return (this.scenarioRef);                           }
 }
