@@ -10,9 +10,9 @@ import interfaces.Lanes;
 public class Turtles extends SpriteCollection {
 
     //define the turtles array
-    private Turtle[] turtles            = new Turtle[Stages.CURRENT_STAGE_TURTLES[Stages.CURRENT_STAGE]];
-    private Turtle[] offsetTurtles      = new Turtle[Stages.TURTLES.length];
-    private double[] offsetPosX         = new double[offsetTurtles.length];
+    private Turtle[] turtles            = null;
+    private Turtle[] offsetTurtles      = null;
+    private double[] offsetPosX         = null;
     private final short far             = -10_000;
     private int windowWidth1000         =  0;
 
@@ -21,6 +21,7 @@ public class Turtles extends SpriteCollection {
     protected int windowHeight          = 0;
     private volatile boolean stopped    = false;
     private Scenario scenarioRef        = null;
+    private volatile boolean reseting   = false;
 
     /**
      * Constructor
@@ -34,51 +35,35 @@ public class Turtles extends SpriteCollection {
         this.windowHeight       = windowHeight;
         this.windowWidth1000    = this.windowWidth * 1_000;
 
-        //instantiate the turtles objects and the offset turtles
-        for (byte i = 0; i < turtles.length; i++) {
-            turtles[i] = new Turtle(this);
-            turtles[i].setScenarioOffsetY(this.scenarioRef.getScoreHeight());
-        } 
-        for (byte i = 0; i < offsetTurtles.length; i++) {
-            offsetTurtles[i]             = new Turtle(this);
-            offsetTurtles[i].positionX   = far;
-            offsetTurtles[i].setScenarioOffsetY(this.scenarioRef.getScoreHeight());
-        }
-
-        for (int i = 0, index = 0; i < Stages.TURTLES[Stages.CURRENT_STAGE].length; i++) {
-            if (Stages.TURTLES[Stages.CURRENT_STAGE][i].length != 0) {
-                for (int j = 0; j < Stages.TURTLES[Stages.CURRENT_STAGE][i][3].length; j++) {
-                    this.turtles[index++].ogPositionX  = Stages.TURTLES[Stages.CURRENT_STAGE][i][4][j];
-                }
-            }
-        }
+        //set the stage
+        this.nextStage();
     }
 
     @Override
-    public void update(long frametime) {
+    public synchronized void update(long frametime) {
 
         byte index              = 0;
         byte indexLines         = 0;
         byte positionYOffset    = 14;
 
         if (!this.stopped) {
-            for (int i = 0; i < Stages.TURTLES[Stages.CURRENT_STAGE].length; i++) {
+            for (int i = 0; i < Stages.TURTLES[Stages.CURRENT_STAGE[0]].length; i++) {
 
-                if (Stages.TURTLES[Stages.CURRENT_STAGE][i].length != 0) {
+                if (Stages.TURTLES[Stages.CURRENT_STAGE[0]][i].length != 0) {
 
-                    byte direction      = (byte)Stages.TURTLES[Stages.CURRENT_STAGE][i][0][0];
-                    short velocity      = (short)Stages.TURTLES[Stages.CURRENT_STAGE][i][1][0];
+                    byte direction      = (byte)Stages.TURTLES[Stages.CURRENT_STAGE[0]][i][0][0];
+                    short velocity      = (short)Stages.TURTLES[Stages.CURRENT_STAGE[0]][i][1][0];
 
-                    for (int j = 0; j < Stages.TURTLES[Stages.CURRENT_STAGE][i][3].length; j++, index++) {
+                    for (int j = 0; j < Stages.TURTLES[Stages.CURRENT_STAGE[0]][i][3].length; j++, index++) {
 
                         //read & set the turtles parameters
                         double step                     = (double)velocity / (double)(1_000_000D / (double)frametime);
                         double stepDir                  = step * direction;
-                        double position                 = Stages.TURTLES[Stages.CURRENT_STAGE][i][4][j];
+                        double position                 = Stages.TURTLES[Stages.CURRENT_STAGE[0]][i][4][j];
                         double calcPos                  = position + stepDir;
-                        byte dive                       = (byte)Stages.TURTLES[Stages.CURRENT_STAGE][i][3][j];
+                        byte dive                       = (byte)Stages.TURTLES[Stages.CURRENT_STAGE[0]][i][3][j];
                         turtles[index].calculatedStep   = stepDir;
-                        turtles[index].type             = (byte)Stages.TURTLES[Stages.CURRENT_STAGE][i][2][0];
+                        turtles[index].type             = (byte)Stages.TURTLES[Stages.CURRENT_STAGE[0]][i][2][0];
                         turtles[index].velocity         = velocity;
 
                         //update the turtles
@@ -115,7 +100,7 @@ public class Turtles extends SpriteCollection {
                         }
 
                         //store the new X position in the array
-                        Stages.TURTLES[Stages.CURRENT_STAGE][i][4][j]      = (int)Math.round(calcPos);
+                        Stages.TURTLES[Stages.CURRENT_STAGE[0]][i][4][j]      = (int)Math.round(calcPos);
 
                         //set the turtles parameters
                         this.turtles[index].direction    = direction;
@@ -124,7 +109,7 @@ public class Turtles extends SpriteCollection {
                         this.turtles[index].positionY    = (short)Lanes.riverLanes[i] + positionYOffset; //incrementa o index ao final
                     }
 
-                    if (Stages.TURTLES[Stages.CURRENT_STAGE][i].length > 0) {
+                    if (Stages.TURTLES[Stages.CURRENT_STAGE[0]][i].length > 0) {
                         indexLines++;
                     }
                 }
@@ -133,11 +118,11 @@ public class Turtles extends SpriteCollection {
     }
 
     @Override
-    public void draw(long frametime) {
+    public synchronized void draw(long frametime) {
         int index = 0;
         //draw the turtles
-        for (byte i = 0; i < Stages.TURTLES[Stages.CURRENT_STAGE].length; i++) {
-            for (byte j = 0; Stages.TURTLES[Stages.CURRENT_STAGE][i].length != 0 && j < Stages.TURTLES[Stages.CURRENT_STAGE][i][3].length; j++, index++) {
+        for (byte i = 0; turtles != null && i < Stages.TURTLES[Stages.CURRENT_STAGE[0]].length; i++) {
+            for (byte j = 0; Stages.TURTLES[Stages.CURRENT_STAGE[0]][i].length != 0 && j < Stages.TURTLES[Stages.CURRENT_STAGE[0]][i][3].length; j++, index++) {
                 turtles[index].draw(frametime);
             }
         }
@@ -147,6 +132,55 @@ public class Turtles extends SpriteCollection {
                 offsetTurtles[j].draw(frametime);
             }
         }
+    }
+
+    /**
+     * Set the stage
+     */
+    @Override
+    public void nextStage() {
+        //stop update
+        this.stopped = true;
+        this.reseting = true;
+        
+        //clean the current turtles array
+        for (int i = 0; this.turtles != null && i < this.turtles.length; i++) {
+            this.turtles[i] = null;
+        } for (int i = 0; this.offsetTurtles != null && i < this.offsetTurtles.length; i++) {
+            this.offsetTurtles[i] = null;
+        }
+
+        //set the objects to null
+        this.turtles            = null;
+        this.offsetTurtles      = null;
+
+        //create new array with the turtles of this stage
+        this.turtles            = new Turtle[Stages.CURRENT_STAGE_TURTLES[Stages.CURRENT_STAGE[0]]];
+        this.offsetTurtles      = new Turtle[Stages.TURTLES.length];
+        this.offsetPosX         = new double[offsetTurtles.length];
+
+        //instantiate the turtles objects and the offset turtles
+        for (byte i = 0; i < turtles.length; i++) {
+            turtles[i] = new Turtle(this);
+            turtles[i].setScenarioOffsetY(this.scenarioRef.getScoreHeight());
+        } for (byte i = 0; i < offsetTurtles.length; i++) {
+            offsetTurtles[i]             = new Turtle(this);
+            offsetTurtles[i].positionX   = far;
+            offsetTurtles[i].setScenarioOffsetY(this.scenarioRef.getScoreHeight());
+        }
+
+        //save og pos for reset
+        for (int i = 0, index = 0; i < Stages.TURTLES[Stages.CURRENT_STAGE[0]].length; i++) {
+            if (Stages.TURTLES[Stages.CURRENT_STAGE[0]][i].length != 0) {
+                for (int j = 0; j < Stages.TURTLES[Stages.CURRENT_STAGE[0]][i][3].length; j++) {
+                    this.turtles[index++].ogPositionX  = Stages.TURTLES[Stages.CURRENT_STAGE[0]][i][4][j];
+                }
+            }
+        }
+        
+        //start the update
+        this.stopped = false;
+        this.reseting = false;
     }
 
     @Override
@@ -166,10 +200,10 @@ public class Turtles extends SpriteCollection {
      * reset method
      */
     public void reset() {
-        for (int i = 0, index = 0; i < Stages.TURTLES[Stages.CURRENT_STAGE].length; i++) {
-            if (Stages.TURTLES[Stages.CURRENT_STAGE][i].length != 0) {
-                for (int j = 0; j < Stages.TURTLES[Stages.CURRENT_STAGE][i][3].length; j++) {
-                    Stages.TURTLES[Stages.CURRENT_STAGE][i][4][j] = this.turtles[index].ogPositionX;
+        for (int i = 0, index = 0; i < Stages.TURTLES[Stages.CURRENT_STAGE[0]].length; i++) {
+            if (Stages.TURTLES[Stages.CURRENT_STAGE[0]][i].length != 0) {
+                for (int j = 0; j < Stages.TURTLES[Stages.CURRENT_STAGE[0]][i][3].length; j++) {
+                    Stages.TURTLES[Stages.CURRENT_STAGE[0]][i][4][j] = this.turtles[index].ogPositionX;
                     this.turtles[index++].resetAnimation();
                 }
             }
@@ -180,8 +214,7 @@ public class Turtles extends SpriteCollection {
         }
     }
 
+    //getters
     @Override
-    public Graphics2D getG2D() {
-        return (this.scenarioRef.getGameRef().getG2D());
-    }
+    public Graphics2D getG2D() {return (this.scenarioRef.getGameRef().getG2D());}
 }
