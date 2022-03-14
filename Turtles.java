@@ -21,7 +21,6 @@ public class Turtles extends SpriteCollection {
     protected int windowHeight          = 0;
     private volatile boolean stopped    = false;
     private Scenario scenarioRef        = null;
-    private volatile boolean reseting   = false;
 
     /**
      * Constructor
@@ -141,7 +140,6 @@ public class Turtles extends SpriteCollection {
     public void nextStage() {
         //stop update
         this.stopped = true;
-        this.reseting = true;
         
         //clean the current turtles array
         for (int i = 0; this.turtles != null && i < this.turtles.length; i++) {
@@ -180,7 +178,6 @@ public class Turtles extends SpriteCollection {
         
         //start the update
         this.stopped = false;
-        this.reseting = false;
     }
 
     @Override
