@@ -23,7 +23,6 @@ public class Trunks extends SpriteCollection {
     private Scenario scenarioRef        = null;
     private TrunkSnake trunkSnake       = null;
     private boolean hasTrunkInThirdLine = false;
-    private volatile boolean reseting   = false;
 
     /**
      * Trunks constructor
@@ -173,7 +172,6 @@ public class Trunks extends SpriteCollection {
     public void nextStage() {
         //stop update
         this.stopped = true;
-        this.reseting = true;
 
         //clean the current trunks array
         for (int i = 0; this.trunks != null && i < this.trunks.length; i++) {
@@ -215,7 +213,6 @@ public class Trunks extends SpriteCollection {
 
         //start the update
         this.stopped = false;
-        this.reseting = false;
     }
 
     @Override
