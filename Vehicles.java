@@ -17,7 +17,6 @@ public class Vehicles extends SpriteCollection {
     //define the vehicules array
     private Vehicle [] vehicles         = null;
     private volatile boolean stopped    = false;
-    private volatile boolean reseting   = false;
     
     /**
      * Vehicles constructor
@@ -102,7 +101,6 @@ public class Vehicles extends SpriteCollection {
         
         //stop update
         this.stopped = true;
-        this.reseting = true;
 
         //clean the current vehicles array
         for (int i = 0; this.vehicles != null && i < this.vehicles.length; i++) {
@@ -130,7 +128,6 @@ public class Vehicles extends SpriteCollection {
 
         //start the update
         this.stopped = false;
-        this.reseting = false;
     }
 
     /**
