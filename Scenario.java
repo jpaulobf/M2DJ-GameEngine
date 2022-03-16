@@ -60,11 +60,11 @@ public class Scenario {
         this.turtles.nextStage();
         this.dockers.nextStage();
 
-        //enable elements drawing
-        this.toogleElements();
-
         //enable elements update
         this.toogleReseting();
+
+        //enable elements drawing
+        this.toogleElements();
     }
 
     /**
