@@ -53,6 +53,8 @@ public class Frog extends SpriteImpl {
     private volatile byte lastMovement      = UP;
     private volatile boolean stopped        = false;
     private volatile boolean moving         = false;
+    private volatile boolean clear          = false;
+    protected volatile long framecounter    = 0;
 
     /**
      * Frog constructor
@@ -456,6 +458,7 @@ public class Frog extends SpriteImpl {
                                 this.gameReference.tooglePause();
                                 this.gameReference.getMessages().toogleShowing();
                                 this.clearAudio.play();
+                                this.clear = true;
                             } else {
                                 this.gameReference.getTimer().reset();
                                 this.gameReference.getScore().addScore(Score.DOCKER);
@@ -509,6 +512,21 @@ public class Frog extends SpriteImpl {
             this.gameReference.getG2D().drawImage(this.animalTiles, dx1, dy1 + this.scenarioOffsetY, dx2, dy2 + this.scenarioOffsetY,                                                //dest w1, h1, w2, h2
                                                                     drawImgX, drawImgY, (drawImgX + drawImgW), (drawImgY + drawImgH),  //source w1, h1, w2, h2
                                                                     null);
+        }
+
+        if (this.clear) {
+            this.framecounter += frametime;
+            if (this.framecounter > 4_000_000_000L) {
+                this.clear          = false;
+                this.framecounter   = 0;
+                
+                //after n seconds
+                this.gameReference.nextStage();
+
+                //hide the message & unpause
+                this.gameReference.getMessages().toogleShowing();
+                this.tooglePause();
+            }
         }
     }
 
