@@ -169,7 +169,7 @@ public class Trunks extends SpriteCollection {
      * Set the stage
      */
     @Override
-    public void nextStage() {
+    public synchronized void nextStage() {
         //stop update
         this.stopped = true;
 
