@@ -34,7 +34,7 @@ public class Dockers extends SpriteCollection {
         //set the stage
         this.nextStage();
 
-        // this.dummy();
+         this.dummy();
     }
 
     @SuppressWarnings("unused")
@@ -113,7 +113,7 @@ public class Dockers extends SpriteCollection {
     }
 
     @Override
-    public void nextStage() {
+    public synchronized void nextStage() {
         //stop update
         this.stopped = true;
 
