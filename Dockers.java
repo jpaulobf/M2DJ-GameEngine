@@ -34,7 +34,7 @@ public class Dockers extends SpriteCollection {
         //set the stage
         this.nextStage();
 
-         this.dummy();
+        //this.dummy();
     }
 
     @SuppressWarnings("unused")
