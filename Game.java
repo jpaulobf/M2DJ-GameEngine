@@ -271,7 +271,8 @@ public class Game implements IGame {
     /** 
      * go to the next stage 
      */
-    public void nextStage() {
+    public synchronized void nextStage() {
+
         //disable elements update
         this.toogleReseting();
 
@@ -286,7 +287,6 @@ public class Game implements IGame {
 
         //enable elements update
         this.toogleReseting();
-
     }
 
     /**
