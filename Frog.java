@@ -525,7 +525,6 @@ public class Frog extends SpriteImpl {
 
                 //hide the message & unpause
                 this.gameReference.getMessages().toogleShowing();
-                this.tooglePause();
             }
         }
     }
