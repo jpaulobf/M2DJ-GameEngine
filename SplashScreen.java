@@ -230,7 +230,7 @@ public class SplashScreen extends JFrame implements Runnable {
         public void verifyTheConfigurationFile() {
             
             //Indica o local do arquivo de configuração
-            File configfile = new File("config.ini");
+            File configfile = new File("./files/config.ini");
             fileExists = configfile.exists();
 
             //Recupera a resolução padrão do monitor

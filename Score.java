@@ -123,7 +123,7 @@ public class Score {
         //2 - if file not exist, do nothing!
         //3 - else load current hiscore date (yyyy-mm-dd) & score
         //4 - set to the variables
-        File hiscorep = new File("hiscore.p");
+        File hiscorep = new File("./files/hiscore.p");
         if (hiscorep.exists()) {
             Scanner scanner = null;
             try {
