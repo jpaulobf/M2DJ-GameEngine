@@ -285,6 +285,14 @@ public class Game implements IGame {
         this.scenario.nextStage();
         this.sidewalkSnake.nextStage();
 
+        //unpause timer & frog
+        this.timer.tooglePause();
+        this.frog.tooglePause();
+        
+        //return to initial position & play
+        this.theme.stop();
+        this.toogleMuteTheme();
+
         //enable elements update
         this.toogleReseting();
     }
