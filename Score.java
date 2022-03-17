@@ -166,7 +166,7 @@ public class Score {
         this.dateHiscore = new Date();
         this.sHiscore = String.valueOf(this.hiscore);
         this.sDate = formatter.format(this.dateHiscore);
-        File hiscorep = new File("hiscore.p");
+        File hiscorep = new File("./files/hiscore.p");
 
         //if file exists, delete it
         if (hiscorep.exists()) {
