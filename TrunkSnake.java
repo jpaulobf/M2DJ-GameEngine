@@ -1,4 +1,4 @@
-import interfaces.IGame;
+import interfaces.GameInterface;
 import interfaces.Lanes;
 import interfaces.Stages;
 
@@ -16,7 +16,7 @@ public class TrunkSnake extends Snake {
     /**
      * Class constructor
      */
-    public TrunkSnake(IGame game, int windowWidth) {
+    public TrunkSnake(GameInterface game, int windowWidth) {
         //call super constructor
         super(game, windowWidth);
         this.nextStage();

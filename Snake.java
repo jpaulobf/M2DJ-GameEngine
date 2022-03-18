@@ -1,4 +1,4 @@
-import interfaces.IGame;
+import interfaces.GameInterface;
 import java.awt.image.BufferedImage;
 
 /**
@@ -8,7 +8,7 @@ public abstract class Snake extends SpriteImpl {
 
     protected volatile byte tileElements        = 0;
     protected volatile byte currentTyle         = 0;
-    protected IGame gRef                        = null;
+    protected GameInterface gRef                = null;
     private BufferedImage snakeTile             = null;
     protected volatile double positionXSource   = 0;
     protected volatile long framecounter        = 0;
@@ -22,7 +22,7 @@ public abstract class Snake extends SpriteImpl {
      * Class constructor
      * @param game
      */
-    public Snake(IGame game, int windowWidth) {
+    public Snake(GameInterface game, int windowWidth) {
         this.height             = 30;
         this.width              = 81;
         this.gRef               = game;

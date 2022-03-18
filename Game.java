@@ -1,7 +1,7 @@
 import util.Audio;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import interfaces.IGame;
+import interfaces.GameInterface;
 import interfaces.Stages;
 
 import java.awt.image.VolatileImage;
@@ -12,7 +12,7 @@ import java.awt.RenderingHints;
 /**
  * Class responsable for the game
  */
-public class Game implements IGame {
+public class Game implements GameInterface {
 
     //the game statemachine goes here
     private StateMachine gameState          = null;

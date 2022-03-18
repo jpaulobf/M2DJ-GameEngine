@@ -6,7 +6,7 @@ import java.awt.image.VolatileImage;
 /**
  * All games need to implement the IGame interface
  */
-public interface IGame {
+public interface GameInterface {
     /**
      * Game update
      * @param frametime

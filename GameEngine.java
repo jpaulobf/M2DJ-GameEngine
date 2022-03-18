@@ -11,7 +11,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferStrategy;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
-import interfaces.IGame;
+import interfaces.GameInterface;
 import util.JoystickController;
 
 /*
@@ -21,7 +21,7 @@ import util.JoystickController;
     Date:       Octuber 2021
     WTCD:       This class, provides a stage for the game.
 */
-public class Frogger implements Runnable {
+public class GameEngine implements Runnable {
 
     /**
      * Game Canvas
@@ -45,7 +45,7 @@ public class Frogger implements Runnable {
         
         //the first 'canvas' & the backbuffer (for simple doublebuffer strategy)
         private JPanel canvas                       = null;
-        private IGame game                          = null;
+        private GameInterface game                  = null;
 
         //some support and the graphical device itself
         private GraphicsEnvironment ge              = null;
@@ -501,7 +501,7 @@ public class Frogger implements Runnable {
      * Thread Constructor
      * @param targetFPS
      */
-    public Frogger(int targetFPS) {
+    public GameEngine(int targetFPS) {
         this.targetFPS  = targetFPS;
     }
 

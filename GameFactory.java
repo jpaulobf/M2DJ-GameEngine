@@ -1,10 +1,10 @@
-import interfaces.IGame;
+import interfaces.GameInterface;
 
 /**
  * Game factory
  */
 public class GameFactory {
-    public static IGame getGameInstance() {
+    public static GameInterface getGameInstance() {
         return (new Game());
     }
 }

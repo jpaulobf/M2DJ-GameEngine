@@ -1,4 +1,4 @@
-import interfaces.IGame;
+import interfaces.GameInterface;
 import interfaces.Lanes;
 import interfaces.Stages;
 
@@ -12,7 +12,7 @@ public class SidewalkSnake extends Snake {
     /**
      * Class constructor
      */
-    public SidewalkSnake(IGame game, int windowWidth) {
+    public SidewalkSnake(GameInterface game, int windowWidth) {
         super(game, windowWidth);
         this.nextStage();
     }
