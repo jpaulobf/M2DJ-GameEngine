@@ -516,7 +516,7 @@ public class Frog extends SpriteImpl {
 
         if (this.clear) {
             this.framecounter += frametime;
-            if (this.framecounter > 4_000_000_000L) {
+            if (this.framecounter > 4_500_000_000L) {
                 this.clear          = false;
                 this.framecounter   = 0;
                 
