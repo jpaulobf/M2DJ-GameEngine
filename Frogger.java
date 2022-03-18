@@ -1,6 +1,7 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import interfaces.CanvasEngine;
+import interfaces.ControllerListener;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -11,6 +12,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
 import interfaces.IGame;
+import util.JoystickController;
 
 /*
     Project:    Modern 2D Java Game Engine
@@ -24,7 +26,7 @@ public class Frogger implements Runnable {
     /**
      * Game Canvas
      */
-    private class Canvas extends JFrame implements CanvasEngine {
+    private class Canvas extends JFrame implements CanvasEngine, ControllerListener {
 
         private static final long serialVersionUID  = 1L;
 
@@ -33,8 +35,6 @@ public class Frogger implements Runnable {
         private int positionY                       = 0;
 
         //width and height of the window
-        //private int windowWidth                   = 1079;
-        //private int windowHeight                  = 700;
         private int windowWidth                     = 1344;
         private int windowHeight                    = 912;
         private int fullScreenWidth                 = 0;
@@ -53,6 +53,9 @@ public class Frogger implements Runnable {
         private BufferStrategy bufferStrategy       = null;
         private volatile Graphics2D g2d             = null;
         private Dimension size                      = null;
+
+        //add support to joystick
+        private JoystickController controller       = null;
 
         //show or hide the game FPS
         private boolean showFPS                     = true;
@@ -140,6 +143,13 @@ public class Frogger implements Runnable {
 
             //recover the pointer to the buffer graphics2d
             this.g2d  = this.game.getG2D();
+
+            //thread para o controle (quando presente)
+            this.controller = new JoystickController(this);
+            Thread thread   = new Thread(this.controller, "controller");
+            if (thread != null && controller.hasAnyConnectedController()) {
+                thread.start();
+            }
 
             //KeyListener
             this.addKeyListener(new KeyAdapter() {
@@ -319,6 +329,23 @@ public class Frogger implements Runnable {
                 Thread.sleep(500);
             } catch(InterruptedException ex){}
             this.bufferStrategy = super.getBufferStrategy();
+        }
+
+        @Override
+        public void notify(boolean U, boolean D, boolean L, boolean R) {
+            if (U) {
+                this.game.keyPressed(38);
+            } else if (D) {
+                this.game.keyPressed(40);
+            } else if (L) {
+                this.game.keyPressed(37);
+            } else if (R) {
+                this.game.keyPressed(39);
+            }
+
+            if (!U && !D && !L && !R) {
+                this.game.keyReleased(0);
+            }
         }
     }
 
