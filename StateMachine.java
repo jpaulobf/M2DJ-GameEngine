@@ -16,6 +16,10 @@ public class StateMachine {
     protected int currentState          = STARTING;
     protected Game referencetToGame     = null;
 
+    /**
+     * Constructor
+     * @param game
+     */
     public StateMachine(Game game) {
         this.currentState = STAGING;
         this.referencetToGame = game;
