@@ -1,3 +1,5 @@
+package game;
+
 import interfaces.Sprite;
 import interfaces.SpriteCollection;
 import java.awt.Graphics2D;

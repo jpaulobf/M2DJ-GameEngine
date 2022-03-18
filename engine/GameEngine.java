@@ -1,3 +1,5 @@
+package engine;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import interfaces.CanvasEngine;
@@ -352,7 +354,7 @@ public class GameEngine implements Runnable {
     /**
      * Class of GameEngine
      */
-    private class GameEngine implements Runnable {
+    private class Engine implements Runnable {
 
         private boolean isEngineRunning     = true;
         private long FPS240                 = (long)(1_000_000_000 / 240);
@@ -368,7 +370,7 @@ public class GameEngine implements Runnable {
             WTMD: constructor
                     receives the target FPS (0, 30, 60, 120, 240) and starts the engine
         */
-        public GameEngine(int targetFPS, CanvasEngine game) {
+        public Engine(int targetFPS, CanvasEngine game) {
     
             this.UNLIMITED_FPS = false;
             switch(targetFPS) {
@@ -510,6 +512,6 @@ public class GameEngine implements Runnable {
      */
     @Override
     public void run() {
-        new GameEngine(this.targetFPS, new Canvas()).run();
+        new Engine(this.targetFPS, new Canvas()).run();
     }
 }

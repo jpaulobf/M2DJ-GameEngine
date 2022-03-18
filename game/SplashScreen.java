@@ -1,5 +1,8 @@
+package game;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import engine.GameEngine;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;

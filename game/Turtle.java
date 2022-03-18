@@ -1,7 +1,11 @@
+package game;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+
 import interfaces.Sprite;
 import interfaces.SpriteCollection;
+
 import java.awt.GraphicsEnvironment;
 import java.awt.Transparency;
 

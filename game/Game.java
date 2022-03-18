@@ -1,9 +1,10 @@
+package game;
+
 import util.Audio;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import interfaces.GameInterface;
 import interfaces.Stages;
-
 import java.awt.image.VolatileImage;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;

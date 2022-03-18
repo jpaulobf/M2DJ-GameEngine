@@ -1,3 +1,5 @@
+package game;
+
 import interfaces.Sprite;
 import interfaces.SpriteCollection;
 import interfaces.Stages;

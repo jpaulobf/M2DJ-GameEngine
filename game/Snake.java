@@ -1,4 +1,7 @@
+package game;
+
 import interfaces.GameInterface;
+
 import java.awt.image.BufferedImage;
 
 /**

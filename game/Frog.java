@@ -1,7 +1,11 @@
+package game;
+
 import util.Audio;
+
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
+
 import interfaces.Lanes;
 
 /*

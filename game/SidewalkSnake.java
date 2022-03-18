@@ -1,3 +1,5 @@
+package game;
+
 import interfaces.GameInterface;
 import interfaces.Lanes;
 import interfaces.Stages;

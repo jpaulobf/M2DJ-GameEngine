@@ -1,3 +1,6 @@
+package engine;
+
+import game.Game;
 import interfaces.GameInterface;
 
 /**

@@ -1,3 +1,5 @@
+package game;
+
 import util.Audio;
 import javax.imageio.ImageIO;
 import java.io.File;

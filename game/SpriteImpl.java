@@ -1,3 +1,5 @@
+package game;
+
 import java.awt.geom.Rectangle2D;
 import interfaces.Directions;
 import interfaces.Sprite;

@@ -1,3 +1,5 @@
+package game;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
@@ -7,9 +9,9 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Transparency;
 import interfaces.GameInterface;
 
-/*
-    WTCD: This class represents the Scenario and traps of the Game
-*/
+/**
+ * Class representing the game scenario
+ */
 public class Scenario {
 
     //Scenario variables

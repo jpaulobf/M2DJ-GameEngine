@@ -1,3 +1,5 @@
+package game;
+
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import util.Audio;

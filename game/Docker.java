@@ -1,4 +1,7 @@
+package game;
+
 import java.awt.image.BufferedImage;
+
 import interfaces.SpriteCollection;
 
 /**

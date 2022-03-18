@@ -1,3 +1,5 @@
+package game;
+
 /**
  * StateMachine class - control the state of the game
  */
