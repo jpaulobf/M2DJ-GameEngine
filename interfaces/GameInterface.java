@@ -36,6 +36,12 @@ public interface GameInterface {
     public Graphics2D getG2D();
 
     /**
+     * Get Scenario Offset for Y
+     * @return
+     */
+    public int getScenarioOffsetY();
+
+    /**
      * Recover the bufferedImage
      * @return
      */
@@ -60,15 +66,39 @@ public interface GameInterface {
     public int getInternalResolutionHeight();
 
     /**
-     * Return the scenario offsetY
-     * @return
-     */
-    public int getScenarioOffsetY();
-    
-    /**
      * Mute the music
      */
     public void toogleMuteTheme();
+
+    /**
+     * Decrease the Master Volume
+     */
+    public void decMasterVolume();
+
+    /**
+     * Increase the Master Volume
+     */
+    public void incMasterVolume();
+
+    /**
+     * Decrease only the theme
+     */
+    public void decVolumeTheme();
+
+    /**
+     * Increase the theme volume
+     */    
+    public void incVolumeTheme();
+
+    /**
+     * Decrease the SFX Volume
+     */
+    public void decVolumeSFX();
+
+    /**
+     * Increase the SFX Volume
+     */
+    public void incVolumeSFX();
 
     /**
      * Stop the music
