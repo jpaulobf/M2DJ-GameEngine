@@ -347,4 +347,36 @@ public class Game implements GameInterface {
     public synchronized void toogleReseting() {
         this.reseting = !this.reseting;
     }
+
+    @Override
+    public void decMasterVolume() {
+        this.decVolumeSFX();
+        this.decVolumeTheme();
+    }
+
+    @Override
+    public void incMasterVolume() {
+        this.incVolumeSFX();
+        this.incVolumeTheme();
+    }
+
+    @Override
+    public void decVolumeTheme() {
+        this.theme.decVolume(1);
+    }
+
+    @Override
+    public void incVolumeTheme() {
+        this.theme.addVolume(1);
+    }
+
+    @Override
+    public void decVolumeSFX() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void incVolumeSFX() {
+        // TODO Auto-generated method stub
+    }
 }
