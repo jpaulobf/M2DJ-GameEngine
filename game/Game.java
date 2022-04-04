@@ -306,6 +306,8 @@ public class Game implements GameInterface {
             this.canContinue = false;
             if (!this.reseting) {
                 this.movement(keyCode);
+                if (keyCode == 45) {this.decMasterVolume();}
+                if (keyCode == 61) {this.incMasterVolume();}
             }
         }
     }
