@@ -34,7 +34,7 @@ public class JoystickController implements Runnable {
 		Controller[] controllers = ce.getControllers();    
         this.listener = listener;
         for (int i = 0; controllers != null && i < controllers.length; i++) {
-            var temp  = controllers[i];
+            Controller temp  = controllers[i];
             if (temp.getClass().getName().equals("net.java.games.input.DIAbstractController")) {
                 this.controller = temp;
                 break;
