@@ -30,7 +30,7 @@ public class JoystickController implements Runnable {
      */
     public JoystickController(ControllerListener listener) {
         /* Get the available controllers */
-        ControllerEnvironment ce = ControllerEnvironment.getDefaultEnvironment();
+        /*ControllerEnvironment ce = ControllerEnvironment.getDefaultEnvironment();
 		Controller[] controllers = ce.getControllers();    
         this.listener = listener;
         for (int i = 0; controllers != null && i < controllers.length; i++) {
@@ -39,7 +39,7 @@ public class JoystickController implements Runnable {
                 this.controller = temp;
                 break;
             }
-        }
+        }*/
     }
 
     /**
