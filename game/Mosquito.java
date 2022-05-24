@@ -40,21 +40,29 @@ public class Mosquito extends SpriteImpl {
         if (this.framecounter == frametime) {
             //start the process
             this.finished = false;
+            byte free = 1;
 
-            if (!dockers.getDockersComplete()) {
+            if (!dockers.getDockersComplete() && dockers.getFreeDockersCounter() >= free) {
                 //recover the taked dockers
                 boolean [] isInWhichDock = dockers.getIsInDock();
+                byte counter    = 0;
+                byte MAX_TRIES  = 10;
 
                 //sort one free docker
                 do {
                     this.sorted = (byte)(Math.random() * 5);
-                } while (isInWhichDock[sorted] != false || sorted == this.dockers.getCurrentGatorHead());
+                    if (++counter > MAX_TRIES) {
+                        break;
+                    }
+                } while (isInWhichDock[sorted] != false || this.sorted == this.dockers.getCurrentGatorHead());
 
-                //after sort, set the mosquito
-                this.dockers.setCurrentMosquito(sorted);
+                if (sorted != -1) {
+                    //after sort, set the mosquito
+                    this.dockers.setCurrentMosquito(sorted);
 
-                //update the X & Y position
-                this.positionX = this.positionsX[sorted];
+                    //update the X & Y position
+                    this.positionX = this.positionsX[sorted];
+                }
             }
         } else {
             if (this.sorted != -1) {
